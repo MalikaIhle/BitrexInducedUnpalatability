@@ -19,7 +19,7 @@ rm(list = ls(all = TRUE))
 
 nF <- 60 # number of females to be tested
 pbrep <- 10000 # number of simulation replicates
-probs <- 0.55 # probability of DpdtYN being yes
+probs <- 0.7 # probability of DpdtYN being yes
 
 
 #Function to check number of significant result by chance

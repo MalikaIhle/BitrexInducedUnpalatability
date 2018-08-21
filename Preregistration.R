@@ -18,7 +18,7 @@ rm(list = ls(all = TRUE))
 
 
 nF <- 60 # number of females to be tested
-pbrep <- 1000 # number of simulation replicates
+pbrep <- 10000 # number of simulation replicates
 probs <- 0.55 # probability of DpdtYN being yes
 
 

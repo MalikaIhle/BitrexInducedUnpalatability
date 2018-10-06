@@ -4,7 +4,7 @@
 #  simulation of data to see whether planned analyses code works
 #	 Start : 20 August 2018
 #	 last modif : 05 october 2018
-#	 commit: add prior exposure to half the subjects
+#	 commit: add prior exposure to half the subjects 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 

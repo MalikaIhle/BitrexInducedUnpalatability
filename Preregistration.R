@@ -22,14 +22,14 @@ rm(list = ls(all = TRUE))
 
 nF <- 100 # number of females to be tested
 pbrep <- 100 # number of simulation replicates
-probsnaive <- 0.5 # probability of attacking the bitter prey when never exposed to the bitter compound - needs to be 0.25 to always detect the effect
-probswhenexposed <- 0.3 # probability of attacking the bitter prey when trained on the bitter compound - needs to be 0.05 to always detect the interaciton (if previous is 0.25)
+probsnaive <- 0.25 # probability of attacking the bitter prey when never exposed to the bitter compound - needs to be 0.25 to always detect the effect
+probswhenexposed <- 0.25 # probability of attacking the bitter prey when trained on the bitter compound - needs to be 0.05 to always detect the interaciton (if previous is 0.25)
 
 ### two-by-two design 
 FPriorExposure <- c(1,1,1,1,0,0,0,0)
 FColorGroup <- c('Green','Green','Beige','Beige','Green','Green','Beige','Beige') # the color that will contain DB, the other color will contain water
 ### headers of contingency table
-TermiteEaten <- c('Water','DB','Water','DB','Water','DB','Water','DB') # in one test, either the DB termite or the water termite has to be attacked for the test to end
+TermiteEatenPalatability <- c('Water','DB','Water','DB','Water','DB','Water','DB') # in one test, either the DB termite or the water termite has to be attacked for the test to end
 TermiteEatenColor <- c('Beige','Green','Green','Beige','Beige','Green','Green','Beige') # deduced from FcolorGroup and Termite Eaten
 
 # simulation of an effect of the bitter compound (say smell) onto that attack, if the termite has the bitter compound, prob of attack is = probs
@@ -47,17 +47,17 @@ Simulate_and_analyse <-function(){
 Freq <- c(nF/4 - GreenDBExp,GreenDBExp, nF/4 - BeigeDBExp, BeigeDBExp, nF/4 - GreenDBNoExp,GreenDBNoExp, nF/4 - BeigeDBNoExp, BeigeDBNoExp)
 
   ### in contingency table, diagnals should sum up to nF/4
-contingencytable <- xtabs(Freq~TermiteEatenColor+TermiteEaten+FPriorExposure)
+contingencytable <- xtabs(Freq~TermiteEatenColor+TermiteEatenPalatability+FPriorExposure)
 FreqTable <- as.data.frame.table(contingencytable)
 
-modFreq0 <- glm(Freq ~ TermiteEatenColor+TermiteEaten+FPriorExposure, family = 'poisson', data = FreqTable)
-modFreq1 <- glm(Freq ~ TermiteEatenColor+TermiteEaten*FPriorExposure, family = 'poisson', data = FreqTable)
+modFreq0 <- glm(Freq ~ TermiteEatenColor+TermiteEatenPalatability+FPriorExposure, family = 'poisson', data = FreqTable)
+modFreq1 <- glm(Freq ~ TermiteEatenColor+TermiteEatenPalatability*FPriorExposure, family = 'poisson', data = FreqTable)
 summary(modFreq1)
 
 anova(modFreq0,modFreq1,test='Chi')
 
 
-        ##### plot_model(modFreq1, type = "pred", terms = c("TermiteEaten", "FPriorExposure"))
+        ##### plot_model(modFreq1, type = "pred", terms = c("TermiteEatenPalatability", "FPriorExposure"))
 
 
 ## to p value

@@ -13,7 +13,7 @@ rm(list = ls(all = TRUE))
 
 {# packages
   #library(lme4) # for mixed effect models (not needed for simple glm)
-  library(pbapply) # to replicate a function / a simulation multiple time with a bar of progress
+  #library(pbapply) # to replicate a function / a simulation multiple time with a bar of progress (pbreplicate instead of replicate)
   #library(ggplot2) # for plot
   #library(sjPlot) # for interaction plot
   #library(sjmisc) # for interaction plot
@@ -67,7 +67,7 @@ return(list(modFreq1p))
 }  
 
 
-OutputSimulation <- do.call(rbind, pbreplicate(pbrep,Simulate_and_analyse())) # collect all p values for both factors in the models
+OutputSimulation <- do.call(rbind, replicate(pbrep,Simulate_and_analyse())) # collect all p values for both factors in the models
 OutputSimulation <- OutputSimulation<0.05 # determine whether or not their are significant
 colSums(OutputSimulation)/pbrep # count the number of significant p values out of the number of simulation replicate. 
 ##### factors where no effect was simulated should have a percentage of false positive effect under 5%

@@ -13,153 +13,62 @@ rm(list = ls(all = TRUE))
 
 {# packages
   library(lme4) # for mixed effect models (not needed for simple glm)
-  library(pbapply)
-}
-
+  library(pbapply) # to replicate a function / a simulation multiple time with a bar of progress
+  library(ggplot2) # for plot
+  library(sjPlot) # for interaction plot
+  library(sjmisc) # for interaction plot
+  }
 
 
 nF <- 100 # number of females to be tested
-pbrep <- 2 # number of simulation replicates
-probsnaive <- 0.3 # probability of attacking the bitter prey when never exposed to the bitter compound
-probswhenexposed <- 0.3  # probability of the bitter prey when trained on the bitter compound
+pbrep <- 100 # number of simulation replicates
+probsnaive <- 0.2 # probability of attacking the bitter prey when never exposed to the bitter compound
+probswhenexposed <- 0.2  # probability of attacking the bitter prey when trained on the bitter compound
 
-
+### two-by-two design 
 FPriorExposure <- c(1,1,1,1,0,0,0,0)
-FColorGroup <- c('Green','Green','Beige','Beige','Green','Green','Beige','Beige')
-TermiteEaten <- c('Water','DB','Water','DB','Water','DB','Water','DB')
-TermiteEatenColor <- c('Beige','Green','Green','Beige','Beige','Green','Green','Beige')
+FColorGroup <- c('Green','Green','Beige','Beige','Green','Green','Beige','Beige') # the color that will contain DB, the other color will contain water
+### headers of contingency table
+TermiteEaten <- c('Water','DB','Water','DB','Water','DB','Water','DB') # in one test, either the DB termite or the water termite has to be attacked for the test to end
+TermiteEatenColor <- c('Beige','Green','Green','Beige','Beige','Green','Green','Beige') # deduced from FcolorGroup and Termite Eaten
 
-# simulation of an effect of the bitter compound (say smell) onto that attack likelihood of the focal termite, if the termite has the bitter compound, prob of attack of the focal is = probs
+# simulation of an effect of the bitter compound (say smell) onto that attack, if the termite has the bitter compound, prob of attack is = probs
+ 
+## Function to check number of significant result by chance
+Simulate_and_analyse <-function(){
 
+ ### generate a number of spider attacking the DB termite, given the probability of attacking it
         GreenDBNoExp <- sum(sample(c(1,0),nF/4, prob = c(probsnaive, 1-probsnaive), replace=TRUE))
         BeigeDBNoExp <- sum(sample(c(1,0),nF/4, prob = c(probsnaive, 1-probsnaive), replace=TRUE))
-        GreenDBExp <-sum(sample(c(1,0),1, prob = c(probswhenexposed, 1-probswhenexposed)))
-        BeigeDBExp <-sum(sample(c(1,0),1, prob = c(probswhenexposed, 1-probswhenexposed)))
+        GreenDBExp <-sum(sample(c(1,0),nF/4, prob = c(probswhenexposed, 1-probswhenexposed),replace=TRUE))
+        BeigeDBExp <-sum(sample(c(1,0),nF/4, prob = c(probswhenexposed, 1-probswhenexposed), replace=TRUE))
     
-   
+  ### the number of spiders attacking the water termite is the number of spider tested in the two-by-two group minus the number of spider that attacked the DB termite 
 Freq <- c(nF/4 - GreenDBExp,GreenDBExp, nF/4 - BeigeDBExp, BeigeDBExp, nF/4 - GreenDBNoExp,GreenDBNoExp, nF/4 - BeigeDBNoExp, BeigeDBNoExp)
 
-
+  ### in contingency table, diagnals should sum up to nF/4
 contingencytable <- xtabs(Freq~TermiteEatenColor+TermiteEaten+FPriorExposure)
 FreqTable <- as.data.frame.table(contingencytable)
 
-summary(glm(Freq ~ TermiteEatenColor+TermiteEaten*FPriorExposure, family = 'poisson', data = FreqTable))
+modFreq0 <- glm(Freq ~ TermiteEatenColor+TermiteEaten+FPriorExposure, family = 'poisson', data = FreqTable)
+modFreq1 <- glm(Freq ~ TermiteEatenColor+TermiteEaten*FPriorExposure, family = 'poisson', data = FreqTable)
+summary(modFreq1)
+
+anova(modFreq0,modFreq1,test='Chi')
 
 
+        ##### plot_model(modFreq1, type = "pred", terms = c("TermiteEaten", "FPriorExposure"))
 
-
-
-
-
-
-
-
-
-
-
-
-
-nF <- 100 # number of females to be tested
-pbrep <- 2 # number of simulation replicates
-probsnaive <- 0.3 # probability of FirstAttackYN being yes when never exposed to the bitter compound
-probswhenexposed <- 0.3  # probability of FirstAttackYN being yes when trained on the bitter compound
-
-#Function to check number of significant result by chance
-#Simulate_and_analyse <-function(){
-  
-# simulation data
-
-FID <- 1:nF
-FTrt <- c(rep('Green',nF/2), rep ('Beige',nF/2)) # color containing the bitter compound
-FocalTermiteColor <- rep(c('Green','Beige'), nF/2 ) # random (alternated) focal termite
-FocalTermiteBitterness <- c(rep(c('1','0'), nF/4 ),rep(c('0','1'), nF/4 )) # whether or not the focal termite is the one with the bitter compound
-FpriorExposure <- rep(c(rep(1,nF/4),rep(0,nF/4)),2)
-
-MY_TABLE_FirstAttack <- data.frame(FID, FTrt, FocalTermiteColor,FocalTermiteBitterness, FpriorExposure, row.names = NULL)
-
-# simulation of an effect of the bitter compound (say smell) onto that attack likelihood of the focal termite, if the termite has the bitter compound, prob of attack of the focal is = probs
-for (i in 1:nrow(MY_TABLE_FirstAttack)) 
-{
- if (MY_TABLE_FirstAttack$FpriorExposure[i] == 0) 
- {
-   if (MY_TABLE_FirstAttack$FocalTermiteBitterness[i] == 1)
-         MY_TABLE_FirstAttack$FirstAttackYN[i] <- sample(c(1,0),1, prob = c(probsnaive, 1-probsnaive))
-  
-   if (MY_TABLE_FirstAttack$FocalTermiteBitterness[i] == 0)
-         MY_TABLE_FirstAttack$FirstAttackYN[i] <- sample(c(0,1),1, prob = c(probsnaive, 1-probsnaive))
-  }
-   
- if (MY_TABLE_FirstAttack$FpriorExposure[i] == 1) 
- {
-   if (MY_TABLE_FirstAttack$FocalTermiteBitterness[i] == 1)
-     MY_TABLE_FirstAttack$FirstAttackYN[i] <- sample(c(1,0),1, prob = c(probswhenexposed, 1-probswhenexposed))
-   
-   if (MY_TABLE_FirstAttack$FocalTermiteBitterness[i] == 0)
-     MY_TABLE_FirstAttack$FirstAttackYN[i] <- sample(c(0,1),1, prob = c(probswhenexposed, 1-probswhenexposed))
- }   
-}
-
-for (i in 1:nrow(MY_TABLE_FirstAttack)) 
-{
-  if (MY_TABLE_FirstAttack$FocalTermiteBitterness[i] == 0 & MY_TABLE_FirstAttack$FirstAttackYN[i] == 0)
-  {MY_TABLE_FirstAttack$AttackBitterYN[i] <- 1}
-  if (MY_TABLE_FirstAttack$FocalTermiteBitterness[i] == 0 & MY_TABLE_FirstAttack$FirstAttackYN[i] == 1)
-  {MY_TABLE_FirstAttack$AttackBitterYN[i] <- 0}
-  if (MY_TABLE_FirstAttack$FocalTermiteBitterness[i] == 1 & MY_TABLE_FirstAttack$FirstAttackYN[i] == 0)
-  {MY_TABLE_FirstAttack$AttackBitterYN[i] <- 0}
-  if (MY_TABLE_FirstAttack$FocalTermiteBitterness[i] == 1 & MY_TABLE_FirstAttack$FirstAttackYN[i] == 1)
-  {MY_TABLE_FirstAttack$AttackBitterYN[i] <- 1}
-}
-
-
-FPriorExposure <- c(1,1,1,1,0,0,0,0)
-FColorGroup <- c('Green','Green','Beige','Beige','Green','Green','Beige','Beige')
-TermiteEaten <- c('Water','DB','Water','DB','Water','DB','Water','DB')
-Freq <- c(length(MY_TABLE_FirstAttack$AttackBitterYN[MY_TABLE_FirstAttack$FpriorExposure == 1 & 
-                                                     MY_TABLE_FirstAttack$FocalTermiteColor == 'Green' & 
-                                                     MY_TABLE_FirstAttack$AttackBitterYN == 0]),
-          length(MY_TABLE_FirstAttack$AttackBitterYN[MY_TABLE_FirstAttack$FpriorExposure == 1 & 
-                                                       MY_TABLE_FirstAttack$FocalTermiteColor == 'Green' & 
-                                                       MY_TABLE_FirstAttack$AttackBitterYN == 1]),
-          length(MY_TABLE_FirstAttack$AttackBitterYN[MY_TABLE_FirstAttack$FpriorExposure == 1 & 
-                                                       MY_TABLE_FirstAttack$FocalTermiteColor == 'Beige' & 
-                                                       MY_TABLE_FirstAttack$AttackBitterYN == 0]), 
-          length(MY_TABLE_FirstAttack$AttackBitterYN[MY_TABLE_FirstAttack$FpriorExposure == 1 & 
-                                                       MY_TABLE_FirstAttack$FocalTermiteColor == 'Beige' & 
-                                                       MY_TABLE_FirstAttack$AttackBitterYN == 1]), 
-          length(MY_TABLE_FirstAttack$AttackBitterYN[MY_TABLE_FirstAttack$FpriorExposure == 0 & 
-                                                       MY_TABLE_FirstAttack$FocalTermiteColor == 'Green' & 
-                                                       MY_TABLE_FirstAttack$AttackBitterYN == 0]), 
-          length(MY_TABLE_FirstAttack$AttackBitterYN[MY_TABLE_FirstAttack$FpriorExposure == 0 & 
-                                                       MY_TABLE_FirstAttack$FocalTermiteColor == 'Green' & 
-                                                       MY_TABLE_FirstAttack$AttackBitterYN == 1]), 
-          length(MY_TABLE_FirstAttack$AttackBitterYN[MY_TABLE_FirstAttack$FpriorExposure == 0 & 
-                                                       MY_TABLE_FirstAttack$FocalTermiteColor == 'Beige' & 
-                                                       MY_TABLE_FirstAttack$AttackBitterYN == 0]), 
-          length(MY_TABLE_FirstAttack$AttackBitterYN[MY_TABLE_FirstAttack$FpriorExposure == 0 & 
-                                                       MY_TABLE_FirstAttack$FocalTermiteColor == 'Beige' & 
-                                                       MY_TABLE_FirstAttack$AttackBitterYN == 1])) 
-contingencytable <- xtabs(Freq~+FColorGroup+TermiteEaten+FPriorExposure)
-FreqTable <- as.data.frame.table(contingencytable)
-
-MY_TABLE_FirstAttack
-
-modfirstattack <- glm( FirstAttackYN ~ FocalTermiteColor + FocalTermiteBitterness*FpriorExposure, family = "binomial",data = MY_TABLE_FirstAttack)
-summary(modfirstattack)
-
-library(sjPlot)
-library(sjmisc)
-library(ggplot2)
-plot_model(modfirstattack, type = "pred", terms = c("FocalTermiteBitterness", "FpriorExposure"))
 
 ## to p value
-modfirstattackp <-  coef(summary(modfirstattack))[-1, 4]
+modFreq1p <-  coef(summary(modFreq1))[-1, 4]
 
-return(list(modfirstattackp))  
+return(list(modFreq1p))  
 }  
 
+
 OutputSimulation <- do.call(rbind, pbreplicate(pbrep,Simulate_and_analyse())) # collect all p values for both factors in the models
-OutputSimulation <- OutputSimulation<0.05 # determine whetehr or not their are significant
+OutputSimulation <- OutputSimulation<0.05 # determine whether or not their are significant
 colSums(OutputSimulation)/pbrep # count the number of significant p values out of the number of simulation replicate. 
-# factors where no effect was simulated should have a percentage of false positive effect under 5%
-# factors with simulated effect should detect an effect in at least more than 5% of the cases
+##### factors where no effect was simulated should have a percentage of false positive effect under 5%
+##### factors with simulated effect should detect an effect in at least more than 5% of the cases

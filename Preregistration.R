@@ -12,18 +12,18 @@
 rm(list = ls(all = TRUE))
 
 {# packages
-  library(lme4) # for mixed effect models (not needed for simple glm)
+  #library(lme4) # for mixed effect models (not needed for simple glm)
   library(pbapply) # to replicate a function / a simulation multiple time with a bar of progress
-  library(ggplot2) # for plot
-  library(sjPlot) # for interaction plot
-  library(sjmisc) # for interaction plot
+  #library(ggplot2) # for plot
+  #library(sjPlot) # for interaction plot
+  #library(sjmisc) # for interaction plot
   }
 
 
 nF <- 100 # number of females to be tested
 pbrep <- 100 # number of simulation replicates
-probsnaive <- 0.2 # probability of attacking the bitter prey when never exposed to the bitter compound
-probswhenexposed <- 0.2  # probability of attacking the bitter prey when trained on the bitter compound
+probsnaive <- 0.5 # probability of attacking the bitter prey when never exposed to the bitter compound - needs to be 0.25 to always detect the effect
+probswhenexposed <- 0.3 # probability of attacking the bitter prey when trained on the bitter compound - needs to be 0.05 to always detect the interaciton (if previous is 0.25)
 
 ### two-by-two design 
 FPriorExposure <- c(1,1,1,1,0,0,0,0)

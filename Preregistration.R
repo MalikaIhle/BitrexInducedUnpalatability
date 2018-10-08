@@ -22,7 +22,7 @@ rm(list = ls(all = TRUE))
 
 nF <- 100 # number of females to be tested
 pbrep <- 1000 # number of simulation replicates
-probsnaive <- 0.5 # probability of attacking the bitter prey when never exposed to the bitter compound - needs to be 0.25 to always detect the effect
+probsnaive <- 0.25 # probability of attacking the bitter prey when never exposed to the bitter compound - needs to be 0.25 to always detect the effect
 probswhenexposed <- 0.25 # probability of attacking the bitter prey when trained on the bitter compound - needs to be 0.05 to always detect the interaciton (if previous is 0.25)
 
 ### two-by-two design 
@@ -99,7 +99,7 @@ anova(modFreq0,modFreq1,test='Chi')
 
 # Binomial model on long table 
 
-modBinom <- glmer (AttackedYN ~ TermiteEatenColor+TermiteEatenPalatability*FPriorExposure + (1|FID), family = 'binomial', data = FocalAttackTable)
+modBinom <- glm (AttackedYN ~ TermiteEatenColor+TermiteEatenPalatability*FPriorExposure, family = 'binomial', data = FocalAttackTable)
 summary(modBinom)
 
 

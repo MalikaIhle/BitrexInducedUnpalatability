@@ -24,7 +24,7 @@ rm(list = ls(all = TRUE))
 
 nF <- 100 # number of females to be tested
 pbrep <- 1000 # number of simulation replicates
-probsnaive <- 0.25 # probability of attacking the bitter prey when never exposed to the bitter compound - needs to be 0.25 to always detect the effect
+probsnaive <- 0.5 # probability of attacking the bitter prey when never exposed to the bitter compound - needs to be 0.25 to always detect the effect
 probswhenexposed <- 0.25 # probability of attacking the bitter prey when trained on the bitter compound - needs to be 0.05 to always detect the interaciton (if previous is 0.25)
 ProbDropifDB <- 0.9 # probability of dropping the prey if coated with bitter compound
 ProbDropifWater <- 0.1 # probability of dropping the prey if control prey (sprayed with water)
@@ -108,6 +108,18 @@ anova(modFreq0,modFreq1,test='Chi')
 modBinom <- glm (AttackedYN ~ TermiteEatenColor+TermiteEatenPalatability*FPriorExposure, family = 'binomial', data = FocalAttackTable)
 summary(modBinom)
 
+    ## test color and palatability on subsets with or without prior exposure
+    
+    modBinomwithoutExposure <- glm (AttackedYN ~ TermiteEatenColor+TermiteEatenPalatability, family = 'binomial', data = FocalAttackTable[FocalAttackTable$FPriorExposure == 0,])
+    summary(modBinomwithoutExposure)
+    
+    modBinomwithExposure <- glm (AttackedYN ~ TermiteEatenColor+TermiteEatenPalatability, family = 'binomial', data = FocalAttackTable[FocalAttackTable$FPriorExposure == 1,])
+    summary(modBinomwithExposure)
+    
+    ## compare effect of palatability between the two models
+    
+    
+
 
 # to extract p value
 modFreq1p <-  coef(summary(modFreq1))[-1, 4]
@@ -115,18 +127,18 @@ modBinomp <- coef(summary(modBinom))[-1, 4]
 
 
 
-### add whether dropYN to the attacked prey table
-for (i in 1:nrow(AttackedPreyTable)){
-  if (AttackedPreyTable$TermiteEatenPalatability[i] == 'DB') 
-  {AttackedPreyTable$DropYN[i] <- sample(c(1,0),1, prob = c(ProbDropifDB,1-ProbDropifDB))}
-  else {AttackedPreyTable$DropYN[i] <- sample(c(1,0),1, prob = c(ProbDropifWater,1-ProbDropifWater))}}
-
-head(AttackedPreyTable)
-
-# model whether attacked prey gets dropped (if several attack within a test: each attack will be one line, and FID will be added as random factor)
-
-modDrop <- glm(DropYN ~ TermiteEatenColor + TermiteEatenPalatability, family = 'binomial', data = AttackedPreyTable )
-summary(modDrop)
+        ### add whether dropYN to the attacked prey table
+        for (i in 1:nrow(AttackedPreyTable)){
+          if (AttackedPreyTable$TermiteEatenPalatability[i] == 'DB') 
+          {AttackedPreyTable$DropYN[i] <- sample(c(1,0),1, prob = c(ProbDropifDB,1-ProbDropifDB))}
+          else {AttackedPreyTable$DropYN[i] <- sample(c(1,0),1, prob = c(ProbDropifWater,1-ProbDropifWater))}}
+        
+        head(AttackedPreyTable)
+        
+        # model whether attacked prey gets dropped (if several attack within a test: each attack will be one line, and FID will be added as random factor)
+        
+        modDrop <- glm(DropYN ~ TermiteEatenColor + TermiteEatenPalatability, family = 'binomial', data = AttackedPreyTable )
+        summary(modDrop)
 
 
 

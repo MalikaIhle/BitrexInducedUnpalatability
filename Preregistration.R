@@ -4,7 +4,7 @@
 #  simulation of data to see whether planned analyses code works
 #	 Start : 20 August 2018
 #	 last modif : 10 october 2018
-#	 commit: add prior exposure to half the subjects, create contingency table and long table for binomial test 
+#	 commit: add prior exposure to half the subjects, create contingency table and long table (picking opne focal termite at random) for binomial test 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
@@ -81,7 +81,12 @@ for (i in 1:nrow(SecondLinePerTestTable)){
 TwoLinePerTestTable <- rbind(ONeTestOneLineTable,SecondLinePerTestTable )
 TwoLinePerTestTable <- TwoLinePerTestTable[order(TwoLinePerTestTable$FID),]
 
+    ##### pick one line at random for each female (since when we know one line (she attacked or did not attack that one, we know she attacked or did not attack the other one) ))
 
+FocalAttackTable <- do.call(rbind,lapply(split(TwoLinePerTestTable, TwoLinePerTestTable$FID),function(x){x[sample(nrow(x), 1), ]}))
+
+          
+  
 # Poisson Model on contingency table
 modFreq0 <- glm(Freq ~ TermiteEatenColor+TermiteEatenPalatability+FPriorExposure, family = 'poisson', data = FreqTable)
 modFreq1 <- glm(Freq ~ TermiteEatenColor+TermiteEatenPalatability*FPriorExposure, family = 'poisson', data = FreqTable)
@@ -94,7 +99,7 @@ anova(modFreq0,modFreq1,test='Chi')
 
 # Binomial model on long table 
 
-modBinom <- glmer (AttackedYN ~ TermiteEatenColor+TermiteEatenPalatability*FPriorExposure + (1|FID), family = 'binomial', data = TwoLinePerTestTable)
+modBinom <- glmer (AttackedYN ~ TermiteEatenColor+TermiteEatenPalatability*FPriorExposure + (1|FID), family = 'binomial', data = FocalAttackTable)
 summary(modBinom)
 
 
@@ -119,6 +124,6 @@ OutputSimulationBinom <- OutputSimulation[rownames(OutputSimulation) == "modBino
         ##### factors with simulated effect should detect an effect in at least more than 5% of the cases
 data.frame(colSums(OutputSimulationFreq)/pbrep) # count the number of significant p values out of the number of simulation replicate. 
 data.frame(colSums(OutputSimulationBinom)/pbrep) # count the number of significant p values out of the number of simulation replicate. 
-###### binomial model seem to create false positives !!
+
 
 

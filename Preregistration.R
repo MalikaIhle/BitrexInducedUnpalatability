@@ -105,7 +105,7 @@ anova(modFreq0,modFreq1,test='Chi')
 
 # Binomial model on long table 
           #### should be named: glm (FocalTermiteAttackedYN ~ FocalTermiteColor+FocalTermitePalatability*FPriorExposure but keep name similar as above to compile them more easily
-modBinom <- glm (AttackedYN ~ TermiteEatenColor+TermiteEatenPalatability*FPriorExposure, family = 'binomial', data = FocalAttackTable)
+modBinom <- glm (AttackedYN ~ TermiteEatenColor +TermiteEatenPalatability*FPriorExposure, family = 'binomial', data = FocalAttackTable)
 summary(modBinom)
 
     ## test color and palatability on subsets with or without prior exposure
@@ -114,10 +114,7 @@ summary(modBinom)
     summary(modBinomwithoutExposure)
     
     modBinomwithExposure <- glm (AttackedYN ~ TermiteEatenColor+TermiteEatenPalatability, family = 'binomial', data = FocalAttackTable[FocalAttackTable$FPriorExposure == 1,])
-    summary(modBinomwithExposure)
-    
-    ## compare effect of palatability between the two models
-    
+    summary(modBinomwithExposure) ## compare effect of palatability between the two models
     
 
 
@@ -165,3 +162,5 @@ data.frame(colSums(OutputSimulationBinom)/pbrep) # count the number of significa
 ##### CONCLUSION: 
 ##### glm on three-way contingency table with Poisson distribution does as good as 
 ##### glm binomial with one line per test with the data on a focal termite
+##### having the interaction in hte model on all the data is similar to 
+##### comparing the effect of palatability in models on subset of the data (with or without prior exposure)

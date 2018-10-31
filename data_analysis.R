@@ -40,7 +40,9 @@ ConvertToTime <- function(x){
 
 {# load data
   
+  #conDB= odbcConnectAccess2007("C:\\Users\\malika.ihle\\Dropbox\\HabronatusPyrrithrix\\VideoAnalyses_BitrexTermites.accdb")
   conDB= odbcConnectAccess2007("C:\\Users\\malika.ihle\\Dropbox\\HabronatusPyrrithrix\\VideoAnalyses_BitrexTermites.accdb")
+  
   sqlTables(conDB)	# list all the tables in the DB  
 
 

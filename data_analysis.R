@@ -7,13 +7,8 @@
 #	 commit: first commit
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
-
-
-rm(list = ls(all = TRUE))
-
-
 MyData <- read.csv(file="AllAttacks.csv", header=TRUE, sep=",")
+
 
 head(MyData)    
 

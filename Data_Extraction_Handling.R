@@ -50,12 +50,14 @@ sqlTables(conDB)	# list all the tables in the DB
 
 AllAttacks <- sqlQuery(conDB, "
                           SELECT Behav_Video_Metadata.FID, 
-Basic_Trials.SubGroupName, 
-Basic_Trials.GroupName, 
-Behav_Female_Attacks.AttackTime, 
-Behav_Female_Attacks.Color AS AttackedTermiteColor, 
-Behav_Female_Attacks.Outcome, 
-Behav_Video_Metadata.VideoTimeStart, Behav_Female.ExcludeYN, Behav_Female.ReasonExclusion
+                                Basic_Trials.SubGroupName, 
+                                Basic_Trials.GroupName, 
+                                Behav_Female_Attacks.AttackTime, 
+                                Behav_Female_Attacks.Color AS AttackedTermiteColor, 
+                                Behav_Female_Attacks.Outcome, 
+                                Behav_Video_Metadata.VideoTimeStart, 
+                                Behav_Female.ExcludeYN, 
+                                Behav_Female.ReasonExclusion
                           FROM ((Basic_Trials INNER JOIN Behav_Female ON Basic_Trials.Ind_ID = Behav_Female.FID) INNER JOIN Behav_Video_Metadata ON Behav_Female.FID = Behav_Video_Metadata.FID) LEFT JOIN Behav_Female_Attacks ON Behav_Video_Metadata.VideoID = Behav_Female_Attacks.VideoID
                          GROUP BY Behav_Video_Metadata.FID, Basic_Trials.SubGroupName, Basic_Trials.GroupName, Behav_Female_Attacks.AttackTime, Behav_Female_Attacks.Color, Behav_Female_Attacks.Outcome, Behav_Video_Metadata.VideoTimeStart, Behav_Female.ExcludeYN, Behav_Female.ReasonExclusion;
                          " )
@@ -66,8 +68,8 @@ AllAttacks <- AllAttacks[AllAttacks$ExcludeYN == 0,] # see remarks
 # reformat columns in tables
 AllAttacks$AttackTime <- ConvertToTime(AllAttacks$AttackTime)
 AllAttacks$VideoTimeStart <- ConvertToTime(AllAttacks$VideoTimeStart)
-AllAttacks$AttackedTermiteColor[AllAttacks$AttackedTermiteColor == 1] <- "Brown"
-AllAttacks$AttackedTermiteColor[AllAttacks$AttackedTermiteColor == 2] <- "Green"
+AllAttacks$AttackedTermiteColor[AllAttacks$AttackedTermiteColor == 1] <- "Green"
+AllAttacks$AttackedTermiteColor[AllAttacks$AttackedTermiteColor == 2] <- "Brown"
 AllAttacks$Outcome[AllAttacks$Outcome == 1] <- "Consumed"
 AllAttacks$Outcome[AllAttacks$Outcome == -1] <- "Dropped"
 str(AllAttacks)
@@ -116,7 +118,7 @@ head(FirstAttacks)
 FocalTermiteAttack <- rbind(AllFemales[,c('FID', 'GroupName', 'SubGroupName')],AllFemales[,c('FID', 'GroupName', 'SubGroupName')])
 FocalTermiteAttack$FocalTermiteColor <- c(rep('Brown',nrow(AllFemales)),rep('Green',nrow(AllFemales)))
 FocalTermiteAttack <- FocalTermiteAttack[order(FocalTermiteAttack$FID),]
-
+nrow(FocalTermiteAttack) # 190 looks good
 
 
 FocalTermiteAttack <- split(FocalTermiteAttack, FocalTermiteAttack$FID)
@@ -132,8 +134,10 @@ rownames(FocalTermiteAttack) <- NULL
 
 FocalTermiteAttack <- merge(FocalTermiteAttack, FirstAttacks[,c('FID','AttackedTermiteColor')], by='FID', all.x=TRUE)
 
+
 FocalTermiteAttack$FocalTermiteAttackedYN[FocalTermiteAttack$FocalTermiteColor == FocalTermiteAttack$AttackedTermiteColor] <- 1
 FocalTermiteAttack$FocalTermiteAttackedYN[FocalTermiteAttack$FocalTermiteColor != FocalTermiteAttack$AttackedTermiteColor] <- 0
+
 
 for (i in 1:nrow(FocalTermiteAttack)) {
   
@@ -177,7 +181,7 @@ for (i in 1:nrow(AllAttacks)) {
   if(AllAttacks$SubGroupName[i] == "BrownDB" & AllAttacks$AttackedTermiteColor[i] == 'Brown')
   {AllAttacks$AttackedTermitePalatability[i] <- 0}
   
-  if(AllAttacks$SubGroupName[i] == "BrownDB" & FocalTermiteAttack$AttackedTermiteColor[i] == 'Green')
+  if(AllAttacks$SubGroupName[i] == "BrownDB" & AllAttacks$AttackedTermiteColor[i] == 'Green')
   {AllAttacks$AttackedTermitePalatability[i] <- 1}
   
 }
@@ -198,7 +202,7 @@ for (i in 1:nrow(FirstAttacks)) {
   if(FirstAttacks$SubGroupName[i] == "BrownDB" & FirstAttacks$AttackedTermiteColor[i] == 'Brown')
   {FirstAttacks$AttackedTermitePalatability[i] <- 0}
   
-  if(FirstAttacks$SubGroupName[i] == "BrownDB" & FocalTermiteAttack$AttackedTermiteColor[i] == 'Green')
+  if(FirstAttacks$SubGroupName[i] == "BrownDB" & FirstAttacks$AttackedTermiteColor[i] == 'Green')
   {FirstAttacks$AttackedTermitePalatability[i] <- 1}
   
 }
@@ -213,4 +217,5 @@ head(FirstAttacks) # dataset for exploratory analyses
 # write.csv(FirstAttacks, file = "FirstAttacks.csv", row.names = FALSE)
 # 20181031 first time
 # 20181101 with prior exposure to allattack table
+# 20181101 correct a SERIOUS typo reversing all the colors !!!!!
 

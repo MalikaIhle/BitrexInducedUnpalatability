@@ -9,10 +9,11 @@
 
 {# Remarks
 ### excluded FID:
-  # 18630
-  # 18632
-  # 18650
-  # 18687
+  # 18604 : died during training
+  # 18630 : protocol failed
+  # 18632 : video failed
+  # 18650 : video failed
+  # 18687 : video failed
 
 ## color:  1=Green or 2=Brown
 ## outcome: 1= Consum or -1=Drop
@@ -162,7 +163,8 @@ head(AllAttacks)
 
 AllAttacks$DropYN[AllAttacks$Outcome == 'Consumed'] <- 0
 AllAttacks$DropYN[AllAttacks$Outcome == 'Dropped'] <- 1
-
+AllAttacks$PriorExposureYN[AllAttacks$GroupName == 'DB'] <- 1
+AllAttacks$PriorExposureYN[AllAttacks$GroupName == 'Water'] <- 0
 
 for (i in 1:nrow(AllAttacks)) {
   
@@ -205,9 +207,10 @@ for (i in 1:nrow(FirstAttacks)) {
 head(FirstAttacks) # dataset for exploratory analyses
 
 
-# 20181031
+
 # write.csv(FocalTermiteAttack, file = "FocalTermiteAttack.csv", row.names = FALSE)
 # write.csv(AllAttacks, file = "AllAttacks.csv", row.names = FALSE)
 # write.csv(FirstAttacks, file = "FirstAttacks.csv", row.names = FALSE)
-
+# 20181031 first time
+# 20181101 with prior exposure to allattack table
 

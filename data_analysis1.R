@@ -30,7 +30,7 @@ head(FirstAttacks)
 # question 1 (confirmatory): reluctant to attack bitrex termite first especially if trained?   
 # --> interaction not significant, effect direction opposite expectation = less likely to attack a focal termite that is palatable if they were exposed
 # question 2 (confirmatory): reluctant to attack bitrex termite first regardless of their training?  
-# --> main effect of Palatability not significant, effect direction according to expectation = palatable one more likely to be attacked first (excessively small effect)                                                           
+# --> main effect of Palatability not significant, effect direction opposite expectation = palatable one less likely to be attacked first (small effect)                                                           
 # question 3 (exploratory): bias against a color ?
 # --> no, effect direction: have a slight preference to attack the green first
 
@@ -51,7 +51,7 @@ summary(mod1)
 # question 3 (exploratory): are termite from a certain color more likely to be dropped?
 # --> yes, they are more likely ** to drop a green termite
 # question 4 (exploratory): are bitrex termites always dropped
-# no, out of 80 bitrex termites attacked, 35 were consumed (43.7%)
+# no, out of 84 bitrex termites attacked, 39 were consumed (46.4%)
 # it might be worth trying with a higher concentration of bitrex
 
 head(AllAttacks)

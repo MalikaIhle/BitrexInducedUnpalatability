@@ -45,7 +45,7 @@ ConvertToTime <- function(x){
 
 {# load data
 
-conDB= odbcConnectAccess2007("C:\\Users\\malika.ihle\\Dropbox\\HabronatusPyrrithrix\\VideoAnalyses_BitrexTermites.accdb")
+conDB= odbcConnectAccess2007("C:\\Users\\malika.ihle\\Dropbox\\HabronatusPyrrithrix\\VideoAnalyses_1BitrexTermites.accdb")
 sqlTables(conDB)	# list all the tables in the DB  
 
 AllAttacks <- sqlQuery(conDB, "
@@ -218,4 +218,5 @@ head(FirstAttacks) # dataset for exploratory analyses
 # 20181031 first time
 # 20181101 with prior exposure to allattack table
 # 20181101 correct a SERIOUS typo reversing all the colors !!!!!
+# 20181121 added data from cohort 3
 

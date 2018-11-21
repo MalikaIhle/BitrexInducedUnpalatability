@@ -116,7 +116,7 @@ nrow(FocalTermiteAttack) # 60 looks good
 FocalTermiteAttack <- split(FocalTermiteAttack, FocalTermiteAttack$FID)
 
 FocalTermiteAttack_fun <- function(x){
-  x$FocalTermiteYN <- sample(c(0,1), 2,replace=FALSE) # randomly assigning YN, determining whterh the termite is focal or not
+  x$FocalTermiteYN <- sample(c(0,1), 2,replace=FALSE) # randomly assigning YN, determining whether the termite is focal or not
   return(x)
 }
 
@@ -147,8 +147,7 @@ for (i in 1:nrow(FocalTermiteAttack)) {
   
   }
 
-FocalTermiteAttack$PriorExposureYN[FocalTermiteAttack$GroupName == 'DB'] <- 1
-FocalTermiteAttack$PriorExposureYN[FocalTermiteAttack$GroupName == 'Water'] <- 0
+
 
 }
 
@@ -159,8 +158,7 @@ head(AllAttacks)
 
 AllAttacks$DropYN[AllAttacks$Outcome == 'Consumed'] <- 0
 AllAttacks$DropYN[AllAttacks$Outcome == 'Dropped'] <- 1
-AllAttacks$PriorExposureYN[AllAttacks$GroupName == 'DB'] <- 1
-AllAttacks$PriorExposureYN[AllAttacks$GroupName == 'Water'] <- 0
+
 
 for (i in 1:nrow(AllAttacks)) {
   
@@ -204,11 +202,8 @@ head(FirstAttacks) # dataset for exploratory analyses
 
 
 
-# write.csv(FocalTermiteAttack, file = "FocalTermiteAttack.csv", row.names = FALSE)
-# write.csv(AllAttacks, file = "AllAttacks.csv", row.names = FALSE)
-# write.csv(FirstAttacks, file = "FirstAttacks.csv", row.names = FALSE)
-# 20181031 first time
-# 20181101 with prior exposure to allattack table
-# 20181101 correct a SERIOUS typo reversing all the colors !!!!!
-# 20181121 added data from cohort 3
+# write.csv(FocalTermiteAttack, file = "FocalTermiteAttack2.csv", row.names = FALSE)
+# write.csv(AllAttacks, file = "AllAttacks2.csv", row.names = FALSE)
+# write.csv(FirstAttacks, file = "FirstAttacks2.csv", row.names = FALSE)
+# 20181121 first time
 

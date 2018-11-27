@@ -2,23 +2,16 @@
 #	 Malika IHLE      malika_ihle@hotmail.fr
 #	 Preregistration manipulation color and unpalatability 
 #  data extraction and handling
-#	 Start : 31 october 2018
-#	 last modif : 
+#	 Start : 21 november 2018
 #	 commit: first commit
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 {# Remarks
-### excluded FID:
-  # 18630
-  # 18632
-  # 18650
-  # 18687
-
 ## color:  1=Green or 2=Brown
 ## outcome: 1= Consum or -1=Drop
-## in DB: all times are sotred in character format with 6 digits '000000'
+## in DB: all times are stored in character format with 6 digits '000000'
 
- ## AllAttacks table include all females tested since requirement for stopping the test was that they need to attack at least once (or otherwise the test would have been repeated the day after, which did not happen) 
+## AllAttacks table include all females tested since requirement for stopping the test was that they need to attack at least once (or otherwise the test would have been repeated the day after, which did not happen) 
   
 }
 
@@ -44,19 +37,19 @@ ConvertToTime <- function(x){
 
 {# load data
 
-#conDB= odbcConnectAccess2007("C:\\Users\\malika.ihle\\Dropbox\\HabronatusPyrrithrix\\VideoAnalyses_BitrexTermites.accdb")
-conDB= odbcConnectAccess2007("VideoAnalyses_BitrexTermites.accdb")
-  sqlTables(conDB)	# list all the tables in the DB  
-
+conDB= odbcConnectAccess2007("C:\\Users\\malika.ihle\\Dropbox\\HabronatusPyrrithrix\\VideoAnalyses_2BitrexTermites.accdb")
+sqlTables(conDB)	# list all the tables in the DB  
 
 AllAttacks <- sqlQuery(conDB, "
                           SELECT Behav_Video_Metadata.FID, 
-Basic_Trials.SubGroupName, 
-Basic_Trials.GroupName, 
-Behav_Female_Attacks.AttackTime, 
-Behav_Female_Attacks.Color AS AttackedTermiteColor, 
-Behav_Female_Attacks.Outcome, 
-Behav_Video_Metadata.VideoTimeStart, Behav_Female.ExcludeYN, Behav_Female.ReasonExclusion
+                                Basic_Trials.SubGroupName, 
+                                Basic_Trials.GroupName, 
+                                Behav_Female_Attacks.AttackTime, 
+                                Behav_Female_Attacks.Color AS AttackedTermiteColor, 
+                                Behav_Female_Attacks.Outcome, 
+                                Behav_Video_Metadata.VideoTimeStart, 
+                                Behav_Female.ExcludeYN, 
+                                Behav_Female.ReasonExclusion
                           FROM ((Basic_Trials INNER JOIN Behav_Female ON Basic_Trials.Ind_ID = Behav_Female.FID) INNER JOIN Behav_Video_Metadata ON Behav_Female.FID = Behav_Video_Metadata.FID) LEFT JOIN Behav_Female_Attacks ON Behav_Video_Metadata.VideoID = Behav_Female_Attacks.VideoID
                          GROUP BY Behav_Video_Metadata.FID, Basic_Trials.SubGroupName, Basic_Trials.GroupName, Behav_Female_Attacks.AttackTime, Behav_Female_Attacks.Color, Behav_Female_Attacks.Outcome, Behav_Video_Metadata.VideoTimeStart, Behav_Female.ExcludeYN, Behav_Female.ReasonExclusion;
                          " )
@@ -67,8 +60,8 @@ AllAttacks <- AllAttacks[AllAttacks$ExcludeYN == 0,] # see remarks
 # reformat columns in tables
 AllAttacks$AttackTime <- ConvertToTime(AllAttacks$AttackTime)
 AllAttacks$VideoTimeStart <- ConvertToTime(AllAttacks$VideoTimeStart)
-AllAttacks$AttackedTermiteColor[AllAttacks$AttackedTermiteColor == 1] <- "Brown"
-AllAttacks$AttackedTermiteColor[AllAttacks$AttackedTermiteColor == 2] <- "Green"
+AllAttacks$AttackedTermiteColor[AllAttacks$AttackedTermiteColor == 1] <- "Green"
+AllAttacks$AttackedTermiteColor[AllAttacks$AttackedTermiteColor == 2] <- "Brown"
 AllAttacks$Outcome[AllAttacks$Outcome == 1] <- "Consumed"
 AllAttacks$Outcome[AllAttacks$Outcome == -1] <- "Dropped"
 str(AllAttacks)
@@ -105,7 +98,7 @@ x <- x[x$AttackTime == min(x$AttackTime),]
 
 FirstAttacks <- do.call(rbind,lapply(FirstAttacks,FirstAttacks_fun))
 
-nrow(FirstAttacks) # 95 looks good
+nrow(FirstAttacks) # 30 looks good
 rownames(FirstAttacks) <- NULL
 
 
@@ -114,16 +107,16 @@ rownames(FirstAttacks) <- NULL
 head(FirstAttacks)
 
 {# create table 2 lines per test: FocalTermiteAttack
-FocalTermiteAttack <- rbind(AllFemales[,c('FID', 'GroupName', 'SubGroupName')],AllFemales[,c('FID', 'GroupName', 'SubGroupName')])
+FocalTermiteAttack <- rbind(AllFemales[,c('FID', 'SubGroupName')],AllFemales[,c('FID', 'SubGroupName')])
 FocalTermiteAttack$FocalTermiteColor <- c(rep('Brown',nrow(AllFemales)),rep('Green',nrow(AllFemales)))
 FocalTermiteAttack <- FocalTermiteAttack[order(FocalTermiteAttack$FID),]
-
+nrow(FocalTermiteAttack) # 60 looks good
 
 
 FocalTermiteAttack <- split(FocalTermiteAttack, FocalTermiteAttack$FID)
 
 FocalTermiteAttack_fun <- function(x){
-  x$FocalTermiteYN <- sample(c(0,1), 2,replace=FALSE) # randomly assigning YN, determining whterh the termite is focal or not
+  x$FocalTermiteYN <- sample(c(0,1), 2,replace=FALSE) # randomly assigning YN, determining whether the termite is focal or not
   return(x)
 }
 
@@ -133,8 +126,10 @@ rownames(FocalTermiteAttack) <- NULL
 
 FocalTermiteAttack <- merge(FocalTermiteAttack, FirstAttacks[,c('FID','AttackedTermiteColor')], by='FID', all.x=TRUE)
 
+
 FocalTermiteAttack$FocalTermiteAttackedYN[FocalTermiteAttack$FocalTermiteColor == FocalTermiteAttack$AttackedTermiteColor] <- 1
 FocalTermiteAttack$FocalTermiteAttackedYN[FocalTermiteAttack$FocalTermiteColor != FocalTermiteAttack$AttackedTermiteColor] <- 0
+
 
 for (i in 1:nrow(FocalTermiteAttack)) {
   
@@ -152,8 +147,7 @@ for (i in 1:nrow(FocalTermiteAttack)) {
   
   }
 
-FocalTermiteAttack$PriorExposureYN[FocalTermiteAttack$GroupName == 'DB'] <- 1
-FocalTermiteAttack$PriorExposureYN[FocalTermiteAttack$GroupName == 'Water'] <- 0
+
 
 }
 
@@ -177,7 +171,7 @@ for (i in 1:nrow(AllAttacks)) {
   if(AllAttacks$SubGroupName[i] == "BrownDB" & AllAttacks$AttackedTermiteColor[i] == 'Brown')
   {AllAttacks$AttackedTermitePalatability[i] <- 0}
   
-  if(AllAttacks$SubGroupName[i] == "BrownDB" & FocalTermiteAttack$AttackedTermiteColor[i] == 'Green')
+  if(AllAttacks$SubGroupName[i] == "BrownDB" & AllAttacks$AttackedTermiteColor[i] == 'Green')
   {AllAttacks$AttackedTermitePalatability[i] <- 1}
   
 }
@@ -198,7 +192,7 @@ for (i in 1:nrow(FirstAttacks)) {
   if(FirstAttacks$SubGroupName[i] == "BrownDB" & FirstAttacks$AttackedTermiteColor[i] == 'Brown')
   {FirstAttacks$AttackedTermitePalatability[i] <- 0}
   
-  if(FirstAttacks$SubGroupName[i] == "BrownDB" & FocalTermiteAttack$AttackedTermiteColor[i] == 'Green')
+  if(FirstAttacks$SubGroupName[i] == "BrownDB" & FirstAttacks$AttackedTermiteColor[i] == 'Green')
   {FirstAttacks$AttackedTermitePalatability[i] <- 1}
   
 }
@@ -207,9 +201,9 @@ for (i in 1:nrow(FirstAttacks)) {
 head(FirstAttacks) # dataset for exploratory analyses
 
 
-# 20181031
-# write.csv(FocalTermiteAttack, file = "FocalTermiteAttack.csv", row.names = FALSE)
-# write.csv(AllAttacks, file = "AllAttacks.csv", row.names = FALSE)
-# write.csv(FirstAttacks, file = "FirstAttacks.csv", row.names = FALSE)
 
+# write.csv(FocalTermiteAttack, file = "FocalTermiteAttack2.csv", row.names = FALSE)
+# write.csv(AllAttacks, file = "AllAttacks2.csv", row.names = FALSE)
+# write.csv(FirstAttacks, file = "FirstAttacks2.csv", row.names = FALSE)
+# 20181121 first time
 

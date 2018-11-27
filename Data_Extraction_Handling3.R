@@ -2,24 +2,16 @@
 #	 Malika IHLE      malika_ihle@hotmail.fr
 #	 Preregistration manipulation color and unpalatability 
 #  data extraction and handling
-#	 Start : 31 october 2018
-#	 last modif : 
+#	 Start : 27 november 2018
 #	 commit: first commit
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 {# Remarks
-### excluded FID:
-  # 18604 : died during training
-  # 18630 : protocol failed
-  # 18632 : video failed
-  # 18650 : video failed
-  # 18687 : video failed
-
 ## color:  1=Green or 2=Brown
 ## outcome: 1= Consum or -1=Drop
-## in DB: all times are sotred in character format with 6 digits '000000'
+## in DB: all times are stored in character format with 6 digits '000000'
 
- ## AllAttacks table include all females tested since requirement for stopping the test was that they need to attack at least once (or otherwise the test would have been repeated the day after, which did not happen) 
+## AllAttacks table include all females tested since requirement for stopping the test was that they need to attack at least once (or otherwise the test would have been repeated the day after, which did not happen) 
   
 }
 
@@ -45,9 +37,8 @@ ConvertToTime <- function(x){
 
 {# load data
 
-conDB= odbcConnectAccess2007("VideoAnalyses_1BitrexTermites.accdb")
+conDB= odbcConnectAccess2007("VideoAnalyses_3BitrexTermites.accdb")
 sqlTables(conDB)	# list all the tables in the DB  
-
 
 AllAttacks <- sqlQuery(conDB, "
                           SELECT Behav_Video_Metadata.FID, 
@@ -107,7 +98,7 @@ x <- x[x$AttackTime == min(x$AttackTime),]
 
 FirstAttacks <- do.call(rbind,lapply(FirstAttacks,FirstAttacks_fun))
 
-nrow(FirstAttacks) # 95 looks good
+nrow(FirstAttacks) # 30 looks good
 rownames(FirstAttacks) <- NULL
 
 
@@ -116,16 +107,16 @@ rownames(FirstAttacks) <- NULL
 head(FirstAttacks)
 
 {# create table 2 lines per test: FocalTermiteAttack
-FocalTermiteAttack <- rbind(AllFemales[,c('FID', 'GroupName', 'SubGroupName')],AllFemales[,c('FID', 'GroupName', 'SubGroupName')])
+FocalTermiteAttack <- rbind(AllFemales[,c('FID', 'SubGroupName')],AllFemales[,c('FID', 'SubGroupName')])
 FocalTermiteAttack$FocalTermiteColor <- c(rep('Brown',nrow(AllFemales)),rep('Green',nrow(AllFemales)))
 FocalTermiteAttack <- FocalTermiteAttack[order(FocalTermiteAttack$FID),]
-nrow(FocalTermiteAttack) # 190 looks good
+nrow(FocalTermiteAttack) # 60 looks good
 
 
 FocalTermiteAttack <- split(FocalTermiteAttack, FocalTermiteAttack$FID)
 
 FocalTermiteAttack_fun <- function(x){
-  x$FocalTermiteYN <- sample(c(0,1), 2,replace=FALSE) # randomly assigning YN, determining whterh the termite is focal or not
+  x$FocalTermiteYN <- sample(c(0,1), 2,replace=FALSE) # randomly assigning YN, determining whether the termite is focal or not
   return(x)
 }
 
@@ -156,8 +147,7 @@ for (i in 1:nrow(FocalTermiteAttack)) {
   
   }
 
-FocalTermiteAttack$PriorExposureYN[FocalTermiteAttack$GroupName == 'DB'] <- 1
-FocalTermiteAttack$PriorExposureYN[FocalTermiteAttack$GroupName == 'Water'] <- 0
+
 
 }
 
@@ -168,8 +158,7 @@ head(AllAttacks)
 
 AllAttacks$DropYN[AllAttacks$Outcome == 'Consumed'] <- 0
 AllAttacks$DropYN[AllAttacks$Outcome == 'Dropped'] <- 1
-AllAttacks$PriorExposureYN[AllAttacks$GroupName == 'DB'] <- 1
-AllAttacks$PriorExposureYN[AllAttacks$GroupName == 'Water'] <- 0
+
 
 for (i in 1:nrow(AllAttacks)) {
   
@@ -213,11 +202,8 @@ head(FirstAttacks) # dataset for exploratory analyses
 
 
 
-# write.csv(FocalTermiteAttack, file = "FocalTermiteAttack.csv", row.names = FALSE)
-# write.csv(AllAttacks, file = "AllAttacks.csv", row.names = FALSE)
-# write.csv(FirstAttacks, file = "FirstAttacks.csv", row.names = FALSE)
-# 20181031 first time
-# 20181101 with prior exposure to allattack table
-# 20181101 correct a SERIOUS typo reversing all the colors !!!!!
-# 20181121 added data from cohort 3
+# write.csv(FocalTermiteAttack, file = "FocalTermiteAttack3.csv", row.names = FALSE)
+# write.csv(AllAttacks, file = "AllAttacks3.csv", row.names = FALSE)
+# write.csv(FirstAttacks, file = "FirstAttacks3.csv", row.names = FALSE)
+# 20181127 first time
 

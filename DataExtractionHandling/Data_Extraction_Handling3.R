@@ -202,8 +202,8 @@ head(FirstAttacks) # dataset for exploratory analyses
 
 
 
-# write.csv(FocalTermiteAttack, file = "FocalTermiteAttack3.csv", row.names = FALSE)
-# write.csv(AllAttacks, file = "AllAttacks3.csv", row.names = FALSE)
-# write.csv(FirstAttacks, file = "FirstAttacks3.csv", row.names = FALSE)
+#write.csv(FocalTermiteAttack, file = "FocalTermiteAttack3.csv", row.names = FALSE)
+#write.csv(AllAttacks, file = "AllAttacks3.csv", row.names = FALSE)
+#write.csv(FirstAttacks, file = "FirstAttacks3.csv", row.names = FALSE)
 # 20181127 first time
 

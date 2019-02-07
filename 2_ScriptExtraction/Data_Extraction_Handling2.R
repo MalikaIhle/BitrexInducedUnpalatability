@@ -200,10 +200,10 @@ for (i in 1:nrow(FirstAttacks)) {
 
 head(FirstAttacks) # dataset for exploratory analyses
 
+## output_folder <- "3_ExtractedData"
+## write.csv(FocalTermiteAttack, file = paste(output_folder,"FocalTermiteAttack2.csv", sep="/"), row.names = FALSE) 
+## write.csv(AllAttacks, file = paste(output_folder,"AllAttacks2.csv", sep="/"), row.names = FALSE) 
+## write.csv(FirstAttacks, file = paste(output_folder,"FirstAttacks2.csv", sep="/"), row.names = FALSE) 
 
-
-# write.csv(FocalTermiteAttack, file = "FocalTermiteAttack2.csv", row.names = FALSE)
-# write.csv(AllAttacks, file = "AllAttacks2.csv", row.names = FALSE)
-# write.csv(FirstAttacks, file = "FirstAttacks2.csv", row.names = FALSE)
 # 20181121 first time
 

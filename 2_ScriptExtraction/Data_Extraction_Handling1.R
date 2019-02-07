@@ -212,10 +212,11 @@ for (i in 1:nrow(FirstAttacks)) {
 head(FirstAttacks) # dataset for exploratory analyses
 
 
+## output_folder <- "3_ExtractedData"
 
-# write.csv(FocalTermiteAttack, file = "FocalTermiteAttack.csv", row.names = FALSE)
-# write.csv(AllAttacks, file = "AllAttacks.csv", row.names = FALSE)
-# write.csv(FirstAttacks, file = "FirstAttacks.csv", row.names = FALSE)
+## write.csv(FocalTermiteAttack, file = paste(output_folder,"FocalTermiteAttack.csv", sep="/"), row.names = FALSE) 
+## write.csv(AllAttacks, file = paste(output_folder,"AllAttacks.csv", sep="/"), row.names = FALSE) 
+## write.csv(FirstAttacks, file = paste(output_folder,"FirstAttacks.csv", sep="/"), row.names = FALSE) 
 # 20181031 first time
 # 20181101 with prior exposure to allattack table
 # 20181101 correct a SERIOUS typo reversing all the colors !!!!!

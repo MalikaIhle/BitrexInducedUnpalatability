@@ -201,8 +201,8 @@ head(AllAttacks) # dataset for model 2
 head(FirstAttacks) # dataset for exploratory analyses
 
 
-
-#write.csv(FocalTermiteAttack, file = "FocalTermiteAttack1_5.csv", row.names = FALSE)
-#write.csv(AllAttacks, file = "AllAttacks1_5.csv", row.names = FALSE)
-#write.csv(FirstAttacks, file = "FirstAttacks1_5.csv", row.names = FALSE)
+## output_folder <- "3_ExtractedData"
+## write.csv(FocalTermiteAttack, file = paste(output_folder,"FocalTermiteAttack1_5.csv", sep="/"), row.names = FALSE) 
+## write.csv(AllAttacks, file = paste(output_folder,"AllAttacks1_5.csv", sep="/"), row.names = FALSE) 
+## write.csv(FirstAttacks, file = paste(output_folder,"FirstAttacks1_5.csv", sep="/"), row.names = FALSE) 
 # 20181127 first time

@@ -1,5 +1,15 @@
 # BitrexInducedUnpalatability
 
+the number 1 (training), 1.5 (no training), 2 (no training), 3 (no training), 3_Final (training) refer to different concentration of bitrex (in different experiment, i.e. different set of spiders) and when using these different concentration, some spiders were given prior exposure (aka training) or not.
+
+chronologically, the experiments were not conducted following the gradient of concentration but in this order:  
+1 (training)  
+2 (no training)  
+3 (no training)  
+1.5 (no training)  
+3_Final (training)  
+
+
 ## 1) Raw Data  
 Contains all Databases:  
 VideoAnalyses_0_control_BitrexTermites.accdb (basal drop rate test),   VideoAnalyses_1_5BitrexTermites.accdb (1.5%),   VideoAnalyses_1BitrexTermites.accdb (1%, with training),   VideoAnalyses_2BitrexTermites.accdb (2%),   VideoAnalyses_3_Final_BitrexTermites.accdb (3% final test with training),   and VideoAnalyses_3BitrexTermites.accdb (3% intermediate with no training)  

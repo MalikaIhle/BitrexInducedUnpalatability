@@ -14,9 +14,11 @@ rm(list = ls(all = TRUE))
 library(lme4)
 library(arm)
 
-AllAttacks <- read.csv(file="AllAttacks.csv", header=TRUE, sep=",")
-FocalTermiteAttack <- read.csv(file = "FocalTermiteAttack.csv", header=TRUE, sep=",")
-FirstAttacks <- read.csv(file = "FirstAttacks.csv", header=TRUE, sep=",")
+
+
+AllAttacks <- read.csv(file="3_ExtractedData/AllAttacks.csv", header=TRUE, sep=",")
+FocalTermiteAttack <- read.csv(file = "3_ExtractedData/FocalTermiteAttack.csv", header=TRUE, sep=",")
+FirstAttacks <- read.csv(file = "3_ExtractedData/FirstAttacks.csv", header=TRUE, sep=",")
 
 
 

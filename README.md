@@ -1,22 +1,33 @@
 # BitrexInducedUnpalatability
 
-## Data extraction: need to run on windows, R 32 bits for package RODBC to call database
+## 1) Raw Data  
+Contains all Databases:  
+VideoAnalyses_0_control_BitrexTermites.accdb (basal drop rate test),   VideoAnalyses_1_5BitrexTermites.accdb (1.5%),   VideoAnalyses_1BitrexTermites.accdb (1%, with training),   VideoAnalyses_2BitrexTermites.accdb (2%),   VideoAnalyses_3_Final_BitrexTermites.accdb (3% final test with training),   and VideoAnalyses_3BitrexTermites.accdb (3% intermediate with no training)  
+
+
+## 2) Data extraction
+### need to run on windows, R 32 bits for package RODBC to call database
+#### if problem with making connection ebtween R and Access, consider installing this:
+##### https://www.microsoft.com/en-ca/download/details.aspx?id=13255
 generate csv file to use for data analysis
 
-## Data analysis: call CVS file and run stats
-
-
-
-Folder 'AllAttacks' contains: 'AllAttacks.csv'(all attacks for 1%), 'AllAttacks1_5.csv' (all attacks for 1.5%), 'AllAttacks2.csv'
+## 3) Extracted Data
+### Folder 'AllAttacks'  
+'AllAttacks.csv'(all attacks for 1%), 'AllAttacks1_5.csv' (all attacks for 1.5%), 'AllAttacks2.csv'
 (all attacks for 2%), 'AllAttacks3.csv'(all attacks for first round of 3%, with no training), and 'AllAttacks3_final.csv'(for all attacks of the last round of 3%, with training)
 
-Folder 'DataAnalysis' , 'DataExtractionHandling' , and  'FocalTermiteAttack' follow the same format as above 
+### Folder 'FirstAttacks' 
+similar structure as above  
 
-Folder 'VideoAnalyses' contains ALL databases: VideoAnalyses_0_control_BitrexTermites.accdb (basal drop rate test), VideoAnalyses_1_5BitrexTermites.accdb (1.5%), VideoAnalyses_1BitrexTermites.accdb (1%, with training), VideoAnalyses_2BitrexTermites.accdb (2%), VideoAnalyses_3_Final_BitrexTermites.accdb (3% final test with training), and VideoAnalyses_3BitrexTermites.accdb (3% intermediate with no training)
+### Folder 'FocalAttacks' 
+similar structure as above  
+
+## 3) Data analyses  
+Call CVS file and run stats
 
 
 
-#IMPORTANT: 
+# IMPORTANT: 
 
  1. The script ran for 3% final tests does not include the training. I couldn't run the same 1% script on the data since that script was specified to the first dataset, so I ran the intermediate script. We got the results for the drop rate, but not the effect of the training, color, etc.
 

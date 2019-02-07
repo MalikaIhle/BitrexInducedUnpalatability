@@ -37,7 +37,7 @@ rm(list = ls(all = TRUE))
 
 {# load data
   
-  conDB= odbcConnectAccess2007("VideoAnalyses_1_5BitrexTermites.accdb")
+  conDB= odbcConnectAccess2007("1_RawData/VideoAnalyses_1_5BitrexTermites.accdb")
   sqlTables(conDB)	# list all the tables in the DB  
   
   AllAttacks <- sqlQuery(conDB, "

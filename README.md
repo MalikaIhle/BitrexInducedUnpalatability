@@ -1,6 +1,6 @@
 # BitrexInducedUnpalatability
 
-the number 1 (training), 1.5 (no training), 2 (no training), 3 (no training), 3_Final (training) refer to different concentration of bitrex (in different experiment, i.e. different set of spiders) and when using these different concentration, some spiders were given prior exposure (aka training) or not.
+6 experiment were conducted (with different sets of spiders), the numbers refer to the concentration of bitrex. 0 (no training, no bitrex involved), 1 (training), 1.5 (no training), 2 (no training), 3 (no training), 3_Final (training) refer to different concentration of bitrex (in different experiment, i.e. different set of spiders) and when using these different concentration, some spiders were given prior exposure (aka training) or not.
 
 chronologically, the experiments were not conducted following the gradient of concentration but in this order:  
 1 (training)  
@@ -8,7 +8,7 @@ chronologically, the experiments were not conducted following the gradient of co
 3 (no training)  
 1.5 (no training)  
 3_Final (training)  
-
+0 (no training, no bitrex involved at all)
 
 ## 1) Raw Data  
 Contains all Databases:  
@@ -25,12 +25,21 @@ generate csv file to use for data analysis
 ### Folder 'AllAttacks'  
 'AllAttacks.csv'(all attacks for 1%), 'AllAttacks1_5.csv' (all attacks for 1.5%), 'AllAttacks2.csv'
 (all attacks for 2%), 'AllAttacks3.csv'(all attacks for first round of 3%, with no training), and 'AllAttacks3_final.csv'(for all attacks of the last round of 3%, with training)
+We use these to analyse drop rate
+
 
 ### Folder 'FirstAttacks' 
 similar structure as above  
+We use these to analyses to delay to attack
+
 
 ### Folder 'FocalAttacks' 
-similar structure as above  
+In each test, there were four termites, two of one treatment (color and palatibility), and two of the other.
+a focal termite group (of two termites) is a randomly selected group in each test.  
+We use these to test for the likelihood of attack toward one treatment or another (regardless of color and different palatability)
+file names are structured as above  
+
+
 
 ## 3) Data analyses  
 Call CVS file and run stats
@@ -41,10 +50,10 @@ Call CVS file and run stats
 
  1. The script ran for 3% final tests does not include the training. I couldn't run the same 1% script on the data since that script was specified to the first dataset, so I ran the intermediate script. We got the results for the drop rate, but not the effect of the training, color, etc.
 
- 2. There is no script for the control basal drop rate test. The database will say which color termite was attacked and dropped/consumed, but I have no way of analyzing the drop rate since the script wants to analyze a focal termite.
+ 2. There is no script for the control basal drop rate test. The database will say which color termite was attacked and dropped/consumed, but I have no way of analyzing the drop rate since the script wants to analyze a focal termite.  
+ 
+3. We need to analyze the drop rate of palatable termites when a spider has attacked a palatable termite first, compared to when the spider attacked a bitrex termite first and then went on to attack a palatable termite after. This will tell us if the contamination is on the mouth parts or not.
 
-3. We still have to create a script for the termite movement videos (just average gridlines crossed comparing each treatment?), and for the other bitrex prey tests (crickets, caped termites, fruit flies). During the caped termite tests, many spiders attacked and dropped the unpalatable prey multiple times, so for analysis we should look at the total drop rate and compare it to our other datasets. 
+4. We still have to create a script for the termite movement videos (just average gridlines crossed comparing each treatment?), and for the other bitrex prey tests (crickets, caped termites, fruit flies). During the caped termite tests, many spiders attacked and dropped the unpalatable prey multiple times, so for analysis we should look at the first attack drop rate and compare it to other parallel experiments where similar prey were given but without bitrex. We still are going to describe, anecdotally that some spiders have attacked multiple and always (?) dropped. 
 
- 4. We need to analyze the drop rate of palatable termites when a spider has attacked a palatable termite first, compared to when the spider attacked a bitrex termite first and then went on to attack a palatable termite after. This will tell us if the contamination is on the mouth parts or not.
-
-5. The other data (other than drop rate), such as if they were more likely to attack a particular treatment, delay to attack, color preference, or if training/prior exposure matters (for the 1% and final 3% tests) needs to be accounted for- the data is accessable with the script, I just haven't written it all out yet.
+5. Additional exploratory analyses ideas (other than drop rate): such as if they were more likely to attack a particular treatment, delay to attack, color preference, or if training/prior exposure matters (for the 1% and final 3% tests) needs to be accounted for.

@@ -37,7 +37,7 @@ rm(list = ls(all = TRUE))
 
 {# load data
   
-  conDB= odbcConnectAccess2007("VideoAnalyses_3_Final_BitrexTermites.accdb")
+  conDB= odbcConnectAccess2007("1_RawData/VideoAnalyses_3_Final_BitrexTermites.accdb")
   sqlTables(conDB)	# list all the tables in the DB  
   
   AllAttacks <- sqlQuery(conDB, "
@@ -202,8 +202,8 @@ head(FirstAttacks) # dataset for exploratory analyses
 
 
 
-#write.csv(FocalTermiteAttack, file = "FocalTermiteAttack3_Final.csv", row.names = FALSE)
-#write.csv(AllAttacks, file = "AllAttacks3_Final.csv", row.names = FALSE)
-#write.csv(FirstAttacks, file = "FirstAttacks3_Final.csv", row.names = FALSE)
+# write.csv(FocalTermiteAttack, file = "FocalTermiteAttack3_Final.csv", row.names = FALSE)
+# write.csv(AllAttacks, file = "AllAttacks3_Final.csv", row.names = FALSE)
+# write.csv(FirstAttacks, file = "FirstAttacks3_Final.csv", row.names = FALSE)
 # 20181127 first time
 

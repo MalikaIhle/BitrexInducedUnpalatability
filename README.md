@@ -47,14 +47,8 @@ Call CVS file and run stats
 
 
 
-# IMPORTANT: 
+# TODO: 
 
- 1. The script ran for 3% final tests does not include the training. I couldn't run the same 1% script on the data since that script was specified to the first dataset, so I ran the intermediate script. We got the results for the drop rate, but not the effect of the training, color, etc.
+. We need to analyze the drop rate of palatable termites when a spider has attacked a palatable termite first, compared to when the spider attacked a bitrex termite first and then went on to attack a palatable termite after. This will tell us if the contamination is on the mouth parts or not.
 
- 2. There is no script for the control basal drop rate test. The database will say which color termite was attacked and dropped/consumed, but I have no way of analyzing the drop rate since the script wants to analyze a focal termite.  
- 
-3. We need to analyze the drop rate of palatable termites when a spider has attacked a palatable termite first, compared to when the spider attacked a bitrex termite first and then went on to attack a palatable termite after. This will tell us if the contamination is on the mouth parts or not.
-
-4. We still have to create a script for the termite movement videos (just average gridlines crossed comparing each treatment?), and for the other bitrex prey tests (crickets, caped termites, fruit flies). During the caped termite tests, many spiders attacked and dropped the unpalatable prey multiple times, so for analysis we should look at the first attack drop rate and compare it to other parallel experiments where similar prey were given but without bitrex. We still are going to describe, anecdotally that some spiders have attacked multiple and always (?) dropped. 
-
-5. Additional exploratory analyses ideas (other than drop rate): such as if they were more likely to attack a particular treatment, delay to attack, color preference, or if training/prior exposure matters (for the 1% and final 3% tests) needs to be accounted for.
+. We still have to create a script for the termite movement videos (just average gridlines crossed comparing each treatment?), and for the other bitrex prey tests (crickets, caped termites, fruit flies). During the caped termite tests, many spiders attacked and dropped the unpalatable prey multiple times, so for analysis we should look at the first attack drop rate and compare it to other parallel experiments where similar prey were given but without bitrex. We still are going to describe, anecdotally that some spiders have attacked multiple and always (?) dropped. 

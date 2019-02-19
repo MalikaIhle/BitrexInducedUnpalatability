@@ -36,7 +36,8 @@ We use these to analyses to delay to attack
 ### Folder 'FocalAttacks' 
 In each test, there were four termites, two of one treatment (color and palatibility), and two of the other.
 a focal termite group (of two termites) is a randomly selected group in each test.  
-We use these to test for the likelihood of attack toward one treatment or another (regardless of color and different palatability)
+We use these to test for the likelihood of attack toward one treatment or another for the first attack
+(regardless of color and different palatability)
 file names are structured as above  
 
 

@@ -14,10 +14,13 @@ rm(list = ls(all = TRUE))
 library(lme4)
 library(arm)
 
-AllAttacks <- read.csv(file="3_ExtractedData/AllAttacks1_5.csv", header=TRUE, sep=",")
-FocalTermiteAttack <- read.csv(file = "3_ExtractedData/FocalTermiteAttack1_5.csv", header=TRUE, sep=",")
-FirstAttacks <- read.csv(file = "3_ExtractedData/FirstAttacks1_5.csv", header=TRUE, sep=",")
+AllAttacks <- read.csv(file="3_ExtractedData/AllAttacks/AllAttacks1_5.csv", header=TRUE, sep=",")
+FocalTermiteAttack <- read.csv(file = "3_ExtractedData/FocalAttacks/FocalTermiteAttack1_5.csv", header=TRUE, sep=",")
+FirstAttacks <- read.csv(file = "3_ExtractedData/FirstAttacks/FirstAttacks1_5.csv", header=TRUE, sep=",")
 
+FocalTermiteAttack$FocalTermitePalatability <- as.factor(FocalTermiteAttack$FocalTermitePalatability)
+AllAttacks$AttackedTermitePalatability <- as.factor(AllAttacks$AttackedTermitePalatability)
+FirstAttacks$AttackedTermitePalatability <- as.factor(FirstAttacks$AttackedTermitePalatability)
 
 
 head(AllAttacks)    
@@ -30,14 +33,12 @@ head(FirstAttacks)
 # question 2 (confirmatory): reluctant to attack bitrex termite first regardless of their training?  
 # --> main effect of Palatability not significant, effect direction according to expectation = palatable one more likely to be attacked first                                                       
 # question 3 (exploratory): bias against a color ?
-# --> yes, effect direction: have a significant preference to attack the green first
+# --> no
 
-head(FocalTermiteAttack)
+str(FocalTermiteAttack)
 
 mod1 <- glm (FocalTermiteAttackedYN ~ FocalTermiteColor + FocalTermitePalatability, family = 'binomial', data = FocalTermiteAttack)
 summary(mod1)
-
-
 
 
 
@@ -51,7 +52,7 @@ summary(mod1)
 # it might be worth trying with a higher concentration of bitrex
 # however, dropping rate of palatable ones went from 10% (bitrex 1%) to 50%: risk of contamination has increased?? -> take more precaution
 
-head(AllAttacks)
+str(AllAttacks)
 
 mod2 <- glmer (DropYN ~ AttackedTermiteColor + AttackedTermitePalatability  + (1|FID)
                ,family = 'binomial', data = AllAttacks)
@@ -65,7 +66,7 @@ table(AllAttacks$Outcome,AllAttacks$AttackedTermitePalatability) # dropping rate
 # question 1 (exploratory): delay to first attack longer if attack the bitrex termite?
 # no, effect direction opposite expectation = palatable termite attacked first were attacked after a longer delay than bitrex termites attacked first
 
-head(FirstAttacks)
+str(FirstAttacks)
 
 mod3 <- lm(DelayToAttack ~ AttackedTermitePalatability, data = FirstAttacks)
 summary(mod3)

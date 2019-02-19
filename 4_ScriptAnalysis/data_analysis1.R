@@ -8,6 +8,10 @@
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
+## rk:
+# palatability = 0 > DB termite
+# palatability = 1 > water termite
+
 rm(list = ls(all = TRUE))
 
 # packages
@@ -16,10 +20,15 @@ library(arm)
 
 
 
-AllAttacks <- read.csv(file="3_ExtractedData/AllAttacks.csv", header=TRUE, sep=",")
-FocalTermiteAttack <- read.csv(file = "3_ExtractedData/FocalTermiteAttack.csv", header=TRUE, sep=",")
-FirstAttacks <- read.csv(file = "3_ExtractedData/FirstAttacks.csv", header=TRUE, sep=",")
+AllAttacks <- read.csv(file="3_ExtractedData/AllAttacks/AllAttacks.csv", header=TRUE, sep=",")
+FocalTermiteAttack <- read.csv(file = "3_ExtractedData/FocalAttacks/FocalTermiteAttack.csv", header=TRUE, sep=",")
+FirstAttacks <- read.csv(file = "3_ExtractedData/FirstAttacks/FirstAttacks.csv", header=TRUE, sep=",")
 
+FocalTermiteAttack$PriorExposureYN <- as.factor(FocalTermiteAttack$PriorExposureYN)
+FocalTermiteAttack$FocalTermitePalatability <- as.factor(FocalTermiteAttack$FocalTermitePalatability)
+AllAttacks$AttackedTermitePalatability <- as.factor(AllAttacks$AttackedTermitePalatability)
+AllAttacks$PriorExposureYN <- as.factor(AllAttacks$PriorExposureYN)
+FirstAttacks$AttackedTermitePalatability <- as.factor(FirstAttacks$AttackedTermitePalatability)
 
 
 head(AllAttacks)    
@@ -36,13 +45,10 @@ head(FirstAttacks)
 # question 3 (exploratory): bias against a color ?
 # --> no, effect direction: have a slight preference to attack the green first
 
-head(FocalTermiteAttack)
+str(FocalTermiteAttack)
 
 mod1 <- glm (FocalTermiteAttackedYN ~ FocalTermiteColor + FocalTermitePalatability*PriorExposureYN, family = 'binomial', data = FocalTermiteAttack)
 summary(mod1)
-
-
-
 
 
 # model 2: 
@@ -56,7 +62,7 @@ summary(mod1)
 # no, out of 84 bitrex termites attacked, 39 were consumed (46.4%)
 # it might be worth trying with a higher concentration of bitrex
 
-head(AllAttacks)
+str(AllAttacks)
 
 mod2 <- glmer (DropYN ~ AttackedTermiteColor + AttackedTermitePalatability
                #*PriorExposureYN 
@@ -75,6 +81,7 @@ DropPalatable <- invlogit(coef(summary(mod2))[1, 1] + coef(summary(mod2))[3, 1])
 DropPalatable_CI_low <-invlogit(coef(summary(mod2))[1, 1]+ coef(summary(mod2))[3, 1]-coef(summary(mod2))[3, 2]*1.96) # 4.6%
 DropPalatable_CI_high <-invlogit(coef(summary(mod2))[1, 1]+ coef(summary(mod2))[3, 1]+coef(summary(mod2))[3, 2]*1.96) # 20.1%
 
+{# try out power analyses for next exp
 # trying to follow guidelines:
 # https://besjournals.onlinelibrary.wiley.com/action/downloadSupplement?doi=10.1111%2F2041-210X.12306&file=mee312306-sup-0001-AppendixS1.pdf
 # from this paper
@@ -105,7 +112,7 @@ pwr.chisq.test(w=0.5,N=, df=1, sig.level=0.05,power=0.8)
 pwr.chisq.test(w=0.9,N=, df=1, sig.level=0.05,power=0.8)
 pwr.chisq.test(w=1,N=, df=1, sig.level=0.05,power=0.8)
 
-
+}
 
 
 
@@ -113,10 +120,12 @@ pwr.chisq.test(w=1,N=, df=1, sig.level=0.05,power=0.8)
 # question 1 (exploratory): delay to first attack longer if attack the bitrex termite?
 # no, effect direction opposite expectation = palatable termite attacked first were attacked after a longer delay than bitrex termites attacked first
 
-head(FirstAttacks)
+str(FirstAttacks)
 
 mod3 <- lm(DelayToAttack ~ AttackedTermitePalatability, data = FirstAttacks)
 summary(mod3)
+
+
 
 
 

@@ -57,7 +57,7 @@ mod2 <- glmer (DropYN ~ AttackedTermiteColor + AttackedTermitePalatability  + (1
                ,family = 'binomial', data = AllAttacks)
 summary(mod2)
 
-sunflowerplot(AllAttacks$DropYN,AllAttacks$AttackedTermitePalatability)
+#sunflowerplot(AllAttacks$DropYN,AllAttacks$AttackedTermitePalatability)
 table(AllAttacks$Outcome,AllAttacks$AttackedTermitePalatability) # dropping rate of bitrex termite = 85.3%
 
 

@@ -66,7 +66,7 @@ mod2 <- glmer (DropYN ~ AttackedTermiteColor + AttackedTermitePalatability
                ,family = 'binomial', data = AllAttacks)
 summary(mod2)
 
-sunflowerplot(AllAttacks$DropYN,AllAttacks$AttackedTermitePalatability)
+#sunflowerplot(AllAttacks$DropYN,AllAttacks$AttackedTermitePalatability)
 table(AllAttacks$Outcome,AllAttacks$AttackedTermitePalatability)
 
 

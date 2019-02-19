@@ -2,8 +2,8 @@
 #	 Malika IHLE      malika_ihle@hotmail.fr
 #	 Preregistration manipulation color and unpalatability 
 #  data extraction and handling
-#	 Start : 27 november 2018
-#	 commit: first commit
+#	 Start : 19 february 2019
+#	 commit: extract all data including training
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 {# Remarks
@@ -39,6 +39,7 @@ rm(list = ls(all = TRUE))
   
   conDB= odbcConnectAccess2007("1_RawData/VideoAnalyses_3_Final_BitrexTermites.accdb")
   sqlTables(conDB)	# list all the tables in the DB  
+  
   
   AllAttacks <- sqlQuery(conDB, "
                          SELECT Behav_Video_Metadata.FID, 
@@ -98,7 +99,7 @@ head(AllAttacks)
   
   FirstAttacks <- do.call(rbind,lapply(FirstAttacks,FirstAttacks_fun))
   
-  nrow(FirstAttacks) # 30 looks good
+  nrow(FirstAttacks) # 95 looks good
   rownames(FirstAttacks) <- NULL
   
   
@@ -107,10 +108,10 @@ head(AllAttacks)
 head(FirstAttacks)
 
 {# create table 2 lines per test: FocalTermiteAttack
-  FocalTermiteAttack <- rbind(AllFemales[,c('FID', 'SubGroupName')],AllFemales[,c('FID', 'SubGroupName')])
+  FocalTermiteAttack <- rbind(AllFemales[,c('FID', 'GroupName', 'SubGroupName')],AllFemales[,c('FID', 'GroupName', 'SubGroupName')])
   FocalTermiteAttack$FocalTermiteColor <- c(rep('Brown',nrow(AllFemales)),rep('Green',nrow(AllFemales)))
   FocalTermiteAttack <- FocalTermiteAttack[order(FocalTermiteAttack$FID),]
-  nrow(FocalTermiteAttack) # 60 looks good
+  nrow(FocalTermiteAttack) # 190 looks good
   
   
   FocalTermiteAttack <- split(FocalTermiteAttack, FocalTermiteAttack$FID)
@@ -147,7 +148,8 @@ head(FirstAttacks)
     
   }
   
-  
+  FocalTermiteAttack$PriorExposureYN[FocalTermiteAttack$GroupName == 'DB'] <- 1
+  FocalTermiteAttack$PriorExposureYN[FocalTermiteAttack$GroupName == 'Water'] <- 0
   
 }
 
@@ -158,7 +160,8 @@ head(FocalTermiteAttack) # dataset for model 1
   
   AllAttacks$DropYN[AllAttacks$Outcome == 'Consumed'] <- 0
   AllAttacks$DropYN[AllAttacks$Outcome == 'Dropped'] <- 1
-  
+  AllAttacks$PriorExposureYN[AllAttacks$GroupName == 'DB'] <- 1
+  AllAttacks$PriorExposureYN[AllAttacks$GroupName == 'Water'] <- 0
   
   for (i in 1:nrow(AllAttacks)) {
     
@@ -200,10 +203,11 @@ head(AllAttacks) # dataset for model 2
 
 head(FirstAttacks) # dataset for exploratory analyses
 
+
 ## output_folder <- "3_ExtractedData"
 ## write.csv(FocalTermiteAttack, file = paste(output_folder,"FocalTermiteAttack3_Final.csv", sep="/"), row.names = FALSE) 
 ## write.csv(AllAttacks, file = paste(output_folder,"AllAttacks3_Final.csv", sep="/"), row.names = FALSE) 
 ## write.csv(FirstAttacks, file = paste(output_folder,"FirstAttacks3_Final.csv", sep="/"), row.names = FALSE) 
 
 # 20181127 first time
-
+# 20190219 add prior exposure

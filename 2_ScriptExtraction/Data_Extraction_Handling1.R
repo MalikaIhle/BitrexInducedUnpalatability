@@ -19,7 +19,8 @@
 ## outcome: 1= Consum or -1=Drop
 ## in DB: all times are sotred in character format with 6 digits '000000'
 
- ## AllAttacks table include all females tested since requirement for stopping the test was that they need to attack at least once (or otherwise the test would have been repeated the day after, which did not happen) 
+## AllAttacks table include all females tested since requirement for stopping the test was that they need to attack at least once 
+## (or otherwise the test would have been repeated the day after, which did not happen) 
   
 }
 
@@ -125,7 +126,7 @@ nrow(FocalTermiteAttack) # 190 looks good
 FocalTermiteAttack <- split(FocalTermiteAttack, FocalTermiteAttack$FID)
 
 FocalTermiteAttack_fun <- function(x){
-  x$FocalTermiteYN <- sample(c(0,1), 2,replace=FALSE) # randomly assigning YN, determining whterh the termite is focal or not
+  x$FocalTermiteYN <- sample(c(0,1), 2,replace=FALSE) # randomly assigning YN, determining whether the termite is focal or not
   return(x)
 }
 

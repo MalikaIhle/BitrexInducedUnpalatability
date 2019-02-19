@@ -1,10 +1,9 @@
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #	 Malika IHLE      malika_ihle@hotmail.fr
-#	 Preregistration manipulation color and unpalatability 
 #  data analysis
 #	 Start : 27 november 2018
-#	 last modif : 2018 11 21
-#	 commit: first
+#	 last modif : 20190219
+#	 commit: change variables to factors
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
@@ -48,9 +47,10 @@ summary(mod1)
 # question 3 (exploratory): are termite from a certain color more likely to be dropped?
 # --> yes, they tend to be more likely . to drop a brown termite (different color than with bitrex 1%)
 # question 4 (exploratory): are bitrex termites always dropped
-# no, out of 34 bitrex termites attacked, 5 were consumed (14.7%)
+# no, out of 36 bitrex termites attacked, 7 were consumed (19.4%)
 # it might be worth trying with a higher concentration of bitrex
-# however, dropping rate of palatable ones went from 10% (bitrex 1%) to 50%: risk of contamination has increased?? -> take more precaution
+# however, dropping rate of palatable ones went from 10% (bitrex 1%) to 50% again:
+# risk of contamination not resolved??
 
 str(AllAttacks)
 
@@ -64,7 +64,7 @@ table(AllAttacks$Outcome,AllAttacks$AttackedTermitePalatability) # dropping rate
 
 # model 3
 # question 1 (exploratory): delay to first attack longer if attack the bitrex termite?
-# no, effect direction opposite expectation = palatable termite attacked first were attacked after a longer delay than bitrex termites attacked first
+# no, effect according to expectation = palatable termite attacked first were attacked after a shorter delay than bitrex termites attacked first
 
 str(FirstAttacks)
 

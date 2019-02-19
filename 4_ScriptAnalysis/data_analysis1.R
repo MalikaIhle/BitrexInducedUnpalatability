@@ -1,9 +1,8 @@
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #	 Malika IHLE      malika_ihle@hotmail.fr
-#	 Preregistration manipulation color and unpalatability 
 #  data analysis
 #	 Start : 31 october 2018
-#	 last modif : 20118 11 06
+#	 last modif : 20190219
 #	 commit: determine sample size for follow up experiment with higher bitrex concentration
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

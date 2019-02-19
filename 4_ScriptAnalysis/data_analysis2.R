@@ -1,10 +1,9 @@
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #	 Malika IHLE      malika_ihle@hotmail.fr
-#	 Preregistration manipulation color and unpalatability 
 #  data analysis
 #	 Start : 21 november 2018
-#	 last modif : 2018 11 21
-#	 commit: first
+#	 last modif : 20190219
+#	 commit: change variable to factors
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
@@ -14,10 +13,13 @@ rm(list = ls(all = TRUE))
 library(lme4)
 library(arm)
 
-AllAttacks <- read.csv(file="3_ExtractedData/AllAttacks2.csv", header=TRUE, sep=",")
-FocalTermiteAttack <- read.csv(file = "3_ExtractedData/FocalTermiteAttack2.csv", header=TRUE, sep=",")
-FirstAttacks <- read.csv(file = "3_ExtractedData/FirstAttacks2.csv", header=TRUE, sep=",")
+AllAttacks <- read.csv(file="3_ExtractedData/AllAttacks/AllAttacks2.csv", header=TRUE, sep=",")
+FocalTermiteAttack <- read.csv(file = "3_ExtractedData/FocalAttacks/FocalTermiteAttack2.csv", header=TRUE, sep=",")
+FirstAttacks <- read.csv(file = "3_ExtractedData/FirstAttacks/FirstAttacks2.csv", header=TRUE, sep=",")
 
+FocalTermiteAttack$FocalTermitePalatability <- as.factor(FocalTermiteAttack$FocalTermitePalatability)
+AllAttacks$AttackedTermitePalatability <- as.factor(AllAttacks$AttackedTermitePalatability)
+FirstAttacks$AttackedTermitePalatability <- as.factor(FirstAttacks$AttackedTermitePalatability)
 
 
 head(AllAttacks)    
@@ -32,12 +34,10 @@ head(FirstAttacks)
 # question 3 (exploratory): bias against a color ?
 # --> yes, effect direction: have a significant preference to attack the green first
 
-head(FocalTermiteAttack)
+str(FocalTermiteAttack)
 
 mod1 <- glm (FocalTermiteAttackedYN ~ FocalTermiteColor + FocalTermitePalatability, family = 'binomial', data = FocalTermiteAttack)
 summary(mod1)
-
-
 
 
 
@@ -51,7 +51,7 @@ summary(mod1)
 # it might be worth trying with a higher concentration of bitrex
 # however, dropping rate of palatable ones went from 10% (bitrex 1%) to 50%: risk of contamination has increased?? -> take more precaution
 
-head(AllAttacks)
+str(AllAttacks)
 
 mod2 <- glmer (DropYN ~ AttackedTermiteColor + AttackedTermitePalatability  + (1|FID)
                ,family = 'binomial', data = AllAttacks)

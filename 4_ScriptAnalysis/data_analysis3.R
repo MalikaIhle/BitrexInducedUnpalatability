@@ -74,5 +74,18 @@ mod3 <- lm(DelayToAttack ~ AttackedTermitePalatability, data = FirstAttacks)
 summary(mod3)
 
 
+# model 4
+# question: are palatable prey (palatability = 1) more likely to get dropped 
+# if attack occur after an attack on a bitrex prey (palatability = 0)?
 
+# second attack on a palatble prey, when first attack on unpalatable prey
+attackafterbitrex <- table(AllAttacks$DropYN[AllAttacks$AttackNb == 2 & AllAttacks$AttackedTermitePalatability == "1" & AllAttacks$PrevPalatabality == "0"])
+# first attack on a palatable prey
+firstattack <- table(AllAttacks$DropYN[AllAttacks$AttackNb == 1 & AllAttacks$AttackedTermitePalatability == "1"])
+
+fisher.test(cbind(attackafterbitrex,firstattack))
+# https://stats.stackexchange.com/questions/316195/fishers-exact-test-meaning-of-greater-and-less
+# ?fisher.test
+fisher.test(cbind(attackafterbitrex,firstattack), alternative='greater') # ?
+fisher.test(cbind(attackafterbitrex,firstattack), alternative='less') # ?
 

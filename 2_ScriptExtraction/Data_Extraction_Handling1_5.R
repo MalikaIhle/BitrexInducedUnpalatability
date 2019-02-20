@@ -213,11 +213,6 @@ head(FirstAttacks) # dataset for exploratory analyses
   AllAttacks <- do.call(rbind,lapply(AllAttacks_perFID,AllAttacks_perFID_fun))
   rownames(AllAttacks) <- NULL
   
-  #AllAttacks[AllAttacks$FID %in% AllAttacks$FID[AllAttacks$AttackNb == 2 & AllAttacks$AttackedTermitePalatability == "1"],]
-  
-  #AllAttacks$DropYN[AllAttacks$AttackNb == 2 & AllAttacks$AttackedTermitePalatability == "1" & AllAttacks$PrevPalatabality == "0"]
-  #AllAttacks$DropYN[AllAttacks$AttackNb == 1 & AllAttacks$AttackedTermitePalatability == "1"]
-
 }
 
 head(AllAttacks) # dataset for exploration on contamination because of chemical on mouth parts

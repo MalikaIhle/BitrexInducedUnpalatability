@@ -3,7 +3,7 @@
 #	 Preregistration manipulation color and unpalatability 
 #  data extraction and handling
 #	 Start : 27 november 2018
-#	 commit: first commit
+#	 commit: add prevattackpalatability to allattacks
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 {# Remarks
@@ -200,9 +200,33 @@ head(AllAttacks) # dataset for model 2
 
 head(FirstAttacks) # dataset for exploratory analyses
 
+{# add info on previous attack termite palatability
+  AllAttacks <- as.data.frame(AllAttacks %>% group_by(FID) %>% arrange(AttackTime, .by_group = TRUE) %>% mutate(AttackNb = row_number()))
+  
+  AllAttacks_perFID <- split(AllAttacks, AllAttacks$FID)
+  
+  AllAttacks_perFID_fun <- function(x){
+    x$PrevPalatabality <- c(NA,x$AttackedTermitePalatability[-nrow(x)])
+    return(x)
+  }
+  
+  AllAttacks <- do.call(rbind,lapply(AllAttacks_perFID,AllAttacks_perFID_fun))
+  rownames(AllAttacks) <- NULL
+  
+  #AllAttacks[AllAttacks$FID %in% AllAttacks$FID[AllAttacks$AttackNb == 2 & AllAttacks$AttackedTermitePalatability == "1"],]
+  
+  #AllAttacks$DropYN[AllAttacks$AttackNb == 2 & AllAttacks$AttackedTermitePalatability == "1" & AllAttacks$PrevPalatabality == "0"]
+  #AllAttacks$DropYN[AllAttacks$AttackNb == 1 & AllAttacks$AttackedTermitePalatability == "1"]
+
+}
+
+head(AllAttacks) # dataset for exploration on contamination because of chemical on mouth parts
+
 
 ## output_folder <- "3_ExtractedData"
 ## write.csv(FocalTermiteAttack, file = paste(output_folder,"FocalTermiteAttack1_5.csv", sep="/"), row.names = FALSE) 
 ## write.csv(AllAttacks, file = paste(output_folder,"AllAttacks1_5.csv", sep="/"), row.names = FALSE) 
 ## write.csv(FirstAttacks, file = paste(output_folder,"FirstAttacks1_5.csv", sep="/"), row.names = FALSE) 
 # 20181127 first time
+# 20190220 add prevattackpalatability to allattacks
+

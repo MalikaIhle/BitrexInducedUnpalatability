@@ -3,8 +3,7 @@
 #	 Preregistration manipulation color and unpalatability 
 #  data extraction and handling
 #	 Start : 31 october 2018
-#	 last modif : 
-#	 commit: first commit
+#	 last modif : add prevattackpalatability to allattacks
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 {# Remarks
@@ -212,11 +211,27 @@ for (i in 1:nrow(FirstAttacks)) {
 
 head(FirstAttacks) # dataset for exploratory analyses
 
-
+{# add info on previous attack termite palatability
 AllAttacks <- as.data.frame(AllAttacks %>% group_by(FID) %>% arrange(AttackTime, .by_group = TRUE) %>% mutate(AttackNb = row_number()))
 
-AllAttacks[AllAttacks$AttackNb == 2 & AllAttacks$AttackedTermitePalatability == "1",]
+AllAttacks_perFID <- split(AllAttacks, AllAttacks$FID)
 
+AllAttacks_perFID_fun <- function(x){
+x$PrevPalatabality <- c(NA,x$AttackedTermitePalatability[-nrow(x)])
+return(x)
+}
+
+AllAttacks <- do.call(rbind,lapply(AllAttacks_perFID,AllAttacks_perFID_fun))
+rownames(AllAttacks) <- NULL
+
+  #AllAttacks[AllAttacks$FID %in% AllAttacks$FID[AllAttacks$AttackNb == 2 & AllAttacks$AttackedTermitePalatability == "1"],]
+
+  #AllAttacks$DropYN[AllAttacks$AttackNb == 2 & AllAttacks$AttackedTermitePalatability == "1" & AllAttacks$PrevPalatabality == "0"]
+  #AllAttacks$DropYN[AllAttacks$AttackNb == 1 & AllAttacks$AttackedTermitePalatability == "1"]
+}
+
+head(AllAttacks) # dataset for exploration on contamination because of chemical on mouth parts
+  
 
 ## output_folder <- "3_ExtractedData"
 
@@ -227,4 +242,5 @@ AllAttacks[AllAttacks$AttackNb == 2 & AllAttacks$AttackedTermitePalatability == 
 # 20181101 with prior exposure to allattack table
 # 20181101 correct a SERIOUS typo reversing all the colors !!!!!
 # 20181121 added data from cohort 3
+# 20190220 add prevattackpalatability to allattacks
 

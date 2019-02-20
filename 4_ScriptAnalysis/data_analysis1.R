@@ -140,5 +140,3 @@ fisher.test(cbind(attackafterbitrex,firstattack))
 # ?fisher.test
 fisher.test(cbind(attackafterbitrex,firstattack), alternative='greater') # ?
 fisher.test(cbind(attackafterbitrex,firstattack), alternative='less') # ?
-
-

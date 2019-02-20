@@ -213,6 +213,11 @@ for (i in 1:nrow(FirstAttacks)) {
 head(FirstAttacks) # dataset for exploratory analyses
 
 
+AllAttacks <- as.data.frame(AllAttacks %>% group_by(FID) %>% arrange(AttackTime, .by_group = TRUE) %>% mutate(AttackNb = row_number()))
+
+AllAttacks[AllAttacks$AttackNb == 2 & AllAttacks$AttackedTermitePalatability == "1",]
+
+
 ## output_folder <- "3_ExtractedData"
 
 ## write.csv(FocalTermiteAttack, file = paste(output_folder,"FocalTermiteAttack.csv", sep="/"), row.names = FALSE) 

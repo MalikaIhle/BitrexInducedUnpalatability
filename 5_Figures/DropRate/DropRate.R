@@ -28,7 +28,7 @@ source_lines(file0, 12:length(readLines(file0)))
 df <- data.frame()
 plot0_dr <-
   ggplot(df) + 
-  scale_y_continuous(name="Drop Rate", 
+  scale_y_continuous(name="Prey rejection probability", 
         limits=c(0, 1), breaks =c(0,0.25,0.5,0.75,1), labels=scales::percent)+
   scale_x_continuous(limits=c(0, 2), breaks =1, labels="Palatable")+
   theme_classic() + 
@@ -46,7 +46,7 @@ source_lines(file1, 16:length(readLines(file1)))
 plot1_dr <- 
   plot_model(mod2, type = "eff", terms = c('AttackedTermitePalatability'))+
   ylim(c(0,1))+ 
- scale_x_continuous(breaks=c(0,1), labels=c("Unapalatable","Palatable"))+
+# scale_x_continuous(breaks=c(0,1), labels=c("Unapalatable","Palatable"))+
   theme_classic() +
   theme(
     panel.border = element_rect(colour = "black", fill=NA),
@@ -64,7 +64,7 @@ source_lines(file1_5, 16:length(readLines(file1_5)))
 plot1_5_dr <- 
   plot_model(mod2, type = "eff", terms = c('AttackedTermitePalatability'))+
   ylim(c(0,1))+ 
-  scale_x_continuous(breaks=c(0,1), labels=c("Unapalatable","Palatable"))+
+#  scale_x_continuous(breaks=c(0,1), labels=c("Unapalatable","Palatable"))+
   theme_classic() +
   theme(
     panel.border = element_rect(colour = "black", fill=NA),
@@ -82,7 +82,7 @@ source_lines(file2, 16:length(readLines(file2)))
 plot2_dr <- 
   plot_model(mod2, type = "eff", terms = c('AttackedTermitePalatability'))+
   ylim(c(0,1))+ 
-  scale_x_continuous(breaks=c(0,1), labels=c("Unapalatable","Palatable"))+
+ # scale_x_continuous(breaks=c(0,1), labels=c("Unapalatable","Palatable"))+
   theme_classic() +
   theme(
     panel.border = element_rect(colour = "black", fill=NA),
@@ -100,7 +100,7 @@ source_lines(file3, 16:length(readLines(file3)))
 plot3_dr <- 
   plot_model(mod2, type = "eff", terms = c('AttackedTermitePalatability'))+
   ylim(c(0,1))+ 
-  scale_x_continuous(breaks=c(0,1), labels=c("Unapalatable","Palatable"))+
+ # scale_x_continuous(breaks=c(0,1), labels=c("Unapalatable","Palatable"))+
   theme_classic() +
   theme(
     panel.border = element_rect(colour = "black", fill=NA),
@@ -118,7 +118,7 @@ source_lines(file3F, 16:length(readLines(file3F)))
 plot3F_dr <- 
   plot_model(mod2, type = "eff", terms = c('AttackedTermitePalatability'))+
   ylim(c(0,1))+ 
-  scale_x_continuous(breaks=c(0,1), labels=c("Unapalatable","Palatable"))+
+#  scale_x_continuous(breaks=c(0,1), labels=c("Unapalatable","Palatable"))+
   theme_classic() +
   theme(
     panel.border = element_rect(colour = "black", fill=NA),

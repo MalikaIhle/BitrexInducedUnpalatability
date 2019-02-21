@@ -31,7 +31,7 @@ plot1_lkh <- plot_model(mod1,
                         ylim(c(0,1))+ 
                     #pb sinc egrouped data (interaction term) 
                     #scale_x_discrete('FocalTermitePalatability',labels=c("0"="Unapalt", '1'="Pala"))+
-                        scale_y_continuous(name="Likelihood of first attack", 
+                        scale_y_continuous(name="Prey probability of being attacked first", 
                           limits=c(0, 1), breaks =c(0,0.25,0.5,0.75,1), labels=scales::percent)+
                         theme_classic() +
                         theme(
@@ -39,8 +39,7 @@ plot1_lkh <- plot_model(mod1,
                          legend.position=c(0.2,0.10), 
                          axis.title.x=element_blank(),
                          #axis.text.x=element_text(),
-                         axis.ticks.x=element_blank(),
-                         axis.title.y=element_text("Likelihood of first attack"))+
+                         axis.ticks.x=element_blank())+
                        labs(title = "1%")+
                        scale_colour_discrete(name  ="Prior Exposure to Bitrex",
                          breaks=c("0", "1"),
@@ -55,7 +54,7 @@ plot1_5_lkh <-
              type = "eff", 
              terms = c("FocalTermitePalatability"))+
              ylim(c(0,1))+ 
-  scale_x_continuous(limits=c(0, 1), breaks =c(0,1), labels=c("Unpalatable", "Palatable"))+
+ # scale_x_continuous(limits=c(0, 1), breaks =c(0,1), labels=c("Unpalatable", "Palatable"))+
   theme_classic() +
   theme(
     panel.border = element_rect(colour = "black", fill=NA),
@@ -72,7 +71,7 @@ plot2_lkh <-
                           type = "eff", 
                           terms = c("FocalTermitePalatability"))+
   ylim(c(0,1))+ 
-  scale_x_continuous(limits=c(0, 1), breaks =c(0,1), labels=c("Unpalatable", "Palatable"))+
+ # scale_x_continuous(limits=c(0, 1), breaks =c(0,1), labels=c("Unpalatable", "Palatable"))+
   theme_classic() +
   theme(
     panel.border = element_rect(colour = "black", fill=NA),
@@ -89,7 +88,7 @@ plot3_lkh <-
              type = "eff", 
              terms = c("FocalTermitePalatability"))+
   ylim(c(0,1))+ 
-  scale_x_continuous(limits=c(0, 1), breaks =c(0,1), labels=c("Unpalatable", "Palatable"))+
+#  scale_x_continuous(limits=c(0, 1), breaks =c(0,1), labels=c("Unpalatable", "Palatable"))+
   theme_classic() +
   theme(
     panel.border = element_rect(colour = "black", fill=NA),

@@ -1,4 +1,4 @@
-# create pannelled figure for attack likelihood
+# create panelled figure for attack likelihood
 
 rm(list = ls(all = TRUE))
 
@@ -19,13 +19,14 @@ PrepDF <- function(df){
   df$FocalTermitePalatability[df$FocalTermitePalatability == "1"] <- 'Control'
   df$FocalTermitePalatability[df$FocalTermitePalatability == "0"] <- 'DB'
 
-  mod1 <- glm (FocalTermiteAttackedYN ~ -1+FocalTermitePalatability , family = 'binomial', data = df)
+  mod1 <- glm (FocalTermiteAttackedYN ~ -1+FocalTermitePalatability + FocalTermiteColor, family = 'binomial', data = df)
   summary(mod1)
   
   effects_table <- as.data.frame(cbind(est=invlogit(summary(mod1)$coeff[,1]),
                                        CIhigh=invlogit(summary(mod1)$coeff[,1]+summary(mod1)$coeff[,2]*1.96),
                                        CIlow=invlogit(summary(mod1)$coeff[,1]-summary(mod1)$coeff[,2]*1.96)))
-    effects_table$Palatability <- c("Control","DB")
+  effects_table <- effects_table[-nrow(effects_table),]
+  effects_table$Palatability <- c("Control","DB")
   
   return(effects_table)
 }
@@ -103,13 +104,13 @@ df$PriorExposure[df$PriorExposureYN == 0] <- 'Naive'
 
 
 df$PalatExp <- paste(df$FocalTermitePalatability, df$PriorExposure, sep="")
-mod1 <- glm (FocalTermiteAttackedYN ~ -1+PalatExp , family = 'binomial', data = df)
+mod1 <- glm (FocalTermiteAttackedYN ~ -1+PalatExp + FocalTermiteColor, family = 'binomial', data = df)
 summary(mod1)
 
 effects_table <- as.data.frame(cbind(est=invlogit(summary(mod1)$coeff[,1]),
                                       CIhigh=invlogit(summary(mod1)$coeff[,1]+summary(mod1)$coeff[,2]*1.96),
                                       CIlow=invlogit(summary(mod1)$coeff[,1]-summary(mod1)$coeff[,2]*1.96)))
-#effects_table <- effects_table[-nrow(effects_table),]
+effects_table <- effects_table[-nrow(effects_table),]
 effects_table$PriorExposure <- c("Naive", "Trained", "Naive","Trained")
 effects_table$Palatability <- c("Control", "Control", "DB","DB")
 

@@ -2,140 +2,195 @@
 
 rm(list = ls(all = TRUE))
 
+# packages
 
 library(here) # to get path of the Rproj root
-library(sjPlot) # for automatic model plot
-library(effects) # for automatic model plot of effect
+library(lme4) # for glmer
+library(arm) # for invlogit
 library(ggplot2) # to plot
-require(gridExtra) # for function gridarrange
+library(gridExtra) # for function gridarrange
 
 
-source_lines <- function(file, lines){
-  source(textConnection(readLines(file)[lines]))
+# load data
+
+AllAttack0 <- read.csv(file = paste(here(),"3_ExtractedData/AllAttacks/AllAttacks0.csv", sep='/'), header=TRUE, sep=",")
+AllAttack1 <- read.csv(file = paste(here(),"3_ExtractedData/AllAttacks/AllAttacks.csv", sep='/'), header=TRUE, sep=",")
+AllAttack1_5 <- read.csv(file = paste(here(),"3_ExtractedData/AllAttacks/AllAttacks1_5.csv", sep='/'), header=TRUE, sep=",")
+AllAttack2 <- read.csv(file = paste(here(),"3_ExtractedData/AllAttacks/AllAttacks2.csv", sep='/'), header=TRUE, sep=",")
+AllAttack3 <- read.csv(file = paste(here(),"3_ExtractedData/AllAttacks/AllAttacks3.csv", sep='/'), header=TRUE, sep=",")
+AllAttack3F <- read.csv(file = paste(here(),"3_ExtractedData/AllAttacks/AllAttacks3_Final.csv", sep='/'), header=TRUE, sep=",")
+
+# basal drop rate
+basaldr <- table(AllAttack0$Outcome)[2]/(table(AllAttack0$Outcome)[1]+table(AllAttack0$Outcome)[2])
+
+
+# function to prep data (get est+CI from models)
+
+PrepDF <- function(df){
+  df$AttackedTermitePalatability[df$AttackedTermitePalatability == "1"] <- 'Control'
+  df$AttackedTermitePalatability[df$AttackedTermitePalatability == "0"] <- 'DB'
+  
+  mod2 <- glmer (DropYN ~ -1+AttackedTermitePalatability + AttackedTermiteColor + (1|FID), family = 'binomial', data = df)
+  summary(mod2)
+  
+  effects_table <- as.data.frame(cbind(est=invlogit(summary(mod2)$coeff[,1]),
+                                       CIhigh=invlogit(summary(mod2)$coeff[,1]+summary(mod2)$coeff[,2]*1.96),
+                                       CIlow=invlogit(summary(mod2)$coeff[,1]-summary(mod2)$coeff[,2]*1.96)))
+  effects_table <- effects_table[-nrow(effects_table),]
+  effects_table$Palatability <- c("Control","DB")
+  
+  return(effects_table)
+}
+
+effects_table1_5 <- PrepDF(AllAttack1_5)
+effects_table2 <- PrepDF(AllAttack2)
+effects_table3 <- PrepDF(AllAttack3)
+
+
+PrepDF_withtraining <- function(df){
+  df$AttackedTermitePalatability[df$AttackedTermitePalatability == "1"] <- 'Control'
+  df$AttackedTermitePalatability[df$AttackedTermitePalatability == "0"] <- 'DB'
+  df$PriorExposure[df$PriorExposureYN == 1] <- 'Trained'
+  df$PriorExposure[df$PriorExposureYN == 0] <- 'Naive'
+  df$PalatExp <- paste(df$AttackedTermitePalatability, df$PriorExposure, sep="")
+  
+  mod2 <- glmer (DropYN ~ -1 + PalatExp + AttackedTermiteColor + (1|FID), family = 'binomial', data = df)
+  summary(mod2)
+  
+  effects_table <- as.data.frame(cbind(est=invlogit(summary(mod2)$coeff[,1]),
+                                       CIhigh=invlogit(summary(mod2)$coeff[,1]+summary(mod2)$coeff[,2]*1.96),
+                                       CIlow=invlogit(summary(mod2)$coeff[,1]-summary(mod2)$coeff[,2]*1.96)))
+  effects_table <- effects_table[-nrow(effects_table),]
+  effects_table$PriorExposure <- c("Naive", "Trained", "Naive","Trained")
+  effects_table$Palatability <- c("Control", "Control", "DB","DB")
+  
+  return(effects_table)
+}
+
+effects_table1 <- PrepDF_withtraining(AllAttack1)
+effects_table3F <- PrepDF_withtraining(AllAttack3F)
+
+
+# plot
+
+{plot1_5_dr <- 
+    
+    ggplot(data=effects_table1_5, aes(x=Palatability, y=est)) + 
+    scale_y_continuous(name="Prey rejection probability", 
+                       limits=c(0, 1), breaks =c(0,0.25,0.50,0.75,1), labels=scales::percent)+ # 0.75 converted to 75%
+    theme_classic() + # white backgroun, x and y axis (no box)
+    labs(title = "DB solution concentration: 1.5%") +
+    
+    geom_errorbar(aes(ymin=CIlow, ymax=CIhigh), width =0.4)+ # don't plot bor bars on x axis tick, but separate them (dodge)
+    geom_point(size =4, stroke = 1) +
+    geom_hline(yintercept=basaldr, linetype="dashed", color = "grey48") +
+    theme(panel.border = element_rect(colour = "black", fill=NA), # ad square box around graph 
+          axis.title.x=element_text(size=10),
+          axis.title.y=element_text(size=10),
+          plot.title = element_text(hjust = 0.5, size = 10))
+}
+
+{plot2_dr <- 
+    
+    ggplot(data=effects_table2, aes(x=Palatability, y=est)) + 
+    scale_y_continuous(limits=c(0, 1), breaks =c(0,0.25,0.50,0.75,1))+ 
+    theme_classic() + # white backgroun, x and y axis (no box)
+    labs(title = "DB solution concentration: 2%") +
+    
+    geom_errorbar(aes(ymin=CIlow, ymax=CIhigh), width =0.4)+ # don't plot bor bars on x axis tick, but separate them (dodge)
+    geom_point(size =4, stroke = 1) +
+    geom_hline(yintercept=basaldr, linetype="dashed", color = "grey48") +
+    theme(panel.border = element_rect(colour = "black", fill=NA), # ad square box around graph 
+          axis.title.x=element_text(size=10),
+          axis.title.y=element_blank(),
+          axis.text.y=element_blank(),
+          plot.title = element_text(hjust = 0.5, size = 10))
+}
+
+{plot3_dr <- 
+    
+    ggplot(data=effects_table3, aes(x=Palatability, y=est)) + 
+    scale_y_continuous(limits=c(0, 1), breaks =c(0,0.25,0.50,0.75,1))+ 
+    theme_classic() + # white backgroun, x and y axis (no box)
+    labs(title = "DB solution concentration: 3%") +
+    
+    geom_errorbar(aes(ymin=CIlow, ymax=CIhigh), width =0.4)+ # don't plot bor bars on x axis tick, but separate them (dodge)
+    geom_point(size =4, stroke = 1) +
+    geom_hline(yintercept=basaldr, linetype="dashed", color = "grey48") +
+    theme(panel.border = element_rect(colour = "black", fill=NA), # ad square box around graph 
+          axis.title.x=element_text(size=10),
+          axis.title.y=element_blank(),
+          axis.text.y=element_blank(),
+          plot.title = element_text(hjust = 0.5, size = 10))
 }
 
 
-
-file0 <- paste(here(),'4_ScriptAnalysis/data_analysis0.R', sep='/')
-file1 <- paste(here(),'4_ScriptAnalysis/data_analysis1.R', sep='/')
-file1_5 <- paste(here(),'4_ScriptAnalysis/data_analysis1_5.R', sep='/')
-file2 <- paste(here(),'4_ScriptAnalysis/data_analysis2.R', sep='/')
-file3 <- paste(here(),'4_ScriptAnalysis/data_analysis3.R', sep='/')
-file3F <- paste(here(),'4_ScriptAnalysis/data_analysis3_Final.R', sep='/')
+plot1_5_dr_g <- ggplotGrob(plot1_5_dr)
+plot2_dr_g <- ggplotGrob(plot2_dr)
+plot3_dr_g <- ggplotGrob(plot3_dr)
 
 
-source_lines(file0, 12:length(readLines(file0)))
-df <- data.frame()
-plot0_dr <-
-  ggplot(df) + 
-  scale_y_continuous(name="Prey rejection probability", 
-        limits=c(0, 1), breaks =c(0,0.25,0.5,0.75,1), labels=scales::percent)+
-  scale_x_continuous(limits=c(0, 2), breaks =1, labels="Palatable")+
-  theme_classic() + 
-  theme(axis.title.x = element_blank(),
-        panel.border = element_rect(colour = "black", fill=NA)) + 
-  geom_point(aes(x=1, y=5/35), colour="Black", cex=2)+
-  labs(title = "0%")
- 
+setEPS() 
+pdf("Fig1A.pdf", height=5, width=6.85)
+grid.arrange(cbind(plot1_5_dr_g,plot2_dr_g, plot3_dr_g, size="last"))
+dev.off()
 
 
 
+{plot1_dr <- 
+    
+    ggplot(data=effects_table1, aes(x=Palatability, y=est,colour=PriorExposure, shape = PriorExposure)) + 
+    scale_y_continuous(name="Prey rejection probability", 
+                       limits=c(0, 1), breaks =c(0,0.25,0.50,0.75,1), labels=scales::percent)+ # 0.75 converted to 75%
+    theme_classic() + # white backgroun, x and y axis (no box)
+    labs(title = "DB solution concentration: 1%") +
+    
+    geom_errorbar(aes(ymin=CIlow, ymax=CIhigh, col=PriorExposure), width =0.4,na.rm=TRUE, position = position_dodge(width=0.5))+ # don't plot bor bars on x axis tick, but separate them (dodge)
+    geom_point(size =4, aes(shape=PriorExposure, col=PriorExposure), stroke = 1, position = position_dodge(width=0.5)) +
+    geom_hline(yintercept=basaldr, linetype="dashed", color = "grey48") +
+    scale_colour_manual(name= "Prior exposure to DB", values=c("Black","Grey")) +
+    scale_shape_manual(name= "Prior exposure to DB", values=c(16,17))+ # duplicate title to combine legend
+    theme(panel.border = element_rect(colour = "black", fill=NA), # ad square box around graph 
+          legend.position=c(0.5,0.85),
+          legend.title = element_text(size=rel(0.8)),
+          legend.text = element_text(size=rel(0.7)),
+          legend.key.size = unit(0.8, 'lines'),
+          axis.title.x=element_text(size=10),
+          axis.title.y=element_text(size=10),
+          plot.title = element_text(hjust = 0.5, size = 10)) +
+    guides(shape = guide_legend(override.aes = list(linetype = 0, size = 2))) # remove bar o top of symbol in legend
+  
+}
 
-source_lines(file1, 16:length(readLines(file1)))
+{plot3F_dr <- 
+    
+    ggplot(data=effects_table3F, aes(x=Palatability, y=est,colour=PriorExposure, shape = PriorExposure)) + 
+    scale_y_continuous(limits=c(0, 1), breaks =c(0,0.25,0.50,0.75,1))+ 
+    theme_classic() + # white backgroun, x and y axis (no box)
+    labs(title = "DB solution concentration: 3%") +
+    geom_errorbar(aes(ymin=CIlow, ymax=CIhigh, col=PriorExposure),  width =0.4,na.rm=TRUE, position = position_dodge(width=0.5))+ # don't plot bor bars on x axis tick, but separate them (dodge)
+    geom_point(size =4, aes(shape=PriorExposure, col=PriorExposure), stroke = 1, position = position_dodge(width=0.5)) +
+    geom_hline(yintercept=basaldr, linetype="dashed", color = "grey48") +
+    scale_colour_manual(values=c("Black","Grey")) +
+    scale_shape_manual(values=c(16,17))+ # duplicate title to combine legend
+    theme(panel.border = element_rect(colour = "black", fill=NA), # ad square box around graph 
+          legend.position="none",
+          axis.title.y=element_blank(),
+          axis.text.y=element_blank(),
+          axis.title.x=element_text(size=10),
+          plot.title = element_text(hjust = 0.5, size=10))
+  
+}
 
-plot1_dr <- 
-  plot_model(mod2, type = "eff", terms = c('AttackedTermitePalatability'))+
-  ylim(c(0,1))+ 
-# scale_x_continuous(breaks=c(0,1), labels=c("Unapalatable","Palatable"))+
-  theme_classic() +
-  theme(
-    panel.border = element_rect(colour = "black", fill=NA),
-    legend.position="none", 
-    axis.title.x=element_blank(),
-    axis.ticks.x=element_blank(),
-    axis.title.y=element_blank(),
-    axis.text.y=element_blank()
-  )+
-  labs(title = "1%")
+plot1_dr_g <- ggplotGrob(plot1_dr)
+plot3F_dr_g <- ggplotGrob(plot3F_dr)
 
-
-source_lines(file1_5, 16:length(readLines(file1_5)))
-
-plot1_5_dr <- 
-  plot_model(mod2, type = "eff", terms = c('AttackedTermitePalatability'))+
-  ylim(c(0,1))+ 
-#  scale_x_continuous(breaks=c(0,1), labels=c("Unapalatable","Palatable"))+
-  theme_classic() +
-  theme(
-    panel.border = element_rect(colour = "black", fill=NA),
-    legend.position="none", 
-    axis.title.x=element_blank(),
-    axis.ticks.x=element_blank(),
-    axis.title.y=element_blank(),
-    axis.text.y=element_blank()
-  )+
-  labs(title = "1.5%")
-
-
-source_lines(file2, 16:length(readLines(file2)))
-
-plot2_dr <- 
-  plot_model(mod2, type = "eff", terms = c('AttackedTermitePalatability'))+
-  ylim(c(0,1))+ 
- # scale_x_continuous(breaks=c(0,1), labels=c("Unapalatable","Palatable"))+
-  theme_classic() +
-  theme(
-    panel.border = element_rect(colour = "black", fill=NA),
-    legend.position="none", 
-    axis.title.x=element_blank(),
-    axis.ticks.x=element_blank(),
-    axis.title.y=element_blank(),
-    axis.text.y=element_blank()
-  )+
-  labs(title = "2%")
-
-
-source_lines(file3, 16:length(readLines(file3)))
-
-plot3_dr <- 
-  plot_model(mod2, type = "eff", terms = c('AttackedTermitePalatability'))+
-  ylim(c(0,1))+ 
- # scale_x_continuous(breaks=c(0,1), labels=c("Unapalatable","Palatable"))+
-  theme_classic() +
-  theme(
-    panel.border = element_rect(colour = "black", fill=NA),
-    legend.position="none", 
-    axis.title.x=element_blank(),
-    axis.ticks.x=element_blank(),
-    axis.title.y=element_blank(),
-    axis.text.y=element_blank()
-  )+
-  labs(title = "3%")
+setEPS() 
+pdf("Fig1B.pdf", height=5, width=5)
+grid.arrange(cbind(plot1_dr_g,plot3F_dr_g, size="last"))
+dev.off()
 
 
-source_lines(file3F, 16:length(readLines(file3F)))
-
-plot3F_dr <- 
-  plot_model(mod2, type = "eff", terms = c('AttackedTermitePalatability'))+
-  ylim(c(0,1))+ 
-#  scale_x_continuous(breaks=c(0,1), labels=c("Unapalatable","Palatable"))+
-  theme_classic() +
-  theme(
-    panel.border = element_rect(colour = "black", fill=NA),
-    legend.position="none", 
-    axis.title.x=element_blank(),
-    axis.ticks.x=element_blank(),
-    axis.title.y=element_blank(),
-    axis.text.y=element_blank()
-  )+
-  labs(title = "3F%")
 
 
-grid.arrange(plot0_dr,
-             plot1_dr,
-             plot1_5_dr,
-             plot2_dr, 
-             plot3_dr,
-             plot3F_dr,
-             ncol=6)
 

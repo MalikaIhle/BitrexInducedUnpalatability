@@ -48,6 +48,7 @@ str(FocalTermiteAttack)
 
 mod1 <- glm (FocalTermiteAttackedYN ~ FocalTermiteColor + FocalTermitePalatability*PriorExposureYN, family = 'binomial', data = FocalTermiteAttack)
 summary(mod1)
+drop1(mod1, test="Chisq")
 
 
 # model 2: 
@@ -68,6 +69,7 @@ mod2 <- glmer (DropYN ~ AttackedTermiteColor + AttackedTermitePalatability
                + (1|FID)
                ,family = 'binomial', data = AllAttacks)
 summary(mod2)
+drop1(mod2, test="Chisq")
 
 #sunflowerplot(AllAttacks$DropYN,AllAttacks$AttackedTermitePalatability)
 table(AllAttacks$Outcome,AllAttacks$AttackedTermitePalatability)
@@ -123,7 +125,7 @@ str(FirstAttacks)
 
 mod3 <- lm(DelayToAttack ~ AttackedTermitePalatability, data = FirstAttacks)
 summary(mod3)
-
+drop1(mod3, test="Chisq")
 
 
 # model 4
@@ -138,5 +140,4 @@ firstattack <- table(AllAttacks$DropYN[AllAttacks$AttackNb == 1 & AllAttacks$Att
 fisher.test(cbind(attackafterbitrex,firstattack))
 # https://stats.stackexchange.com/questions/316195/fishers-exact-test-meaning-of-greater-and-less
 # ?fisher.test
-fisher.test(cbind(attackafterbitrex,firstattack), alternative='greater') # ?
-fisher.test(cbind(attackafterbitrex,firstattack), alternative='less') # ?
+fisher.test(cbind(attackafterbitrex,firstattack), alternative='less') # p =1

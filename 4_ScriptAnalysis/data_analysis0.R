@@ -26,7 +26,6 @@ head(FirstAttacks)
 # question 3 (exploratory): bias against a color ?
 # --> no, effect direction: slight preference to attack the green first
 
-str(FocalTermiteAttack)
 table(FirstAttacks$AttackedTermiteColor)
 
 chisq.test(c(13,17),p=c(0.5,0.5))
@@ -35,7 +34,7 @@ chisq.test(c(13,17),p=c(0.5,0.5))
 
 # model 2: 
 # question 3 (exploratory): are termite from a certain color more likely to be dropped?
-# --> no, effect direction:  more likely to drop a brown termite
+# --> no, trend, effect direction:  more likely to drop a green termite
 # dropping rate of palatable ones is 14.3% (close to when the most precautions against contamination were taken)
 
 str(AllAttacks)
@@ -43,6 +42,7 @@ str(AllAttacks)
 mod2 <- glmer (DropYN ~ AttackedTermiteColor  + (1|FID)
                ,family = 'binomial', data = AllAttacks)
 summary(mod2)
+drop1(mod2, test="Chisq")
 
 table(AllAttacks$Outcome)
 

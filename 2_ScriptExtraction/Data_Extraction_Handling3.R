@@ -3,7 +3,7 @@
 #	 Preregistration manipulation color and unpalatability 
 #  data extraction and handling
 #	 Start : 27 november 2018
-#	 last commit:  add prevattackpalatability to allattacks
+#	 last commit:  just one line for focal termite
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 {# Remarks
@@ -23,6 +23,7 @@ rm(list = ls(all = TRUE))
 library(RODBC) # this require R AND ACCESS to run on 32 bits ! (and apparently can't do it on MAC)
 library(stringr) # this is needed for the function str_pad in ConvertTime function
 library(dplyr)
+  library(here)
 }
 
 
@@ -117,7 +118,7 @@ FocalTermiteAttack <- split(FocalTermiteAttack, FocalTermiteAttack$FID)
 
 FocalTermiteAttack_fun <- function(x){
   x$FocalTermiteYN <- sample(c(0,1), 2,replace=FALSE) # randomly assigning YN, determining whether the termite is focal or not
-  return(x)
+  return(x[x$FocalTermiteYN == 1,])
 }
 
 FocalTermiteAttack <- do.call(rbind,lapply(FocalTermiteAttack,FocalTermiteAttack_fun))
@@ -219,10 +220,11 @@ head(FirstAttacks) # dataset for exploratory analyses
 head(AllAttacks) # dataset for exploration on contamination because of chemical on mouth parts
 
 
-## output_folder <- "3_ExtractedData"
-## write.csv(FocalTermiteAttack, file = paste(output_folder,"FocalTermiteAttack3.csv", sep="/"), row.names = FALSE) 
+output_folder <- paste(here(),"3_ExtractedData", sep='/')
+write.csv(FocalTermiteAttack, file = paste(output_folder,"FocalAttacks/FocalTermiteAttack3.csv", sep="/"), row.names = FALSE) 
 ## write.csv(AllAttacks, file = paste(output_folder,"AllAttacks3.csv", sep="/"), row.names = FALSE) 
 ## write.csv(FirstAttacks, file = paste(output_folder,"FirstAttacks3.csv", sep="/"), row.names = FALSE) 
 
 # 20181127 first time
 # 20190220 add prevattackpalatability to allattacks
+# 20190318 just one line for focal termite !

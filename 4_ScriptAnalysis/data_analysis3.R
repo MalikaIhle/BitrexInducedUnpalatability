@@ -30,7 +30,7 @@ head(FirstAttacks)
 
 # model 1: 
 # question 2 (confirmatory): reluctant to attack bitrex termite first regardless of their training?  
-# --> main effect of Palatability not significant, effect direction opposite expectation = palatable one less likely to be attacked first                                                       
+# --> main effect of Palatability not significant, effect direction according to expectation = palatable one less likely to be attacked first                                                       
 # question 3 (exploratory): bias against a color ?
 # --> no, effect direction: have a slight preference to attack the green first
 

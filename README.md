@@ -49,6 +49,6 @@ Call CVS file and run stats
 
 # TODO: 
 
-* check wish fisher exact test is apropriate to compare drop rate when palatable prey, before or after attacking a non palatable prey. This will tell us if the contamination is on the mouth parts or not.
 
-* We still have to create a script for the termite movement videos (just average gridlines crossed comparing each treatment?), and for the other bitrex prey tests (crickets, caped termites, fruit flies). During the caped termite tests, many spiders attacked and dropped the unpalatable prey multiple times, so for analysis we should look at the first attack drop rate and compare it to other parallel experiments where similar prey were given but without bitrex. We still are going to describe, anecdotally that some spiders have attacked multiple and always (?) dropped. 
+* For the other bitrex prey tests (crickets, caped termites, fruit flies). During the caped termite tests, many spiders attacked and dropped the unpalatable prey multiple times, so for analysis we should look at the first attack drop rate and compare it to other parallel experiments where similar prey were given but without bitrex. We still are going to describe, anecdotally that some spiders have attacked multiple and always (?) dropped. 
+

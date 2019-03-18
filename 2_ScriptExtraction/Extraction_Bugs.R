@@ -191,22 +191,6 @@ head(AllAttacks) # dataset for model 2
 
 head(FirstAttacks) # dataset for exploratory analyses
 
-{# add info on previous attack termite palatability
-  AllAttacks <- as.data.frame(AllAttacks %>% group_by(FID) %>% arrange(AttackTime, .by_group = TRUE) %>% mutate(AttackNb = row_number()))
-  
-  AllAttacks_perFID <- split(AllAttacks, AllAttacks$FID)
-  
-  AllAttacks_perFID_fun <- function(x){
-    x$PrevPalatabality <- c(NA,x$AttackedTermitePalatability[-nrow(x)])
-    return(x)
-  }
-  
-  AllAttacks <- do.call(rbind,lapply(AllAttacks_perFID,AllAttacks_perFID_fun))
-  rownames(AllAttacks) <- NULL
-  
-}
-
-head(AllAttacks) # dataset for exploration on contamination because of chemical on mouth parts
 
 
  output_folder <- paste(here(),"3_ExtractedData", sep='/')

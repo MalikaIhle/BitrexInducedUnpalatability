@@ -37,12 +37,14 @@ rm(list = ls(all = TRUE))
 
 head(tbl)
 
+table(tbl$Treatment)
 
 
 # stats
 
 mod <-glm(NbGridCrossed ~ Treatment, data = tbl, family = 'poisson') # intercept is MW non painted bug
 summary(mod)
+drop1(mod, test="Chisq")
 
 
 

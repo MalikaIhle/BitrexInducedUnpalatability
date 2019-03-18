@@ -56,13 +56,14 @@ for (i in 1:nrow(tbl_long)) {
 
 head(tbl_long)
 
-
+table(tbl_long$Trt)
+table(tbl_long$Col)
 
 # stats
 
 mod <-glmer(NbGrid ~ Palatability + Col + (1|TestID), data = tbl_long, family = 'poisson')
 summary(mod)
-
+drop1(mod, test="Chisq")
 
 
 #setEPS()

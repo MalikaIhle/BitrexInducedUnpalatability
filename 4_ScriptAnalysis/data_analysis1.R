@@ -40,9 +40,9 @@ head(FirstAttacks)
 # question 1 (confirmatory): reluctant to attack bitrex termite first especially if trained?   
 # --> interaction not significant, effect direction opposite expectation = less likely to attack a focal termite that is palatable if they were exposed
 # question 2 (confirmatory): reluctant to attack bitrex termite first regardless of their training?  
-# --> main effect of Palatability not significant, effect direction opposite expectation = palatable one less likely to be attacked first (small effect)                                                           
+# --> main effect of Palatability not significant, effect direction according to expectation = palatable one more likely to be attacked first (no effect)                                                           
 # question 3 (exploratory): bias against a color ?
-# --> no, effect direction: have a slight preference to attack the green first
+# --> no, effect direction: have a slight (no) preference to attack the green first
 
 str(FocalTermiteAttack)
 

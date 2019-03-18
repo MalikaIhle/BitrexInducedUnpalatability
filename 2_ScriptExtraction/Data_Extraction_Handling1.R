@@ -3,7 +3,7 @@
 #	 Preregistration manipulation color and unpalatability 
 #  data extraction and handling
 #	 Start : 31 october 2018
-#	 last modif : add prevattackpalatability to allattacks
+#	 last modif : remove one line for focal table
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 {# Remarks
@@ -31,6 +31,7 @@ rm(list = ls(all = TRUE))
 library(RODBC) # this require R AND ACCESS to run on 32 bits ! (and apparently can't do it on MAC)
 library(stringr) # this is needed for the function str_pad in ConvertTime function
 library(dplyr)
+library(here)
 }
 
 
@@ -119,14 +120,14 @@ head(FirstAttacks)
 FocalTermiteAttack <- rbind(AllFemales[,c('FID', 'GroupName', 'SubGroupName')],AllFemales[,c('FID', 'GroupName', 'SubGroupName')])
 FocalTermiteAttack$FocalTermiteColor <- c(rep('Brown',nrow(AllFemales)),rep('Green',nrow(AllFemales)))
 FocalTermiteAttack <- FocalTermiteAttack[order(FocalTermiteAttack$FID),]
-nrow(FocalTermiteAttack) # 190 looks good
+nrow(FocalTermiteAttack) # 200 looks good
 
 
 FocalTermiteAttack <- split(FocalTermiteAttack, FocalTermiteAttack$FID)
 
 FocalTermiteAttack_fun <- function(x){
   x$FocalTermiteYN <- sample(c(0,1), 2,replace=FALSE) # randomly assigning YN, determining whether the termite is focal or not
-  return(x)
+  return(x[x$FocalTermiteYN == 1,])
 }
 
 FocalTermiteAttack <- do.call(rbind,lapply(FocalTermiteAttack,FocalTermiteAttack_fun))
@@ -233,9 +234,9 @@ rownames(AllAttacks) <- NULL
 head(AllAttacks) # dataset for exploration on contamination because of chemical on mouth parts
   
 
-## output_folder <- "3_ExtractedData"
+# output_folder <- paste(here(),"3_ExtractedData", sep='/')
 
-## write.csv(FocalTermiteAttack, file = paste(output_folder,"FocalTermiteAttack.csv", sep="/"), row.names = FALSE) 
+# write.csv(FocalTermiteAttack, file = paste(output_folder,"FocalAttacks/FocalTermiteAttack.csv", sep="/"), row.names = FALSE) 
 ## write.csv(AllAttacks, file = paste(output_folder,"AllAttacks.csv", sep="/"), row.names = FALSE) 
 ## write.csv(FirstAttacks, file = paste(output_folder,"FirstAttacks.csv", sep="/"), row.names = FALSE) 
 # 20181031 first time
@@ -243,4 +244,4 @@ head(AllAttacks) # dataset for exploration on contamination because of chemical 
 # 20181101 correct a SERIOUS typo reversing all the colors !!!!!
 # 20181121 added data from cohort 3
 # 20190220 add prevattackpalatability to allattacks
-
+# 20190318 focal table with just focal line !

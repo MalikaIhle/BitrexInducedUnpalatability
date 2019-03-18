@@ -32,7 +32,7 @@ head(FirstAttacks)
 # question 2 (confirmatory): reluctant to attack bitrex termite first regardless of their training?  
 # --> main effect of Palatability not significant, effect direction according to expectation = palatable one more likely to be attacked first                                                       
 # question 3 (exploratory): bias against a color ?
-# --> yes, effect direction: have a significant preference to attack the green first
+# --> no, effect direction: preference to attack the green first
 
 str(FocalTermiteAttack)
 

@@ -18,6 +18,7 @@ rm(list = ls(all = TRUE))
 {# packages
   library(RODBC) # this require R AND ACCESS to run on 32 bits ! (and apparently can't do it on MAC)
   library(here)
+  library(lme4)
 }
 
 
@@ -31,7 +32,7 @@ rm(list = ls(all = TRUE))
   
   
   tbl <- tbl[,c('NbGridCrossed','Treatment')]
-  
+  tbl$rowID <- 1:nrow(tbl)
 
 }
 
@@ -42,27 +43,43 @@ table(tbl$Treatment)
 
 # stats
 
-mod <-glm(NbGridCrossed ~ Treatment, data = tbl, family = 'poisson') # intercept is MW non painted bug
+mod <-glmer(NbGridCrossed ~ Treatment + (1|rowID) # account for overdispersion: makes the whole difference !!! <<<<<<<<<<<<<<<
+            ,data = tbl, family = 'poisson') # intercept is MW non painted bug
 summary(mod)
 drop1(mod, test="Chisq")
+
+
+
+
+
+mod_NoIntercept <-glmer(NbGridCrossed ~ -1+ Treatment + (1|rowID) # account for overdispersion: makes the whole difference !!! <<<<<<<<<<<<<<<
+                        , data = tbl, family = 'poisson')
+summary(mod_NoIntercept)
+
+effects_table <- as.data.frame(cbind(est=exp(summary(mod_NoIntercept)$coeff[,1]),
+                                     CIhigh=exp(summary(mod_NoIntercept)$coeff[,1]+summary(mod_NoIntercept)$coeff[,2]*1.96),
+                                     CIlow=exp(summary(mod_NoIntercept)$coeff[,1]-summary(mod_NoIntercept)$coeff[,2]*1.96)))
+effects_table$Palatability <- c("Milkweed", "Painted Milkweed", "Sunflower")
+effects_table
 
 
 
 setEPS()
 pdf(paste(here(), "5_Figures/Mvt/BugMvt.pdf", sep="/"), height=5, width=3.3)
 
-ggplot(tbl, aes(x=Treatment, y=NbGridCrossed)) + 
-  geom_boxplot()+
+ggplot(effects_table, aes(x=Palatability, y=est)) + 
+  geom_errorbar(aes(ymin=CIlow, ymax=CIhigh), width =0.4)+ # don't plot bor bars on x axis tick, but separate them (dodge)
+  geom_point(size =4, stroke = 1) +
+  
   labs(y = "Number of gridlines crossed", x = NULL)+
-  scale_x_discrete(labels=c("Milkweed", "Painted milkweed", "Sunflower"))+
-theme_classic() +
-theme(panel.border = element_rect(colour = "black", fill=NA), # ad square box around graph 
+  theme_classic() +
+  theme(panel.border = element_rect(colour = "black", fill=NA), # ad square box around graph 
         axis.title.x=element_text(size=10),
         axis.title.y=element_text(size=10),
         plot.title = element_text(hjust = 0.5, size = 10))  
-  
-dev.off()
 
+
+dev.off()
 
 
 

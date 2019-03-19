@@ -52,6 +52,8 @@ for (i in 1:nrow(tbl_long)) {
   
 }
 
+tbl_long$rowID <- 1:nrow(tbl_long)
+
 }
 
 head(tbl_long)
@@ -61,25 +63,44 @@ table(tbl_long$Col)
 
 # stats
 
-mod <-glmer(NbGrid ~ Palatability + Col + (1|TestID), data = tbl_long, family = 'poisson')
+hist(tbl_long$NbGrid)
+
+mod <-glmer(NbGrid ~ Palatability + Col + (1|rowID) # account for overdispersion: makes the whole difference !!! <<<<<<<<<<<<<<<
+            , data = tbl_long, family = 'poisson')
 summary(mod)
 drop1(mod, test="Chisq")
 
+
+
+mod_NoIntercept <-glmer(NbGrid ~ -1+ Palatability + Col + (1|rowID) # account for overdispersion: makes the whole difference !!! <<<<<<<<<<<<<<<
+            , data = tbl_long, family = 'poisson')
+summary(mod_NoIntercept)
+
+effects_table <- as.data.frame(cbind(est=exp(summary(mod_NoIntercept)$coeff[,1]),
+                                     CIhigh=exp(summary(mod_NoIntercept)$coeff[,1]+summary(mod_NoIntercept)$coeff[,2]*1.96),
+                                     CIlow=exp(summary(mod_NoIntercept)$coeff[,1]-summary(mod_NoIntercept)$coeff[,2]*1.96)))
+effects_table <- effects_table[-nrow(effects_table),]
+effects_table$Palatability <- c("Control", "DB")
+effects_table
 
 
 
 setEPS()
 pdf(paste(here(), "5_Figures/Mvt/TermiteMvt.pdf", sep="/"), height=5, width=3.3)
 
-ggplot(tbl_long, aes(x=Palatability, y=NbGrid)) + 
-  geom_boxplot()+
+ggplot(effects_table, aes(x=Palatability, y=est)) + 
+  geom_errorbar(aes(ymin=CIlow, ymax=CIhigh), width =0.4)+ # don't plot bor bars on x axis tick, but separate them (dodge)
+  geom_point(size =4, stroke = 1) +
+  
   labs(y = "Number of gridlines crossed", x = NULL)+
- scale_x_discrete(labels=c("Control", "DB"))+
+  labs(title = "DB solution concentration: 3%") +
+  scale_x_discrete(labels=c("Control", "DB"))+
   theme_classic() +
   theme(panel.border = element_rect(colour = "black", fill=NA), # ad square box around graph 
         axis.title.x=element_text(size=10),
         axis.title.y=element_text(size=10),
         plot.title = element_text(hjust = 0.5, size = 10))  
+
 
 dev.off()
 

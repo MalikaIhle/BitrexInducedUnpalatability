@@ -25,6 +25,7 @@ FocalBugAttack$FocalBugPalatability <- as.factor(FocalBugAttack$FocalBugPalatabi
 AllAttacks$AttackedBugPalatability <- as.factor(AllAttacks$AttackedBugPalatability)
 FirstAttacks$AttackedBugPalatability <- as.factor(FirstAttacks$AttackedBugPalatability)
 
+AllAttacks$rowID <- 1:nrow(AllAttacks)
 
 head(AllAttacks)    
 head(FocalBugAttack)
@@ -60,9 +61,14 @@ mod2 <- glm (DropYN ~ AttackedBugColor + AttackedBugPalatability  #+ (1|FID)
                ,family = 'binomial', data = AllAttacks)
 summary(mod2) ## <<<<<< super weird P value for ultra significant effect >>>>>>>>>>>>>> use LRT drop1 function
 drop1(mod2, test="Chisq")
+par(mfrow=c(2,2))
+plot(mod2)  ## I believe test not valid as residual variance super heteroscedastic
 
 #sunflowerplot(AllAttacks$DropYN,AllAttacks$AttackedBugPalatability)
-table(AllAttacks$Outcome,AllAttacks$AttackedBugPalatability) # dropping rate of milkweed Bug = 100%
+contingency_tbl <- table(AllAttacks$Outcome,AllAttacks$AttackedBugPalatability) # dropping rate of milkweed Bug = 100%, SF bugs = 40%
+chisq.test(table(AllAttacks$Outcome,AllAttacks$AttackedBugPalatability))
+chisq.test(table(AllAttacks$Outcome,AllAttacks$AttackedBugColor))
+
 
 
 # model 3
@@ -110,30 +116,41 @@ dev.off()
 
 # Figure drop rate
 
-mod2_noIntercept <- mod2 <- glm (DropYN ~  -1 + AttackedBugPalatability + AttackedBugColor #+ (1|FID)
-                                 ,family = 'binomial', data = AllAttacks)
+par(mfrow=c(2,2))
+barplot(c(100,40),
+        ylim = c(0,100),
+        xlab="Palatability",
+        ylab= "Prey rejection probability (%)",
+        names.arg = c("Milkweed", "Sunflower")
+)
 
-effects_table_dr <- as.data.frame(cbind(est=invlogit(summary(mod2_noIntercept)$coeff[,1]),
-                                     CIhigh=invlogit(summary(mod2_noIntercept)$coeff[,1]+summary(mod2_noIntercept)$coeff[,2]*1.96),
-                                     CIlow=invlogit(summary(mod2_noIntercept)$coeff[,1]-summary(mod2_noIntercept)$coeff[,2]*1.96)))
-effects_table_dr <- effects_table_dr[-nrow(effects_table_dr),]
-effects_table_dr$Palatability <- c("Milkweed","Sunflower")
-effects_table_dr
+barplot(contingency_tbl,
+        ylim = c(0,50),
+        xlab="Palatability treatment",
+        ylab= "Number of prey attacked",
+        names.arg = c("Milkweed", "Sunflower"),
+        legend = rownames(contingency_tbl)
+)
+
+contingency_tbl
+tbl_ggplot <- data.frame(Palatability = c('Milkweed', 'Milkweed', 'Sunflower', 'Sunflower'),
+                         Outcome = c('Rejected', 'Consumed', 'Rejected', 'Consumed'),
+                         Count = c(41,0,10,15))
+
+
+BugAttack_dr <- ggplot(tbl_ggplot, aes(x=Palatability, y=Count, fill=Outcome)) + 
+  geom_bar(stat="identity")+
+  labs(y = "Number of prey rejected or consumed after attack", x = 'Palatability treatment')+      
+  scale_x_discrete(labels=c("Milkweed", "Sunflower"))  +
+  theme_classic() +
+  scale_fill_grey() +  
+  theme(panel.border = element_rect(colour = "black", fill=NA),
+        legend.title=element_blank(),
+        legend.position = c(0.75,0.75))#+
+#guides(fill = guide_legend(label.hjust = 6)) # only working for one of the two keys...
 
 
 
-BugAttack_dr <- ggplot(data=effects_table_dr, aes(x=Palatability, y=est)) + 
-  scale_y_continuous(name="Prey rejection probability", 
-                     limits=c(0, 1), breaks =c(0,0.25,0.50,0.75,1), labels=scales::percent)+ # 0.75 converted to 75%
-  theme_classic() + # white backgroun, x and y axis (no box)
-  #labs(title = "") +
-  
-  geom_errorbar(aes(ymin=CIlow, ymax=CIhigh), width =0.4)+ # don't plot bor bars on x axis tick, but separate them (dodge)
-  geom_point(size =4, stroke = 1) +
-  theme(panel.border = element_rect(colour = "black", fill=NA), # ad square box around graph 
-        axis.title.x=element_text(size=10),
-        axis.title.y=element_text(size=10),
-        plot.title = element_text(hjust = 0.5, size = 10))
 
 setEPS() 
 pdf(paste(here(), "5_Figures/DropRate/FigBugDR.pdf",sep="/"), height=5, width=3.3)

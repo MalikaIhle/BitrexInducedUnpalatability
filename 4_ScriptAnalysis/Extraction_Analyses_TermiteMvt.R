@@ -66,12 +66,22 @@ summary(mod)
 drop1(mod, test="Chisq")
 
 
-#setEPS()
-#pdf(paste(here(), "5_Figures/Mvt/TermiteMvt.pdf", sep="/"), height=7, width=15)
-boxplot(tbl_long$NbGrid~tbl_long$Palatability, main = 'TermiteMvt')
-#dev.off()
 
 
+setEPS()
+pdf(paste(here(), "5_Figures/Mvt/TermiteMvt.pdf", sep="/"), height=5, width=3.3)
+
+ggplot(tbl_long, aes(x=Palatability, y=NbGrid)) + 
+  geom_boxplot()+
+  labs(y = "Number of gridlines crossed", x = NULL)+
+ scale_x_discrete(labels=c("Control", "DB"))+
+  theme_classic() +
+  theme(panel.border = element_rect(colour = "black", fill=NA), # ad square box around graph 
+        axis.title.x=element_text(size=10),
+        axis.title.y=element_text(size=10),
+        plot.title = element_text(hjust = 0.5, size = 10))  
+
+dev.off()
 
 
 

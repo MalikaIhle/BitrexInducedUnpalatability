@@ -56,7 +56,7 @@ drop1(mod1, test="Chisq")
 # question 4 (exploratory): are bitrex termites always dropped
 # no, out of 83 bitrex termites attacked, 29 were consumed (34.9%)
 # it could have been worth trying with a higher concentration of bitrex?
-# dropping rate of palatable termites: 22.8% (contamination to quite resolved? but better under control?)
+# dropping rate of palatable termites: 22.8% (contamination to quite resolved? but better under control?), and 65% dropping rate for the bitrex
 
 str(AllAttacks)
 

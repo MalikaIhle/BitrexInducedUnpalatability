@@ -58,7 +58,7 @@ summary(mod2) ## <<<<<< super weird P value for ultra significant effect >>>>>>>
 drop1(mod2, test="Chisq")
 
 #sunflowerplot(AllAttacks$DropYN,AllAttacks$AttackedBugPalatability)
-table(AllAttacks$Outcome,AllAttacks$AttackedBugPalatability) # dropping rate of bitrex Bug = 85.3%
+table(AllAttacks$Outcome,AllAttacks$AttackedBugPalatability) # dropping rate of milkweed Bug = 100%
 
 
 # model 3

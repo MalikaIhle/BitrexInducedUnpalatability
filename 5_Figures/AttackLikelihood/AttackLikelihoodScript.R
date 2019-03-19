@@ -19,7 +19,8 @@ PrepDF <- function(df){
   df$FocalTermitePalatability[df$FocalTermitePalatability == "1"] <- 'Control'
   df$FocalTermitePalatability[df$FocalTermitePalatability == "0"] <- 'DB'
 
-  mod1 <- glm (FocalTermiteAttackedYN ~ -1+FocalTermitePalatability + FocalTermiteColor, family = 'binomial', data = df)
+  mod1 <- glm (FocalTermiteAttackedYN ~ -1+ FocalTermitePalatability + FocalTermiteColor
+               , family = 'binomial', data = df)
   summary(mod1)
   
   effects_table <- as.data.frame(cbind(est=invlogit(summary(mod1)$coeff[,1]),
@@ -45,6 +46,7 @@ effects_table3 <- PrepDF(FocalTermiteAttack3)
     
     geom_errorbar(aes(ymin=CIlow, ymax=CIhigh), width =0.4)+ # don't plot bor bars on x axis tick, but separate them (dodge)
     geom_point(size =4, stroke = 1) +
+    geom_hline(yintercept=0.5, linetype="dashed", color = "grey48") +
         theme(panel.border = element_rect(colour = "black", fill=NA), # ad square box around graph 
           axis.title.x=element_text(size=10),
           axis.title.y=element_text(size=10),
@@ -60,6 +62,7 @@ effects_table3 <- PrepDF(FocalTermiteAttack3)
     
     geom_errorbar(aes(ymin=CIlow, ymax=CIhigh), width =0.4)+ # don't plot bor bars on x axis tick, but separate them (dodge)
     geom_point(size =4, stroke = 1) +
+    geom_hline(yintercept=0.5, linetype="dashed", color = "grey48") +
     theme(panel.border = element_rect(colour = "black", fill=NA), # ad square box around graph 
           axis.title.x=element_text(size=10),
           axis.title.y=element_blank(),
@@ -76,6 +79,7 @@ effects_table3 <- PrepDF(FocalTermiteAttack3)
     
     geom_errorbar(aes(ymin=CIlow, ymax=CIhigh), width =0.4)+ # don't plot bor bars on x axis tick, but separate them (dodge)
     geom_point(size =4, stroke = 1) +
+    geom_hline(yintercept=0.5, linetype="dashed", color = "grey48") +
     theme(panel.border = element_rect(colour = "black", fill=NA), # ad square box around graph 
           axis.title.x=element_text(size=10),
           axis.title.y=element_blank(),
@@ -129,7 +133,8 @@ effects_table3F <- PrepDF_withtraining(FocalTermiteAttack3F)
   labs(title = "DB solution concentration: 1%") +
   
   geom_errorbar(aes(ymin=CIlow, ymax=CIhigh, col=PriorExposure), width =0.4,na.rm=TRUE, position = position_dodge(width=0.5))+ # don't plot bor bars on x axis tick, but separate them (dodge)
-  geom_point(size =4, aes(shape=PriorExposure, col=PriorExposure), stroke = 1, position = position_dodge(width=0.5)) +
+    geom_hline(yintercept=0.5, linetype="dashed", color = "grey48") +
+    geom_point(size =4, aes(shape=PriorExposure, col=PriorExposure), stroke = 1, position = position_dodge(width=0.5)) +
   scale_colour_manual(name= "Prior exposure to DB", values=c("Black","Grey")) +
   scale_shape_manual(name= "Prior exposure to DB", values=c(16,17))+ # duplicate title to combine legend
   theme(panel.border = element_rect(colour = "black", fill=NA), # ad square box around graph 
@@ -151,7 +156,8 @@ effects_table3F <- PrepDF_withtraining(FocalTermiteAttack3F)
   theme_classic() + # white backgroun, x and y axis (no box)
   labs(title = "DB solution concentration: 3%") +
   geom_errorbar(aes(ymin=CIlow, ymax=CIhigh, col=PriorExposure),  width =0.4,na.rm=TRUE, position = position_dodge(width=0.5))+ # don't plot bor bars on x axis tick, but separate them (dodge)
-  geom_point(size =4, aes(shape=PriorExposure, col=PriorExposure), stroke = 1, position = position_dodge(width=0.5)) +
+    geom_hline(yintercept=0.5, linetype="dashed", color = "grey48") +
+    geom_point(size =4, aes(shape=PriorExposure, col=PriorExposure), stroke = 1, position = position_dodge(width=0.5)) +
   scale_colour_manual(values=c("Black","Grey")) +
   scale_shape_manual(values=c(16,17))+ # duplicate title to combine legend
   theme(panel.border = element_rect(colour = "black", fill=NA), # ad square box around graph 

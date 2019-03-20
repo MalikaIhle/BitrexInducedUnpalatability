@@ -65,7 +65,7 @@ drop1(mod1, test="Chisq")
 str(AllAttacks)
 
 mod2 <- glmer (DropYN ~ AttackedTermiteColor + AttackedTermitePalatability
-               #*PriorExposureYN 
+               *PriorExposureYN 
                + (1|FID)
                ,family = 'binomial', data = AllAttacks)
 summary(mod2)

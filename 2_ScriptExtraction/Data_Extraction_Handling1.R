@@ -208,6 +208,10 @@ for (i in 1:nrow(FirstAttacks)) {
   {FirstAttacks$AttackedTermitePalatability[i] <- 1}
   
 }
+  
+  FirstAttacks$PriorExposureYN[FirstAttacks$GroupName == 'DB'] <- 1
+  FirstAttacks$PriorExposureYN[FirstAttacks$GroupName == 'Water'] <- 0
+  
 }
 
 head(FirstAttacks) # dataset for exploratory analyses
@@ -234,14 +238,15 @@ rownames(AllAttacks) <- NULL
 head(AllAttacks) # dataset for exploration on contamination because of chemical on mouth parts
   
 
-# output_folder <- paste(here(),"3_ExtractedData", sep='/')
+output_folder <- paste(here(),"3_ExtractedData", sep='/')
 
 # write.csv(FocalTermiteAttack, file = paste(output_folder,"FocalAttacks/FocalTermiteAttack.csv", sep="/"), row.names = FALSE) 
 ## write.csv(AllAttacks, file = paste(output_folder,"AllAttacks.csv", sep="/"), row.names = FALSE) 
-## write.csv(FirstAttacks, file = paste(output_folder,"FirstAttacks.csv", sep="/"), row.names = FALSE) 
+ write.csv(FirstAttacks, file = paste(output_folder,"FirstAttacks/FirstAttacks.csv", sep="/"), row.names = FALSE) 
 # 20181031 first time
 # 20181101 with prior exposure to allattack table
 # 20181101 correct a SERIOUS typo reversing all the colors !!!!!
 # 20181121 added data from cohort 3
 # 20190220 add prevattackpalatability to allattacks
 # 20190318 focal table with just focal line !
+# 20190320 add prior exposure to first attack

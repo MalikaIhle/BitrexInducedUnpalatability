@@ -163,6 +163,8 @@ for (i in 1:nrow(FocalTermiteAttack)) {
 
 FocalTermiteAttack$PriorExposureYN[FocalTermiteAttack$GroupName == 'DB'] <- 1
 FocalTermiteAttack$PriorExposureYN[FocalTermiteAttack$GroupName == 'Water'] <- 0
+FocalTermiteAttack$PriorExposure[FocalTermiteAttack$PriorExposureYN == 1] <- 'Trained'
+FocalTermiteAttack$PriorExposure[FocalTermiteAttack$PriorExposureYN == 0] <- 'Naive'
 
 return(FocalTermiteAttack)
 } # to create 1000 datasets for model 1

@@ -41,40 +41,6 @@ summary(mod1)
 drop1(mod1, test="Chisq")
 
 
-# model 2: 
-# question 2 (confirmatory): are bitrex termite more likely to be dropped?
-# --> yes, ***
-# question 3 (exploratory): are termite from a certain color more likely to be dropped?
-# --> yes, they tend to be more likely . to drop a brown termite (different color than with bitrex 1%)
-# question 4 (exploratory): are bitrex termites always dropped
-# no, out of 26 bitrex termites attacked, 5 were consumed (19.2%)
-# dropping rate didn't increase, it may not be wroth trying a higher concentration
-# however, dropping rate of palatable ones went from 10% (bitrex 1%) to 50% (bitrex 2%) to 24.1%:
-# risk of contamination has been better handled but not completely solved
-# worth trying to compare to actual basal dropping rate (when no bitrex involved)
-
-str(AllAttacks)
-
-mod2 <- glmer (DropYN ~ AttackedTermiteColor + AttackedTermitePalatability  + (1|FID)
-               ,family = 'binomial', data = AllAttacks)
-summary(mod2)
-drop1(mod2, test="Chisq")
-
-
-#sunflowerplot(AllAttacks$DropYN,AllAttacks$AttackedTermitePalatability)
-table(AllAttacks$Outcome,AllAttacks$AttackedTermitePalatability) # dropping rate of bitrex termite = 85.3%
-
-
-# model 3
-# question 1 (exploratory): delay to first attack longer if attack the bitrex termite?
-# no, effect direction according to expectation
-# palatable termite attacked first were attacked after a shorter delay than bitrex termites attacked first
-
-str(FirstAttacks)
-
-mod3 <- lm(DelayToAttack ~ AttackedTermitePalatability, data = FirstAttacks)
-summary(mod3)
-drop1(mod3, test="Chisq")
 
 
 # model 4

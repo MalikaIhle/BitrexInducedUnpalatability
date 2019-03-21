@@ -27,7 +27,7 @@ plot1 <- ggplot(contingency_tbl, aes(x = PalatExp , y = Count, fill = factor(Dro
   labs(x = 'Palatability treatment - Prior Exposure', y= 'Number of prey')+
   scale_y_continuous(limits = c(0, 60), breaks = c(0,10,20,30, 40, 50))+
   scale_fill_grey(name = "Outcome", labels = c('Consumed', 'Rejected')) +  
-  scale_x_discrete( labels=c("0-0" = "Control - Naive", "0-1" = "Control - Trained", "1-0"="DB - Naive", "1-1" = "DB - Trained"))+
+  scale_x_discrete( labels=c("0-0" = "DB - Naive", "0-1" = "DB - Trained", "1-0"="Control - Naive", "1-1" = "Control - Trained"))+
   theme_classic()+
   theme(panel.border = element_rect(colour = "black", fill=NA),
         legend.position = c(0.25,0.85))

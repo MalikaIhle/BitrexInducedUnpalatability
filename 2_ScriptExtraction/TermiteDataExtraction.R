@@ -71,6 +71,8 @@ AllAttacks$DropYN[AllAttacks$Outcome == 1] <- 0
 AllAttacks$DropYN[AllAttacks$Outcome == -1] <- 1
 AllAttacks$PriorExposureYN[AllAttacks$GroupName == 'DB'] <- "1"
 AllAttacks$PriorExposureYN[AllAttacks$GroupName == 'Water'] <- "0"
+AllAttacks$PriorExposure[AllAttacks$PriorExposureYN == 1] <- 'Trained'
+AllAttacks$PriorExposure[AllAttacks$PriorExposureYN == 0] <- 'Naive'
 AllAttacks$DelayToAttack <- as.numeric(as.character(AllAttacks$AttackTime-AllAttacks$VideoTimeStart))
 
 for (i in 1:nrow(AllAttacks)) {
@@ -148,16 +150,20 @@ FocalTermiteAttack$FocalTermiteAttackedYN[FocalTermiteAttack$FocalTermiteColor !
 for (i in 1:nrow(FocalTermiteAttack)) {
   
   if(FocalTermiteAttack$SubGroupName[i] == "GreenDB" & FocalTermiteAttack$FocalTermiteColor[i] == 'Green')
-  {FocalTermiteAttack$FocalTermitePalatability[i] <- 0}
+  {FocalTermiteAttack$FocalTermitePalatability[i] <- 0
+  FocalTermiteAttack$FocalTermitePalatabilityTreatment[i] <- "DB"}
   
   if(FocalTermiteAttack$SubGroupName[i] == "GreenDB" & FocalTermiteAttack$FocalTermiteColor[i] == 'Brown')
-  {FocalTermiteAttack$FocalTermitePalatability[i] <- 1}
+  {FocalTermiteAttack$FocalTermitePalatability[i] <- 1
+  FocalTermiteAttack$FocalTermitePalatabilityTreatment[i] <- "Control"}
   
   if(FocalTermiteAttack$SubGroupName[i] == "BrownDB" & FocalTermiteAttack$FocalTermiteColor[i] == 'Brown')
-  {FocalTermiteAttack$FocalTermitePalatability[i] <- 0}
+  {FocalTermiteAttack$FocalTermitePalatability[i] <- 0
+  FocalTermiteAttack$FocalTermitePalatabilityTreatment[i] <- "DB"}
   
   if(FocalTermiteAttack$SubGroupName[i] == "BrownDB" & FocalTermiteAttack$FocalTermiteColor[i] == 'Green')
-  {FocalTermiteAttack$FocalTermitePalatability[i] <- 1}
+  {FocalTermiteAttack$FocalTermitePalatability[i] <- 1
+  FocalTermiteAttack$FocalTermitePalatabilityTreatment[i] <- "Control"}
   
 }
 

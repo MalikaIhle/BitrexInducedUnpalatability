@@ -48,7 +48,7 @@ AllAttacks <- sqlQuery(conDB, "
                                 Basic_Trials.SubGroupName, 
                                 Basic_Trials.GroupName, 
                                 Behav_Female_Attacks.AttackTime, 
-                                Behav_Female_Attacks.Color AS AttackedTermiteColor, 
+                                Behav_Female_Attacks.Color AS ColorCode, 
                                 Behav_Female_Attacks.Outcome, 
                                 Behav_Video_Metadata.VideoTimeStart, 
                                 Behav_Female.ExcludeYN, 
@@ -60,35 +60,36 @@ AllAttacks <- sqlQuery(conDB, "
 AllAttacks <- AllAttacks[AllAttacks$ExcludeYN == 0,] # see remarks
 
 
-# reformat columns in tables
+# reformat columns in tables to have choice of factors or numerical variables
 AllAttacks$AttackTime <- ConvertToTime(AllAttacks$AttackTime)
 AllAttacks$VideoTimeStart <- ConvertToTime(AllAttacks$VideoTimeStart)
-AllAttacks$AttackedTermiteColor[AllAttacks$AttackedTermiteColor == 1] <- "Green"
-AllAttacks$AttackedTermiteColor[AllAttacks$AttackedTermiteColor == 2] <- "Brown"
-AllAttacks$Outcome[AllAttacks$Outcome == 1] <- "Consumed"
-AllAttacks$Outcome[AllAttacks$Outcome == -1] <- "Rejected"
-
-# add variables
+AllAttacks$AttackedColor[AllAttacks$ColorCode == 1] <- "Green"
+AllAttacks$AttackedColor[AllAttacks$ColorCode == 2] <- "Brown"
+AllAttacks$Fate[AllAttacks$Outcome == 1] <- "Consumed"
+AllAttacks$Fate[AllAttacks$Outcome == -1] <- "Rejected"
+AllAttacks$DropYN[AllAttacks$Outcome == 1] <- 0
+AllAttacks$DropYN[AllAttacks$Outcome == -1] <- 1
+AllAttacks$PriorExposureYN[AllAttacks$GroupName == 'DB'] <- "1"
+AllAttacks$PriorExposureYN[AllAttacks$GroupName == 'Water'] <- "0"
 AllAttacks$DelayToAttack <- as.numeric(as.character(AllAttacks$AttackTime-AllAttacks$VideoTimeStart))
-AllAttacks$DropYN[AllAttacks$Outcome == 'Consumed'] <- 0
-AllAttacks$DropYN[AllAttacks$Outcome == 'Dropped'] <- 1
-AllAttacks$PriorExposureYN[AllAttacks$GroupName == 'DB'] <- 1
-AllAttacks$PriorExposureYN[AllAttacks$GroupName == 'Water'] <- 0
-
 
 for (i in 1:nrow(AllAttacks)) {
 if(!is.na(AllAttacks$SubGroupName[i])){  
-  if(AllAttacks$SubGroupName[i] == "GreenDB" & AllAttacks$AttackedTermiteColor[i] == 'Green')
-  {AllAttacks$AttackedTermitePalatability[i] <- 0}
+  if(AllAttacks$SubGroupName[i] == "GreenDB" & AllAttacks$AttackedColor[i] == 'Green')
+  {AllAttacks$AttackedPalatability[i] <- 0
+  AllAttacks$AttackedPalatabilityTreatment[i] <- "DB"}
   
-  if(AllAttacks$SubGroupName[i] == "GreenDB" & AllAttacks$AttackedTermiteColor[i] == 'Brown')
-  {AllAttacks$AttackedTermitePalatability[i] <- 1}
+  if(AllAttacks$SubGroupName[i] == "GreenDB" & AllAttacks$AttackedColor[i] == 'Brown')
+  {AllAttacks$AttackedPalatability[i] <- 1
+  AllAttacks$AttackedPalatabilityTreatment[i] <- "Control"}
   
-  if(AllAttacks$SubGroupName[i] == "BrownDB" & AllAttacks$AttackedTermiteColor[i] == 'Brown')
-  {AllAttacks$AttackedTermitePalatability[i] <- 0}
+  if(AllAttacks$SubGroupName[i] == "BrownDB" & AllAttacks$AttackedColor[i] == 'Brown')
+  {AllAttacks$AttackedPalatability[i] <- 0
+  AllAttacks$AttackedPalatabilityTreatment[i] <- "DB"}
   
-  if(AllAttacks$SubGroupName[i] == "BrownDB" & AllAttacks$AttackedTermiteColor[i] == 'Green')
-  {AllAttacks$AttackedTermitePalatability[i] <- 1}
+  if(AllAttacks$SubGroupName[i] == "BrownDB" & AllAttacks$AttackedColor[i] == 'Green')
+  {AllAttacks$AttackedPalatability[i] <- 1
+  AllAttacks$AttackedPalatabilityTreatment[i] <- "Control"}
  
 }}
 
@@ -98,7 +99,7 @@ AllAttacks <- as.data.frame(AllAttacks %>% group_by(FID) %>% arrange(AttackTime,
 AllAttacks_perFID <- split(AllAttacks, AllAttacks$FID)
 
 AllAttacks_perFID_fun <- function(x){
-  x$PrevPalatabality <- c(NA,x$AttackedTermitePalatability[-nrow(x)])
+  x$PrevPalatabality <- c(NA,x$AttackedPalatability[-nrow(x)])
   return(x)
 }
 
@@ -137,11 +138,11 @@ FocalTermiteAttack <- FocalTermiteAttack[order(FocalTermiteAttack$FID),]
 nrow(FocalTermiteAttack) # 200 looks good
 
 
-FocalTermiteAttack <- merge(FocalTermiteAttack, FirstAttacks[,c('FID','AttackedTermiteColor')], by='FID', all.x=TRUE)
+FocalTermiteAttack <- merge(FocalTermiteAttack, FirstAttacks[,c('FID','AttackedColor')], by='FID', all.x=TRUE)
 
 
-FocalTermiteAttack$FocalTermiteAttackedYN[FocalTermiteAttack$FocalTermiteColor == FocalTermiteAttack$AttackedTermiteColor] <- 1
-FocalTermiteAttack$FocalTermiteAttackedYN[FocalTermiteAttack$FocalTermiteColor != FocalTermiteAttack$AttackedTermiteColor] <- 0
+FocalTermiteAttack$FocalTermiteAttackedYN[FocalTermiteAttack$FocalTermiteColor == FocalTermiteAttack$AttackedColor] <- 1
+FocalTermiteAttack$FocalTermiteAttackedYN[FocalTermiteAttack$FocalTermiteColor != FocalTermiteAttack$AttackedColor] <- 0
 
 
 for (i in 1:nrow(FocalTermiteAttack)) {

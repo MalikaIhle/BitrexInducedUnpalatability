@@ -1,4 +1,4 @@
-"FID","GroupName","SubGroupName","FocalTermiteColor","AttackedTermiteColor","FocalTermiteAttackedYN","FocalTermitePalatability","PriorExposureYN"
+"FID","GroupName","SubGroupName","FocalTermiteColor","AttackedColor","FocalTermiteAttackedYN","FocalTermitePalatability","PriorExposureYN"
 18617,NA,"BrownDB","Brown","Green",0,0,NA
 18617,NA,"BrownDB","Green","Green",1,1,NA
 18620,NA,"GreenDB","Brown","Brown",1,1,NA

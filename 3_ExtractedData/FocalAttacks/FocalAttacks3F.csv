@@ -1,4 +1,4 @@
-"FID","GroupName","SubGroupName","FocalTermiteColor","AttackedTermiteColor","FocalTermiteAttackedYN","FocalTermitePalatability","PriorExposureYN"
+"FID","GroupName","SubGroupName","FocalTermiteColor","AttackedColor","FocalTermiteAttackedYN","FocalTermitePalatability","PriorExposureYN"
 18065,"Water","GreenDB","Brown","Green",0,1,0
 18065,"Water","GreenDB","Green","Green",1,0,0
 18070,"DB","GreenDB","Brown","Brown",1,1,1

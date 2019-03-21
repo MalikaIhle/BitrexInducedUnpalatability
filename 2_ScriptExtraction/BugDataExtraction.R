@@ -97,44 +97,44 @@ head(AllAttacks)
 
 head(FirstAttacks)
 
-{# create table 2 lines per test: FocalBugAttack
-  FocalBugAttack <- rbind(AllFemales[,c('FID', 'Trt')],AllFemales[,c('FID', 'Trt')])
-  FocalBugAttack$FocalBugColor <- c(rep('Brown',nrow(AllFemales)),rep('Green',nrow(AllFemales)))
-  FocalBugAttack <- FocalBugAttack[order(FocalBugAttack$FID),]
-  nrow(FocalBugAttack) # 80 looks good
+{# create table 2 lines per test: FocalAttacks
+  FocalAttacks <- rbind(AllFemales[,c('FID', 'Trt')],AllFemales[,c('FID', 'Trt')])
+  FocalAttacks$FocalBugColor <- c(rep('Brown',nrow(AllFemales)),rep('Green',nrow(AllFemales)))
+  FocalAttacks <- FocalAttacks[order(FocalAttacks$FID),]
+  nrow(FocalAttacks) # 80 looks good
   
   
-  FocalBugAttack <- split(FocalBugAttack, FocalBugAttack$FID)
+  FocalAttacks <- split(FocalAttacks, FocalAttacks$FID)
   
-  FocalBugAttack_fun <- function(x){
+  FocalAttacks_fun <- function(x){
     x$FocalBugYN <- sample(c(0,1), 2,replace=FALSE) # randomly assigning YN, determining whether the bug is focal or not
-    return(x[x$FocalBugYN == 1,])
+    return(x)
   }
   
-  FocalBugAttack <- do.call(rbind,lapply(FocalBugAttack,FocalBugAttack_fun))
-  rownames(FocalBugAttack) <- NULL
+  FocalAttacks <- do.call(rbind,lapply(FocalAttacks,FocalAttacks_fun))
+  rownames(FocalAttacks) <- NULL
   
   
-  FocalBugAttack <- merge(FocalBugAttack, FirstAttacks[,c('FID','AttackedBugColor')], by='FID', all.x=TRUE)
+  FocalAttacks <- merge(FocalAttacks, FirstAttacks[,c('FID','AttackedBugColor')], by='FID', all.x=TRUE)
   
   
-  FocalBugAttack$FocalBugAttackedYN[FocalBugAttack$FocalBugColor == FocalBugAttack$AttackedBugColor] <- 1
-  FocalBugAttack$FocalBugAttackedYN[FocalBugAttack$FocalBugColor != FocalBugAttack$AttackedBugColor] <- 0
+  FocalAttacks$FocalAttacksedYN[FocalAttacks$FocalBugColor == FocalAttacks$AttackedBugColor] <- 1
+  FocalAttacks$FocalAttacksedYN[FocalAttacks$FocalBugColor != FocalAttacks$AttackedBugColor] <- 0
   
   
-  for (i in 1:nrow(FocalBugAttack)) {
+  for (i in 1:nrow(FocalAttacks)) {
     
-    if(FocalBugAttack$Trt[i] == "GreenMW" & FocalBugAttack$FocalBugColor[i] == 'Green')
-    {FocalBugAttack$FocalBugPalatability[i] <- 0}
+    if(FocalAttacks$Trt[i] == "GreenMW" & FocalAttacks$FocalBugColor[i] == 'Green')
+    {FocalAttacks$FocalBugPalatability[i] <- 0}
     
-    if(FocalBugAttack$Trt[i] == "GreenMW" & FocalBugAttack$FocalBugColor[i] == 'Brown')
-    {FocalBugAttack$FocalBugPalatability[i] <- 1}
+    if(FocalAttacks$Trt[i] == "GreenMW" & FocalAttacks$FocalBugColor[i] == 'Brown')
+    {FocalAttacks$FocalBugPalatability[i] <- 1}
     
-    if(FocalBugAttack$Trt[i] == "BrownMW" & FocalBugAttack$FocalBugColor[i] == 'Brown')
-    {FocalBugAttack$FocalBugPalatability[i] <- 0}
+    if(FocalAttacks$Trt[i] == "BrownMW" & FocalAttacks$FocalBugColor[i] == 'Brown')
+    {FocalAttacks$FocalBugPalatability[i] <- 0}
     
-    if(FocalBugAttack$Trt[i] == "BrownMW" & FocalBugAttack$FocalBugColor[i] == 'Green')
-    {FocalBugAttack$FocalBugPalatability[i] <- 1}
+    if(FocalAttacks$Trt[i] == "BrownMW" & FocalAttacks$FocalBugColor[i] == 'Green')
+    {FocalAttacks$FocalBugPalatability[i] <- 1}
     
   }
   
@@ -142,7 +142,7 @@ head(FirstAttacks)
   
 }
 
-head(FocalBugAttack) # dataset for model 1
+head(FocalAttacks) # dataset for model 1
 
 {# create table 1 line per attack with outcome: AllAttacks
   head(AllAttacks)
@@ -194,7 +194,7 @@ head(FirstAttacks) # dataset for exploratory analyses
 
 
  output_folder <- paste(here(),"3_ExtractedData", sep='/')
- write.csv(FocalBugAttack, file = paste(output_folder,"FocalAttacks/FocalBugAttack.csv", sep="/"), row.names = FALSE) 
- write.csv(AllAttacks, file = paste(output_folder,"AllAttacks/AllAttacksBug.csv", sep="/"), row.names = FALSE) 
- write.csv(FirstAttacks, file = paste(output_folder,"FirstAttacks/FirstAttacksBug.csv", sep="/"), row.names = FALSE) 
-# 20190318 first time (focal table with just one line)
+ write.csv(FocalAttacks, file = paste(output_folder,"FocalAttacks/FocalBugAttacks.csv", sep="/"), row.names = FALSE) 
+ write.csv(AllAttacks, file = paste(output_folder,"AllAttacks/AllBugAttacks.csv", sep="/"), row.names = FALSE) 
+ write.csv(FirstAttacks, file = paste(output_folder,"FirstAttacks/FirstBugAttacks.csv", sep="/"), row.names = FALSE) 
+# 20190319 FocalAttacks still has two lines per test

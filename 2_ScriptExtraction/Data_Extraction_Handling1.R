@@ -116,7 +116,7 @@ rownames(FirstAttacks) <- NULL
 
 head(FirstAttacks)
 
-{# create table 2 lines per test: FocalTermiteAttack
+{# create table 2 lines per test and select one at random (1000 times): FocalTermiteAttack
 FocalTermiteAttack <- rbind(AllFemales[,c('FID', 'GroupName', 'SubGroupName')],AllFemales[,c('FID', 'GroupName', 'SubGroupName')])
 FocalTermiteAttack$FocalTermiteColor <- c(rep('Brown',nrow(AllFemales)),rep('Green',nrow(AllFemales)))
 FocalTermiteAttack <- FocalTermiteAttack[order(FocalTermiteAttack$FID),]

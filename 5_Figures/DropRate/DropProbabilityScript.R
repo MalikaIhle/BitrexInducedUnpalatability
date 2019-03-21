@@ -57,8 +57,11 @@ PrepDF_withtraining <- function(df){
   df$PriorExposure[df$PriorExposureYN == 1] <- 'Trained'
   df$PriorExposure[df$PriorExposureYN == 0] <- 'Naive'
   df$PalatExp <- paste(df$AttackedTermitePalatability, df$PriorExposure, sep="")
+  df$Color[df$AttackedTermiteColor == "Brown"] <- 1
+  df$Color[df$AttackedTermiteColor == "Green"] <- 0
   
-  mod2 <- glmer (DropYN ~ -1 + PalatExp + AttackedTermiteColor + (1|FID), family = 'binomial', data = df)
+  
+  mod2 <- glmer (DropYN ~ -1 + PalatExp + scale(Color) + (1|FID), family = 'binomial', data = df)
   summary(mod2)
   
   effects_table <- as.data.frame(cbind(est=invlogit(summary(mod2)$coeff[,1]),

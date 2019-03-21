@@ -56,10 +56,16 @@ PrepDF_withtraining <- function(df){
   df$FocalTermitePalatability[df$FocalTermitePalatability == "0"] <- 'DB'
   df$PriorExposure[df$PriorExposureYN == 1] <- 'Trained'
   df$PriorExposure[df$PriorExposureYN == 0] <- 'Naive'
+  df$Color[df$AttackedTermiteColor == "Brown"] <- 1
+  df$Color[df$AttackedTermiteColor == "Green"] <- 0
+  
   
   
   df$PalatExp <- paste(df$FocalTermitePalatability, df$PriorExposure, sep="")
-  mod1 <- glm (FocalTermiteAttackedYN ~ -1+PalatExp + FocalTermiteColor, family = 'binomial', data = df)
+  mod1 <- glm (FocalTermiteAttackedYN ~ -1+PalatExp + AttackedTermiteColor
+                # scale(Color)
+                 , family = 'binomial'
+               , data = df)
   summary(mod1)
   
   effects_table <- as.data.frame(cbind(est=invlogit(summary(mod1)$coeff[,1]),
@@ -67,12 +73,14 @@ PrepDF_withtraining <- function(df){
                                        CIlow=invlogit(summary(mod1)$coeff[,1]-summary(mod1)$coeff[,2]*1.96)))
   effects_table <- effects_table[-nrow(effects_table),]
   effects_table$PriorExposure <- c("Naive", "Trained", "Naive","Trained")
-  effects_table$Palatability <- c("Control", "Control", "DB","DB")
+ effects_table$Palatability <- c("Control", "Control", "DB","DB")
   
   return(effects_table)
 }
 
+
 effects_table1 <- PrepDF_withtraining(FocalTermiteAttack1)
+
 
  plot3 <-   ggplot(data=effects_table1, aes(x=Palatability, y=est,colour=PriorExposure, shape = PriorExposure)) + 
     scale_y_continuous(name="Prey probability of being attacked first", 

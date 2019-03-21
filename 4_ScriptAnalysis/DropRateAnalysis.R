@@ -26,6 +26,7 @@ AllAttacks3 <- read.csv(file="3_ExtractedData/AllAttacks/AllAttacks3.csv", heade
 AllAttacks3F <- read.csv(file="3_ExtractedData/AllAttacks/AllAttacks3F.csv", header=TRUE, sep=",")
 
 
+
 # concentration DB = 1% 
   # question 1 (exploratory):  drop bitrex termite less so if trained/habituated?
   # --> absolutely no interaction between training and palatability on dropYN; interaction removed from model 
@@ -130,5 +131,22 @@ mod3F <- glmer (DropYN ~ AttackedColor + AttackedPalatabilityTreatment
                ,family = 'binomial', data = AllAttacks3F)
 summary(mod3F)
 drop1(mod3F, test="Chisq")
+
+
+# concentration DB = 0%
+  # question 3 (exploratory): are termite from a certain color more likely to be dropped?
+  # --> no, trend, effect direction:  more likely to drop a green termite
+  # dropping rate of palatable ones is 14.3% (close to when the most precautions against contamination were taken)
+  
+  str(AllAttacks0)
+  table(AllAttacks0$Fate)
+
+mod0 <- glmer (DropYN ~ AttackedColor  + (1|FID)
+               ,family = 'binomial', data = AllAttacks0)
+summary(mod0)
+drop1(mod0, test="Chisq")
+
+
+
 
 

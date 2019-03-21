@@ -150,20 +150,20 @@ FocalTermiteAttack$FocalTermiteAttackedYN[FocalTermiteAttack$FocalTermiteColor !
 for (i in 1:nrow(FocalTermiteAttack)) {
   
   if(FocalTermiteAttack$SubGroupName[i] == "GreenDB" & FocalTermiteAttack$FocalTermiteColor[i] == 'Green')
-  {FocalTermiteAttack$FocalTermitePalatability[i] <- 0
-  FocalTermiteAttack$FocalTermitePalatabilityTreatment[i] <- "DB"}
+  {FocalTermiteAttack$FocalPalatability[i] <- 0
+  FocalTermiteAttack$FocalPalatabilityTreatment[i] <- "DB"}
   
   if(FocalTermiteAttack$SubGroupName[i] == "GreenDB" & FocalTermiteAttack$FocalTermiteColor[i] == 'Brown')
-  {FocalTermiteAttack$FocalTermitePalatability[i] <- 1
-  FocalTermiteAttack$FocalTermitePalatabilityTreatment[i] <- "Control"}
+  {FocalTermiteAttack$FocalPalatability[i] <- 1
+  FocalTermiteAttack$FocalPalatabilityTreatment[i] <- "Control"}
   
   if(FocalTermiteAttack$SubGroupName[i] == "BrownDB" & FocalTermiteAttack$FocalTermiteColor[i] == 'Brown')
-  {FocalTermiteAttack$FocalTermitePalatability[i] <- 0
-  FocalTermiteAttack$FocalTermitePalatabilityTreatment[i] <- "DB"}
+  {FocalTermiteAttack$FocalPalatability[i] <- 0
+  FocalTermiteAttack$FocalPalatabilityTreatment[i] <- "DB"}
   
   if(FocalTermiteAttack$SubGroupName[i] == "BrownDB" & FocalTermiteAttack$FocalTermiteColor[i] == 'Green')
-  {FocalTermiteAttack$FocalTermitePalatability[i] <- 1
-  FocalTermiteAttack$FocalTermitePalatabilityTreatment[i] <- "Control"}
+  {FocalTermiteAttack$FocalPalatability[i] <- 1
+  FocalTermiteAttack$FocalPalatabilityTreatment[i] <- "Control"}
   
 }
 

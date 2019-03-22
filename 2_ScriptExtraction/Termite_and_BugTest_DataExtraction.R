@@ -27,6 +27,9 @@ rm(list = ls(all = TRUE))
   ### excluded FID in 3%F:
   # 18337: female died during training (training = water)
   
+  
+  ### ALL spiders were exposed to MW bugs for the bug experiment (they all have prior exposure / training)
+  
 }
 
 
@@ -76,19 +79,19 @@ AllAttacks$DelayToAttack <- as.numeric(as.character(AllAttacks$AttackTime-AllAtt
 
 for (i in 1:nrow(AllAttacks)) {
 if(!is.na(AllAttacks$SubGroupName[i])){  
-  if(AllAttacks$SubGroupName[i] == "GreenDB" & AllAttacks$AttackedColor[i] == 'Green')
+  if( ( AllAttacks$SubGroupName[i] == "GreenDB" | AllAttacks$SubGroupName[i] == "GreenMW" ) & AllAttacks$AttackedColor[i] == 'Green')
   {AllAttacks$AttackedPalatability[i] <- 0
   AllAttacks$AttackedPalatabilityTreatment[i] <- "DB"}
   
-  if(AllAttacks$SubGroupName[i] == "GreenDB" & AllAttacks$AttackedColor[i] == 'Brown')
+  if( ( AllAttacks$SubGroupName[i] == "GreenDB" | AllAttacks$SubGroupName[i] == "GreenMW" ) & AllAttacks$AttackedColor[i] == 'Brown')
   {AllAttacks$AttackedPalatability[i] <- 1
   AllAttacks$AttackedPalatabilityTreatment[i] <- "Control"}
   
-  if(AllAttacks$SubGroupName[i] == "BrownDB" & AllAttacks$AttackedColor[i] == 'Brown')
+  if( ( AllAttacks$SubGroupName[i] == "BrownDB" | AllAttacks$SubGroupName[i] == "BrownMW" ) & AllAttacks$AttackedColor[i] == 'Brown')
   {AllAttacks$AttackedPalatability[i] <- 0
   AllAttacks$AttackedPalatabilityTreatment[i] <- "DB"}
   
-  if(AllAttacks$SubGroupName[i] == "BrownDB" & AllAttacks$AttackedColor[i] == 'Green')
+  if( ( AllAttacks$SubGroupName[i] == "BrownDB" | AllAttacks$SubGroupName[i] == "BrownMW" ) & AllAttacks$AttackedColor[i] == 'Green')
   {AllAttacks$AttackedPalatability[i] <- 1
   AllAttacks$AttackedPalatabilityTreatment[i] <- "Control"}
  
@@ -157,19 +160,19 @@ FocalAttack$FocalAttackedYN[FocalAttack$FocalColor != FocalAttack$AttackedColor]
 
 for (i in 1:nrow(FocalAttack)) {
   
-  if(FocalAttack$SubGroupName[i] == "GreenDB" & FocalAttack$FocalColor[i] == 'Green')
+  if( ( FocalAttack$SubGroupName[i] == "GreenDB" | FocalAttack$SubGroupName[i] == "GreenMW" ) & FocalAttack$FocalColor[i] == 'Green')
   {FocalAttack$FocalPalatability[i] <- 0
   FocalAttack$FocalPalatabilityTreatment[i] <- "DB"}
   
-  if(FocalAttack$SubGroupName[i] == "GreenDB" & FocalAttack$FocalColor[i] == 'Brown')
+  if( ( FocalAttack$SubGroupName[i] == "GreenDB" | FocalAttack$SubGroupName[i] == "GreenMW"  ) & FocalAttack$FocalColor[i] == 'Brown')
   {FocalAttack$FocalPalatability[i] <- 1
   FocalAttack$FocalPalatabilityTreatment[i] <- "Control"}
   
-  if(FocalAttack$SubGroupName[i] == "BrownDB" & FocalAttack$FocalColor[i] == 'Brown')
+  if( ( FocalAttack$SubGroupName[i] == "BrownDB" | FocalAttack$SubGroupName[i] == "BrownMW"  ) & FocalAttack$FocalColor[i] == 'Brown')
   {FocalAttack$FocalPalatability[i] <- 0
   FocalAttack$FocalPalatabilityTreatment[i] <- "DB"}
   
-  if(FocalAttack$SubGroupName[i] == "BrownDB" & FocalAttack$FocalColor[i] == 'Green')
+  if( ( FocalAttack$SubGroupName[i] == "BrownDB" | FocalAttack$SubGroupName[i] == "BrownMW"  ) & FocalAttack$FocalColor[i] == 'Green')
   {FocalAttack$FocalPalatability[i] <- 1
   FocalAttack$FocalPalatabilityTreatment[i] <- "Control"}
   
@@ -245,6 +248,16 @@ head(FocalAttacks3F)
 close(conDB3F)
 
 
+conDB_Bug= odbcConnectAccess2007(paste(here(),"1_RawData/VideoAnalyses_MilkweedTest.accdb", sep='/'))
+AllAttacks_Bug <- callDB_and_create_AllAttacks(conDB_Bug)
+head(AllAttacks_Bug)
+FirstAttacks_Bug <- create_FirstAttacks(AllAttacks_Bug)
+head(FirstAttacks_Bug)
+FocalAttacks_Bug <- callDB_and_create_Structure_AttacksFocal(conDB_Bug,FirstAttacks_Bug)
+head(FocalAttacks_Bug)
+close(conDB_Bug)
+
+
 # write csv files
 
 output_folder <- paste(here(),"3_ExtractedData", sep='/')
@@ -271,6 +284,10 @@ write.csv(FirstAttacks3, file = paste(output_folder,"FirstAttacks/FirstAttacks3.
 write.csv(FocalAttacks3F, file = paste(output_folder,"FocalAttacks/FocalAttacks3F.csv", sep="/"), row.names = FALSE) 
 write.csv(AllAttacks3F, file = paste(output_folder,"AllAttacks/AllAttacks3F.csv", sep="/"), row.names = FALSE) 
 write.csv(FirstAttacks3F, file = paste(output_folder,"FirstAttacks/FirstAttacks3F.csv", sep="/"), row.names = FALSE) 
+
+write.csv(FocalAttacks_Bug, file = paste(output_folder,"FocalAttacks/FocalAttacks_Bug.csv", sep="/"), row.names = FALSE) 
+write.csv(AllAttacks_Bug, file = paste(output_folder,"AllAttacks/AllAttacks_Bug.csv", sep="/"), row.names = FALSE) 
+write.csv(FirstAttacks_Bug, file = paste(output_folder,"FirstAttacks/FirstAttacks_Bug.csv", sep="/"), row.names = FALSE) 
 
 
 

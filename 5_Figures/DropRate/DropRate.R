@@ -13,24 +13,22 @@ library(gridExtra) # for function gridarrange
 
 # load data
 
-AllAttack0 <- read.csv(file = paste(here(),"3_ExtractedData/AllAttacks/AllAttacks0.csv", sep='/'), header=TRUE, sep=",")
-AllAttack1 <- read.csv(file = paste(here(),"3_ExtractedData/AllAttacks/AllAttacks.csv", sep='/'), header=TRUE, sep=",")
-AllAttack1_5 <- read.csv(file = paste(here(),"3_ExtractedData/AllAttacks/AllAttacks1_5.csv", sep='/'), header=TRUE, sep=",")
-AllAttack2 <- read.csv(file = paste(here(),"3_ExtractedData/AllAttacks/AllAttacks2.csv", sep='/'), header=TRUE, sep=",")
-AllAttack3 <- read.csv(file = paste(here(),"3_ExtractedData/AllAttacks/AllAttacks3.csv", sep='/'), header=TRUE, sep=",")
-AllAttack3F <- read.csv(file = paste(here(),"3_ExtractedData/AllAttacks/AllAttacks3_Final.csv", sep='/'), header=TRUE, sep=",")
+AllAttacks0 <- read.csv(file = paste(here(),"3_ExtractedData/AllAttacks/AllAttacks0.csv", sep='/'), header=TRUE, sep=",")
+AllAttacks1 <- read.csv(file = paste(here(),"3_ExtractedData/AllAttacks/AllAttacks1.csv", sep='/'), header=TRUE, sep=",")
+AllAttacks15 <- read.csv(file = paste(here(),"3_ExtractedData/AllAttacks/AllAttacks15.csv", sep='/'), header=TRUE, sep=",")
+AllAttacks2 <- read.csv(file = paste(here(),"3_ExtractedData/AllAttacks/AllAttacks2.csv", sep='/'), header=TRUE, sep=",")
+AllAttacks3 <- read.csv(file = paste(here(),"3_ExtractedData/AllAttacks/AllAttacks3.csv", sep='/'), header=TRUE, sep=",")
+AllAttacks3F <- read.csv(file = paste(here(),"3_ExtractedData/AllAttacks/AllAttacks3F.csv", sep='/'), header=TRUE, sep=",")
 
 # basal drop rate
-basaldr <- table(AllAttack0$Outcome)[2]/(table(AllAttack0$Outcome)[1]+table(AllAttack0$Outcome)[2])
+basaldr <- table(AllAttacks0$Fate)[2]/(table(AllAttacks0$Fate)[1]+table(AllAttacks0$Fate)[2])
 
 
 # function to prep data (get est+CI from models)
 
 PrepDF <- function(df){
-  df$AttackedTermitePalatability[df$AttackedTermitePalatability == "1"] <- 'Control'
-  df$AttackedTermitePalatability[df$AttackedTermitePalatability == "0"] <- 'DB'
-  
-  mod2 <- glmer (DropYN ~ -1+AttackedTermitePalatability + AttackedTermiteColor + (1|FID), family = 'binomial', data = df)
+
+  mod2 <- glmer (DropYN ~ -1+AttackedPalatabilityTreatment + AttackedColor + (1|FID), family = 'binomial', data = df)
   summary(mod2)
   
   effects_table <- as.data.frame(cbind(est=invlogit(summary(mod2)$coeff[,1]),
@@ -42,19 +40,14 @@ PrepDF <- function(df){
   return(effects_table)
 }
 
-effects_table1_5 <- PrepDF(AllAttack1_5)
-effects_table2 <- PrepDF(AllAttack2)
-effects_table3 <- PrepDF(AllAttack3)
+effects_table1_5 <- PrepDF(AllAttacks15)
+effects_table2 <- PrepDF(AllAttacks2)
+effects_table3 <- PrepDF(AllAttacks3)
 
 
 PrepDF_withtraining <- function(df){
-  df$AttackedTermitePalatability[df$AttackedTermitePalatability == "1"] <- 'Control'
-  df$AttackedTermitePalatability[df$AttackedTermitePalatability == "0"] <- 'DB'
-  df$PriorExposure[df$PriorExposureYN == 1] <- 'Trained'
-  df$PriorExposure[df$PriorExposureYN == 0] <- 'Naive'
-  df$PalatExp <- paste(df$AttackedTermitePalatability, df$PriorExposure, sep="")
-  
-  mod2 <- glmer (DropYN ~ -1 + PalatExp + AttackedTermiteColor + (1|FID), family = 'binomial', data = df)
+
+  mod2 <- glmer (DropYN ~ -1 + PalatExpo + AttackedColor + (1|FID), family = 'binomial', data = df)
   summary(mod2)
   
   effects_table <- as.data.frame(cbind(est=invlogit(summary(mod2)$coeff[,1]),
@@ -67,8 +60,8 @@ PrepDF_withtraining <- function(df){
   return(effects_table)
 }
 
-effects_table1 <- PrepDF_withtraining(AllAttack1)
-effects_table3F <- PrepDF_withtraining(AllAttack3F)
+effects_table1 <- PrepDF_withtraining(AllAttacks1)
+effects_table3F <- PrepDF_withtraining(AllAttacks3F)
 
 
 # plot
@@ -130,10 +123,10 @@ plot2_dr_g <- ggplotGrob(plot2_dr)
 plot3_dr_g <- ggplotGrob(plot3_dr)
 
 
-setEPS() 
-pdf("Fig1A.pdf", height=5, width=6.85)
+#setEPS() 
+#pdf("5_Figures/DropRate/Fig2A.pdf", height=5, width=6.85)
 grid.arrange(cbind(plot1_5_dr_g,plot2_dr_g, plot3_dr_g, size="last"))
-dev.off()
+#dev.off()
 
 
 
@@ -185,10 +178,10 @@ dev.off()
 plot1_dr_g <- ggplotGrob(plot1_dr)
 plot3F_dr_g <- ggplotGrob(plot3F_dr)
 
-setEPS() 
-pdf("Fig1B.pdf", height=5, width=5)
+#setEPS() 
+#pdf("5_Figures/DropRate/Fig2B.pdf", height=5, width=5)
 grid.arrange(cbind(plot1_dr_g,plot3F_dr_g, size="last"))
-dev.off()
+#dev.off()
 
 
 

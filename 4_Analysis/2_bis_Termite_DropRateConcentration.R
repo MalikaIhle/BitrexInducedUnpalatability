@@ -55,7 +55,7 @@ nrow(AllAttacks)
 
 table(AllAttacks$Fate,AllAttacks$Concentration) # dropping rate of bitrex termite = 85.3%
 
-mod1 <- glmer (DropYN ~ Concentration + (1|FID)
+mod1 <- glmer (DropYN ~ poly(Concentration,2) + (1|FID)
                ,family = 'binomial', data = AllAttacks) # only DB attacks
 summary(mod1)
 drop1(mod1, test="Chisq")

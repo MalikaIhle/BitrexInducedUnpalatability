@@ -69,10 +69,6 @@ AllAttacks$Fate[AllAttacks$Outcome == 1] <- "Consumed"
 AllAttacks$Fate[AllAttacks$Outcome == -1] <- "Rejected"
 AllAttacks$DropYN[AllAttacks$Outcome == 1] <- 0
 AllAttacks$DropYN[AllAttacks$Outcome == -1] <- 1
-AllAttacks$PriorExposureYN[AllAttacks$GroupName == 'DB'] <- "1"
-AllAttacks$PriorExposureYN[AllAttacks$GroupName == 'Water'] <- "0"
-AllAttacks$PriorExposure[AllAttacks$PriorExposureYN == 1] <- 'Trained'
-AllAttacks$PriorExposure[AllAttacks$PriorExposureYN == 0] <- 'Naive'
 AllAttacks$DelayToAttack <- as.numeric(as.character(AllAttacks$AttackTime-AllAttacks$VideoTimeStart))
 
 for (i in 1:nrow(AllAttacks)) {
@@ -94,6 +90,13 @@ if(!is.na(AllAttacks$SubGroupName[i])){
   AllAttacks$AttackedPalatabilityTreatment[i] <- "Control"}
  
 }}
+
+AllAttacks$PriorExposureYN[AllAttacks$GroupName == 'DB'] <- "1"
+AllAttacks$PriorExposureYN[AllAttacks$GroupName == 'Water'] <- "0"
+AllAttacks$PriorExposure[AllAttacks$PriorExposureYN == 1] <- 'Trained'
+AllAttacks$PriorExposure[AllAttacks$PriorExposureYN == 0] <- 'Naive'
+AllAttacks$PalatExpo <-  paste(AllAttacks$FocalTermitePalatabilityTreatment, AllAttacks$PriorExposure, sep="")
+
 
 ## info on previous attacked prey palatability
 AllAttacks <- as.data.frame(AllAttacks %>% group_by(FID) %>% arrange(AttackTime, .by_group = TRUE) %>% mutate(AttackNb = row_number()))
@@ -171,6 +174,9 @@ FocalTermiteAttack$PriorExposureYN[FocalTermiteAttack$GroupName == 'DB'] <- 1
 FocalTermiteAttack$PriorExposureYN[FocalTermiteAttack$GroupName == 'Water'] <- 0
 FocalTermiteAttack$PriorExposure[FocalTermiteAttack$PriorExposureYN == 1] <- 'Trained'
 FocalTermiteAttack$PriorExposure[FocalTermiteAttack$PriorExposureYN == 0] <- 'Naive'
+
+FocalTermiteAttack$PalatExpo <-  paste(FocalTermiteAttack$FocalTermitePalatabilityTreatment, FocalTermiteAttack$PriorExposure, sep="")
+
 
 return(FocalTermiteAttack)
 } # full table (2 lines per test) to sample focal from and create 1000 datasets for model 1

@@ -79,21 +79,39 @@ AllAttacks$DelayToAttack <- as.numeric(as.character(AllAttacks$AttackTime-AllAtt
 
 for (i in 1:nrow(AllAttacks)) {
 if(!is.na(AllAttacks$SubGroupName[i])){  
-  if( ( AllAttacks$SubGroupName[i] == "GreenDB" | AllAttacks$SubGroupName[i] == "GreenMW" ) & AllAttacks$AttackedColor[i] == 'Green')
+  
+  if( AllAttacks$SubGroupName[i] == "GreenDB" & AllAttacks$AttackedColor[i] == 'Green')
   {AllAttacks$AttackedPalatability[i] <- 0
   AllAttacks$AttackedPalatabilityTreatment[i] <- "DB"}
   
-  if( ( AllAttacks$SubGroupName[i] == "GreenDB" | AllAttacks$SubGroupName[i] == "GreenMW" ) & AllAttacks$AttackedColor[i] == 'Brown')
+  if( AllAttacks$SubGroupName[i] == "GreenDB"   & AllAttacks$AttackedColor[i] == 'Brown')
   {AllAttacks$AttackedPalatability[i] <- 1
   AllAttacks$AttackedPalatabilityTreatment[i] <- "Control"}
   
-  if( ( AllAttacks$SubGroupName[i] == "BrownDB" | AllAttacks$SubGroupName[i] == "BrownMW" ) & AllAttacks$AttackedColor[i] == 'Brown')
+  if( AllAttacks$SubGroupName[i] == "BrownDB"   & AllAttacks$AttackedColor[i] == 'Brown')
   {AllAttacks$AttackedPalatability[i] <- 0
   AllAttacks$AttackedPalatabilityTreatment[i] <- "DB"}
   
-  if( ( AllAttacks$SubGroupName[i] == "BrownDB" | AllAttacks$SubGroupName[i] == "BrownMW" ) & AllAttacks$AttackedColor[i] == 'Green')
+  if( AllAttacks$SubGroupName[i] == "BrownDB"  & AllAttacks$AttackedColor[i] == 'Green')
   {AllAttacks$AttackedPalatability[i] <- 1
   AllAttacks$AttackedPalatabilityTreatment[i] <- "Control"}
+  
+  
+  if( AllAttacks$SubGroupName[i] == "GreenMW"  & AllAttacks$AttackedColor[i] == 'Green')
+  {AllAttacks$AttackedPalatability[i] <- 0
+  AllAttacks$AttackedPalatabilityTreatment[i] <- "Milkweed"}
+  
+  if(  AllAttacks$SubGroupName[i] == "GreenMW"  & AllAttacks$AttackedColor[i] == 'Brown')
+  {AllAttacks$AttackedPalatability[i] <- 1
+  AllAttacks$AttackedPalatabilityTreatment[i] <- "Sunflower"}
+  
+  if( AllAttacks$SubGroupName[i] == "BrownMW" & AllAttacks$AttackedColor[i] == 'Brown')
+  {AllAttacks$AttackedPalatability[i] <- 0
+  AllAttacks$AttackedPalatabilityTreatment[i] <- "Milkweed"}
+  
+  if(  AllAttacks$SubGroupName[i] == "BrownMW"  & AllAttacks$AttackedColor[i] == 'Green')
+  {AllAttacks$AttackedPalatability[i] <- 1
+  AllAttacks$AttackedPalatabilityTreatment[i] <- "Sunflower"}
  
 }}
 
@@ -160,21 +178,39 @@ FocalAttack$FocalAttackedYN[FocalAttack$FocalColor != FocalAttack$AttackedColor]
 
 for (i in 1:nrow(FocalAttack)) {
   
-  if( ( FocalAttack$SubGroupName[i] == "GreenDB" | FocalAttack$SubGroupName[i] == "GreenMW" ) & FocalAttack$FocalColor[i] == 'Green')
+  if( FocalAttack$SubGroupName[i] == "GreenDB" & FocalAttack$FocalColor[i] == 'Green')
   {FocalAttack$FocalPalatability[i] <- 0
   FocalAttack$FocalPalatabilityTreatment[i] <- "DB"}
   
-  if( ( FocalAttack$SubGroupName[i] == "GreenDB" | FocalAttack$SubGroupName[i] == "GreenMW"  ) & FocalAttack$FocalColor[i] == 'Brown')
+  if( FocalAttack$SubGroupName[i] == "GreenDB"   & FocalAttack$FocalColor[i] == 'Brown')
   {FocalAttack$FocalPalatability[i] <- 1
   FocalAttack$FocalPalatabilityTreatment[i] <- "Control"}
   
-  if( ( FocalAttack$SubGroupName[i] == "BrownDB" | FocalAttack$SubGroupName[i] == "BrownMW"  ) & FocalAttack$FocalColor[i] == 'Brown')
+  if( FocalAttack$SubGroupName[i] == "BrownDB"   & FocalAttack$FocalColor[i] == 'Brown')
   {FocalAttack$FocalPalatability[i] <- 0
   FocalAttack$FocalPalatabilityTreatment[i] <- "DB"}
   
-  if( ( FocalAttack$SubGroupName[i] == "BrownDB" | FocalAttack$SubGroupName[i] == "BrownMW"  ) & FocalAttack$FocalColor[i] == 'Green')
+  if( FocalAttack$SubGroupName[i] == "BrownDB"  & FocalAttack$FocalColor[i] == 'Green')
   {FocalAttack$FocalPalatability[i] <- 1
   FocalAttack$FocalPalatabilityTreatment[i] <- "Control"}
+  
+  
+  if( FocalAttack$SubGroupName[i] == "GreenMW"  & FocalAttack$FocalColor[i] == 'Green')
+  {FocalAttack$FocalPalatability[i] <- 0
+  FocalAttack$FocalPalatabilityTreatment[i] <- "Milkweed"}
+  
+  if(  FocalAttack$SubGroupName[i] == "GreenMW"  & FocalAttack$FocalColor[i] == 'Brown')
+  {FocalAttack$FocalPalatability[i] <- 1
+  FocalAttack$FocalPalatabilityTreatment[i] <- "Sunflower"}
+  
+  if( FocalAttack$SubGroupName[i] == "BrownMW" & FocalAttack$FocalColor[i] == 'Brown')
+  {FocalAttack$FocalPalatability[i] <- 0
+  FocalAttack$FocalPalatabilityTreatment[i] <- "Milkweed"}
+  
+  if(  FocalAttack$SubGroupName[i] == "BrownMW"  & FocalAttack$FocalColor[i] == 'Green')
+  {FocalAttack$FocalPalatability[i] <- 1
+  FocalAttack$FocalPalatabilityTreatment[i] <- "Sunflower"}
+  
   
 }
 

@@ -17,12 +17,44 @@ library(here)
 
 
 # load data
-FocalBugAttacks <- read.csv(file = "3_ExtractedData/FocalAttacks/FocalBugAttacks.csv", header=TRUE, sep=",")
-head(FocalBugAttacks)
+FocalAttacks <- read.csv(file = "3_ExtractedData/FocalAttacks/FocalBugAttacks.csv", header=TRUE, sep=",")
+head(FocalAttacks)
+
+
+# function to replicate
+nrep <- 1000
+
+sample_focal_run_model <- function(df) {
+  
+  FocalAttack <- split(df, df$FID)
+  
+  FocalAttack_fun <- function(x){
+    x$FocalYN <- sample(c(0,1), 2,replace=FALSE) # randomly assigning YN, determining whether the bug is actually focal or not
+    
+    return(x[x$FocalYN == 1,])
+  }
+  
+  FocalAttack <- do.call(rbind,lapply(FocalAttack,FocalAttack_fun))
+  rownames(FocalAttack) <- NULL
+  
+  mod <- glm (FocalAttackedYN ~ FocalColor + FocalPalatabilityTreatment, family = 'binomial', data = FocalAttack)
+  summary(mod)
+  drop1(mod, test="Chisq")[,c('LRT','Pr(>Chi)')]
+  
+  return(list(drop1(mod, test="Chisq")[,c('LRT','Pr(>Chi)')]))
+  
+}
+
+
+
+effects_table_list <- pbreplicate(nrep, sample_focal_run_model(FocalAttacks)
+effects_table <- Reduce(`+`, effects_table_list) / length(effects_table_list)
+effects_table
+
 
 
 # model 
-mod1 <- glm (FocalBugAttackedYN ~ FocalBugColor + FocalBugPalatabilityTreatment, family = 'binomial', data = FocalBugAttacks)
+mod1 <- glm (FocalAttackedYN ~ FocalColor + FocalBugPalatabilityTreatment, family = 'binomial', data = FocalBugAttacks)
 summary(mod1)
 drop1(mod1, test="Chisq")
 

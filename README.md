@@ -67,10 +67,3 @@ the model estimates are plotted, by removing the intercept, having a factor pala
 
 for attack likelihood: either using all first attacks or a focal first attack (replicated 1000 times and averages)
 
-
-
-
-# TODO: 
-
-* For the other bitrex prey tests (crickets, caped termites, fruit flies). During the caped termite tests, many spiders attacked and dropped the unpalatable prey multiple times, so for analysis we should look at the first attack drop rate and compare it to other parallel experiments where similar prey were given but without bitrex. We still are going to describe, anecdotally that some spiders have attacked multiple and always (?) dropped. 
-

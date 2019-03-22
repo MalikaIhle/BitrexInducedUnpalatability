@@ -24,6 +24,9 @@ rm(list = ls(all = TRUE))
   # 18687 : video failed
   
   
+  ### excluded FID in 3%F:
+  # 18337: female died during training (training = water)
+  
 }
 
 
@@ -147,6 +150,7 @@ nrow(FocalAttack) # 200 looks good
 FocalAttack <- merge(FocalAttack, FirstAttacks[,c('FID','AttackedColor')], by='FID', all.x=TRUE)
 
 
+
 FocalAttack$FocalAttackedYN[FocalAttack$FocalColor == FocalAttack$AttackedColor] <- 1
 FocalAttack$FocalAttackedYN[FocalAttack$FocalColor != FocalAttack$AttackedColor] <- 0
 
@@ -175,12 +179,15 @@ FocalAttack$PriorExposureYN[FocalAttack$GroupName == 'DB'] <- 1
 FocalAttack$PriorExposureYN[FocalAttack$GroupName == 'Water'] <- 0
 FocalAttack$PriorExposure[FocalAttack$PriorExposureYN == 1] <- 'Trained'
 FocalAttack$PriorExposure[FocalAttack$PriorExposureYN == 0] <- 'Naive'
-
 FocalAttack$PalatExpo <-  paste(FocalAttack$FocalPalatabilityTreatment, FocalAttack$PriorExposure, sep="")
 
 
+
 return(FocalAttack)
-} # full table (2 lines per test) to sample focal from and create 1000 datasets for model 1
+} 
+       # full table (2 lines per test) to sample focal from 
+       # (and later determine focal color and focal palatability)
+       # and create 1000 datasets for model 1
 
 
 # extract and process (apply functions)

@@ -19,22 +19,24 @@ FocalAttacks1 <- read.csv(file = paste(here(),"3_ExtractedData/FocalAttacks/Foca
 FocalAttacks3F <- read.csv(file = paste(here(),"3_ExtractedData/FocalAttacks/FocalAttacks3F.csv", sep='/'), header=TRUE, sep=",")
 
   
-# select one at random (1000 times), run the model, save est, CI, p 
+# select one at random (1000 times), determine focal color, focal palatability, focal attackedYN, run the model, save est, CI, p 
   
   sample_focal <- function(df) {
   
   FocalAttack <- split(df, df$FID)
   
   FocalAttack_fun <- function(x){
-    x$FocalYN <- sample(c(0,1), 2,replace=FALSE) # randomly assigning YN, determining whether the  is focal or not
+    x$FocalYN <- sample(c(0,1), 2,replace=FALSE) # randomly assigning YN, determining whether the termite is actually focal or not
+    
     return(x[x$FocalYN == 1,])
   }
   
   FocalAttack <- do.call(rbind,lapply(FocalAttack,FocalAttack_fun))
   rownames(FocalAttack) <- NULL
   
-
-  modInter <- glm (FocalAttackedYN ~  PalatExpo + scale(FocalColorCode), family = 'binomial', data = FocalAttack)
+  modInter <- glm (FocalAttackedYN ~  -1+ PalatExpo 
+                   + scale(FocalColorCode)
+                   ,family = 'binomial', data = FocalAttack)
   summary(modInter)
   drop1(modInter, test="Chisq")
   

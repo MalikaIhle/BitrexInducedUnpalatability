@@ -25,22 +25,80 @@ FocalAttacks3 <- read.csv(file="3_ExtractedData/FocalAttacks/FocalAttacks3.csv",
 FocalAttacks3F <- read.csv(file="3_ExtractedData/FocalAttacks/FocalAttacks3F.csv", header=TRUE, sep=",")
 
 
+sample_focal_run_model_with_training <- function(df) {
+  
+  FocalAttack <- split(df, df$FID)
+  
+  FocalAttack_fun <- function(x){
+    x$FocalYN <- sample(c(0,1), 2,replace=FALSE) # randomly assigning YN, determining whether the termite is actually focal or not
+    
+    return(x[x$FocalYN == 1,])
+  }
+  
+  FocalAttack <- do.call(rbind,lapply(FocalAttack,FocalAttack_fun))
+  rownames(FocalAttack) <- NULL
+  
+  mod <- glm (FocalAttackedYN ~ FocalColor + FocalPalatabilityTreatment*PriorExposure, family = 'binomial', data = FocalAttack)
+  summary(mod)
+  drop1(mod, test="Chisq")[,c('LRT','Pr(>Chi)')]
+
+  return(list(drop1(mod, test="Chisq")[,c('LRT','Pr(>Chi)')]))
+  
+}
+
+
+sample_focal_run_model_without_training <- function(df) {
+  
+  FocalAttack <- split(df, df$FID)
+  
+  FocalAttack_fun <- function(x){
+    x$FocalYN <- sample(c(0,1), 2,replace=FALSE) # randomly assigning YN, determining whether the termite is actually focal or not
+    
+    return(x[x$FocalYN == 1,])
+  }
+  
+  FocalAttack <- do.call(rbind,lapply(FocalAttack,FocalAttack_fun))
+  rownames(FocalAttack) <- NULL
+  
+  mod <- glm (FocalAttackedYN ~ FocalColor + FocalPalatabilityTreatment, family = 'binomial', data = FocalAttack)
+  summary(mod)
+  drop1(mod, test="Chisq")[,c('LRT','Pr(>Chi)')]
+  
+  return(list(drop1(mod, test="Chisq")[,c('LRT','Pr(>Chi)')]))
+  
+}
+
+
 # DB concentration = 1%
 
-# question 1 (confirmatory): reluctant to attack bitrex termite first especially if trained?   
-# --> interaction not significant, effect direction opposite expectation = less likely to attack a focal termite that is palatable if they were exposed
-# question 2 (confirmatory): reluctant to attack bitrex termite first regardless of their training?  
-# --> main effect of Palatability not significant, effect direction according to expectation = palatable one more likely to be attacked first (no effect)                                                           
-# question 3 (exploratory): bias against a color ?
-# --> no, effect direction: have a slight (no) preference to attack the green first
+effects_table1_list <- pbreplicate(10, sample_focal_run_model_with_training(FocalAttacks1))
+effects_table1 <- Reduce(`+`, effects_table1_list) / length(effects_table1_list)
+effects_table1
 
-str(FocalAttacks1)
+# DB concentration = 1.5%
 
-mod1 <- glm (FocalAttackedYN ~ FocalColor + FocalPalatabilityTreatment*PriorExposure, family = 'binomial', data = FocalAttacks1)
-summary(mod1)
-drop1(mod1, test="Chisq")
+effects_table15_list <- pbreplicate(10, sample_focal_run_model_without_training(FocalAttacks15))
+effects_table15 <- Reduce(`+`, effects_table15_list) / length(effects_table15_list)
+effects_table15
 
 
+# DB concentration = 2%
+
+effects_table2_list <- pbreplicate(10, sample_focal_run_model_without_training(FocalAttacks2))
+effects_table2 <- Reduce(`+`, effects_table2_list) / length(effects_table2_list)
+effects_table2
+
+# DB concentration = 3%
+
+effects_table3_list <- pbreplicate(10, sample_focal_run_model_without_training(FocalAttacks3))
+effects_table3 <- Reduce(`+`, effects_table3_list) / length(effects_table3_list)
+effects_table3
+
+# DB concentration = 3F%
+
+effects_table3F_list <- pbreplicate(10, sample_focal_run_model_with_training(FocalAttacks3F))
+effects_table3F <- Reduce(`+`, effects_table3F_list) / length(effects_table3F_list)
+effects_table3F
 
 
 # DB concentration = 0%

@@ -17,7 +17,7 @@ FocalAttacks3F <- read.csv(file="3_ExtractedData/FocalAttacks/FocalAttacks3F.csv
 
 PrepDF <- function(df){
 
-  mod1 <- glm (FocalAttackedYN ~ -1+ FocalPalatabilityTreatment + FocalColor
+  mod1 <- glm (FocalAttackedYN ~ -1+ FocalPalatabilityTreatment + scale(FocalColorCode)
                , family = 'binomial', data = df)
   summary(mod1)
   
@@ -100,7 +100,7 @@ grid.arrange(cbind(plot1_5_lkh_g,plot2_lkh_g, plot3_lkh_g, size="last"))
 
 PrepDF_withtraining <- function(df){
 
-mod1 <- glm (FocalAttackedYN ~ -1+PalatExpo + FocalColor, family = 'binomial', data = df)
+mod1 <- glm (FocalAttackedYN ~ -1+PalatExpo + scale(FocalColorCode), family = 'binomial', data = df)
 summary(mod1)
 
 effects_table <- as.data.frame(cbind(est=invlogit(summary(mod1)$coeff[,1]),

@@ -14,7 +14,7 @@ library(lme4)
 library(arm)
 library(ggplot2)
 library(here)
-
+library(pbapply)
 
 # load data
 FocalAttacks <- read.csv(file = "3_ExtractedData/FocalAttacks/FocalAttacks_Bug.csv", header=TRUE, sep=",")

@@ -16,6 +16,7 @@ rm(list = ls(all = TRUE))
 # packages
 library(lme4)
 library(arm)
+library(pbapply)
 
 FirstAttacks0 <- read.csv(file = "3_ExtractedData/FirstAttacks/FirstAttacks0.csv", header=TRUE, sep=",")
 FocalAttacks1 <- read.csv(file="3_ExtractedData/FocalAttacks/FocalAttacks1.csv", header=TRUE, sep=",")

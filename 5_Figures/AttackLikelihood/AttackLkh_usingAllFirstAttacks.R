@@ -90,10 +90,10 @@ plot1_5_lkh_g <- ggplotGrob(plot1_5_lkh)
 plot2_lkh_g <- ggplotGrob(plot2_lkh)
 plot3_lkh_g <- ggplotGrob(plot3_lkh)
 
-#setEPS() 
-#pdf("5_Figures/AttackLikelihood/Fig1A.pdf", height=5, width=6.85)
+setEPS() 
+pdf("5_Figures/AttackLikelihood/Fig1A_AllFirstAttacks.pdf", height=5, width=6.85)
 grid.arrange(cbind(plot1_5_lkh_g,plot2_lkh_g, plot3_lkh_g, size="last"))
-#dev.off()
+dev.off()
 
 
 
@@ -164,8 +164,8 @@ effects_table3F <- PrepDF_withtraining(FocalAttacks3F)
 plot1_lkh_g <- ggplotGrob(plot1_lkh)
 plot3F_lkh_g <- ggplotGrob(plot3F_lkh)
 
-#setEPS() 
-#pdf("5_Figures/AttackLikelihood/Fig1B.pdf", height=5, width=5)
+setEPS() 
+pdf("5_Figures/AttackLikelihood/Fig1B_AllFirstAttacks.pdf", height=5, width=5)
 grid.arrange(cbind(plot1_lkh_g,plot3F_lkh_g, size="last"))
-#dev.off()
+dev.off()
 

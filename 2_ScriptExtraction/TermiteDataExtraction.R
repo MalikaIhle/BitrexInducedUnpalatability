@@ -30,9 +30,9 @@ rm(list = ls(all = TRUE))
 # packages
 
 library(RODBC) # this require R AND ACCESS to run on 32 bits ! (and apparently can't do it on MAC)
-library(stringr)
-library(dplyr)
-library(here)
+library(stringr) # for function convert time
+library(dplyr) # to reformat / summarize data
+library(here) # to write csv in subfolder
 
 
 # functions
@@ -173,7 +173,7 @@ FocalTermiteAttack$PriorExposure[FocalTermiteAttack$PriorExposureYN == 1] <- 'Tr
 FocalTermiteAttack$PriorExposure[FocalTermiteAttack$PriorExposureYN == 0] <- 'Naive'
 
 return(FocalTermiteAttack)
-} # to create 1000 datasets for model 1
+} # full table (2 lines per test) to sample focal from and create 1000 datasets for model 1
 
 
 # extract and process (apply functions)

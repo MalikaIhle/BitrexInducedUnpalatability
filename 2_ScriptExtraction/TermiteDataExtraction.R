@@ -95,7 +95,7 @@ AllAttacks$PriorExposureYN[AllAttacks$GroupName == 'DB'] <- "1"
 AllAttacks$PriorExposureYN[AllAttacks$GroupName == 'Water'] <- "0"
 AllAttacks$PriorExposure[AllAttacks$PriorExposureYN == 1] <- 'Trained'
 AllAttacks$PriorExposure[AllAttacks$PriorExposureYN == 0] <- 'Naive'
-AllAttacks$PalatExpo <-  paste(AllAttacks$FocalTermitePalatabilityTreatment, AllAttacks$PriorExposure, sep="")
+AllAttacks$PalatExpo <-  paste(AllAttacks$AttackedPalatabilityTreatment, AllAttacks$PriorExposure, sep="")
 
 
 ## info on previous attacked prey palatability

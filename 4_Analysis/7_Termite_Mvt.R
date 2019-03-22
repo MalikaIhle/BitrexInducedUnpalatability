@@ -34,7 +34,8 @@ close(conDB)
 tbl_long <- data.frame(TestID = c(tbl_wide$TestID,tbl_wide$TestID),
            NbGrid = c(tbl_wide$BrownNbGridCrossed, tbl_wide$GreenNbGridCrossed),
            Trt = c(as.character(tbl_wide$Treatment), as.character(tbl_wide$Treatment)),
-           Col = c(rep('Brown',nrow(tbl_wide)), rep('Green',nrow(tbl_wide))))
+           Col = c(rep('Brown',nrow(tbl_wide)), rep('Green',nrow(tbl_wide))),
+           ColCode = c(rep(-2,nrow(tbl_wide)), rep(2,nrow(tbl_wide))) )
 
 for (i in 1:nrow(tbl_long)) {
   
@@ -72,7 +73,7 @@ drop1(mod, test="Chisq")
 
 
 
-mod_NoIntercept <-glmer(NbGrid ~ -1+ Palatability + Col + (1|rowID) # account for overdispersion: makes the whole difference !!! <<<<<<<<<<<<<<<
+mod_NoIntercept <-glmer(NbGrid ~ -1+ Palatability + scale(ColCode) + (1|rowID) # account for overdispersion: makes the whole difference !!! <<<<<<<<<<<<<<<
             , data = tbl_long, family = 'poisson')
 summary(mod_NoIntercept)
 

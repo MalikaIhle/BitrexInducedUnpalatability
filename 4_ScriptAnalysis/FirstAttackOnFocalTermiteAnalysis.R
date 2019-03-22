@@ -32,6 +32,6 @@ FocalAttacks3F <- read.csv(file="3_ExtractedData/FocalAttacks/FocalAttacks3F.csv
 # question 3 (exploratory): bias against a color ?
 # --> no, effect direction: slight preference to attack the green first
 
-table(FirstAttacks$AttackedTermiteColor)
+table(FirstAttacks$AttackedColor)
 
 chisq.test(c(13,17),p=c(0.5,0.5))

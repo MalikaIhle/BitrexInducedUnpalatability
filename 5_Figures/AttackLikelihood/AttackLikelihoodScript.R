@@ -8,18 +8,16 @@ library(ggplot2) # to plot
 require(gridExtra) # for function gridarrange
 
 
-FocalTermiteAttack1 <- read.csv(file = paste(here(),"3_ExtractedData/FocalAttacks/FocalTermiteAttack.csv", sep='/'), header=TRUE, sep=",")
-FocalTermiteAttack1_5 <- read.csv(file = paste(here(),"3_ExtractedData/FocalAttacks/FocalTermiteAttack1_5.csv", sep='/'), header=TRUE, sep=",")
-FocalTermiteAttack2 <- read.csv(file = paste(here(),"3_ExtractedData/FocalAttacks/FocalTermiteAttack2.csv", sep='/'), header=TRUE, sep=",")
-FocalTermiteAttack3 <- read.csv(file = paste(here(),"3_ExtractedData/FocalAttacks/FocalTermiteAttack3.csv", sep='/'), header=TRUE, sep=",")
-FocalTermiteAttack3F <- read.csv(file = paste(here(),"3_ExtractedData/FocalAttacks/FocalTermiteAttack3_Final.csv", sep='/'), header=TRUE, sep=",")
+FocalAttacks1 <- read.csv(file="3_ExtractedData/FocalAttacks/FocalAttacks1.csv", header=TRUE, sep=",")
+FocalAttacks15 <- read.csv(file="3_ExtractedData/FocalAttacks/FocalAttacks15.csv", header=TRUE, sep=",")
+FocalAttacks2 <- read.csv(file="3_ExtractedData/FocalAttacks/FocalAttacks2.csv", header=TRUE, sep=",")
+FocalAttacks3 <- read.csv(file="3_ExtractedData/FocalAttacks/FocalAttacks3.csv", header=TRUE, sep=",")
+FocalAttacks3F <- read.csv(file="3_ExtractedData/FocalAttacks/FocalAttacks3F.csv", header=TRUE, sep=",")
 
 
 PrepDF <- function(df){
-  df$FocalTermitePalatability[df$FocalTermitePalatability == "1"] <- 'Control'
-  df$FocalTermitePalatability[df$FocalTermitePalatability == "0"] <- 'DB'
 
-  mod1 <- glm (FocalTermiteAttackedYN ~ -1+ FocalTermitePalatability + FocalTermiteColor
+  mod1 <- glm (FocalAttackedYN ~ -1+ FocalPalatabilityTreatment + FocalColor
                , family = 'binomial', data = df)
   summary(mod1)
   
@@ -32,9 +30,9 @@ PrepDF <- function(df){
   return(effects_table)
 }
 
-effects_table1_5 <- PrepDF(FocalTermiteAttack1_5)
-effects_table2 <- PrepDF(FocalTermiteAttack2)
-effects_table3 <- PrepDF(FocalTermiteAttack3)
+effects_table15 <- PrepDF(FocalAttacks15)
+effects_table2 <- PrepDF(FocalAttacks2)
+effects_table3 <- PrepDF(FocalAttacks3)
 
 {plot1_5_lkh <- 
     
@@ -93,7 +91,7 @@ plot2_lkh_g <- ggplotGrob(plot2_lkh)
 plot3_lkh_g <- ggplotGrob(plot3_lkh)
 
 setEPS() 
-pdf("Fig2A.pdf", height=5, width=6.85)
+pdf("5_Figures/AttackLikelihood/Fig1A.pdf", height=5, width=6.85)
 grid.arrange(cbind(plot1_5_lkh_g,plot2_lkh_g, plot3_lkh_g, size="last"))
 dev.off()
 
@@ -101,14 +99,8 @@ dev.off()
 
 
 PrepDF_withtraining <- function(df){
-df$FocalTermitePalatability[df$FocalTermitePalatability == "1"] <- 'Control'
-df$FocalTermitePalatability[df$FocalTermitePalatability == "0"] <- 'DB'
-df$PriorExposure[df$PriorExposureYN == 1] <- 'Trained'
-df$PriorExposure[df$PriorExposureYN == 0] <- 'Naive'
 
-
-df$PalatExp <- paste(df$FocalTermitePalatability, df$PriorExposure, sep="")
-mod1 <- glm (FocalTermiteAttackedYN ~ -1+PalatExp + FocalTermiteColor, family = 'binomial', data = df)
+mod1 <- glm (FocalAttackedYN ~ -1+PalatExp + FocalColor, family = 'binomial', data = df)
 summary(mod1)
 
 effects_table <- as.data.frame(cbind(est=invlogit(summary(mod1)$coeff[,1]),
@@ -121,8 +113,8 @@ effects_table$Palatability <- c("Control", "Control", "DB","DB")
 return(effects_table)
 }
 
-effects_table1 <- PrepDF_withtraining(FocalTermiteAttack1)
-effects_table3F <- PrepDF_withtraining(FocalTermiteAttack3F)
+effects_table1 <- PrepDF_withtraining(FocalAttack1)
+effects_table3F <- PrepDF_withtraining(FocalAttack3F)
 
 {plot1_lkh <- 
   
@@ -173,7 +165,7 @@ plot1_lkh_g <- ggplotGrob(plot1_lkh)
 plot3F_lkh_g <- ggplotGrob(plot3F_lkh)
 
 setEPS() 
-pdf("Fig2B.pdf", height=5, width=5)
+pdf("5_Figures/AttackLikelihood/Fig1B.pdf", height=5, width=5)
 grid.arrange(cbind(plot1_lkh_g,plot3F_lkh_g, size="last"))
 dev.off()
 

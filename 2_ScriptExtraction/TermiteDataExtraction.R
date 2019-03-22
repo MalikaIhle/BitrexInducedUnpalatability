@@ -137,48 +137,49 @@ FROM Basic_Trials INNER JOIN Behav_Female ON Basic_Trials.Ind_ID = Behav_Female.
                      ")
 AllFemales <- AllFemales[AllFemales$ExcludeYN == 0,] # see remarks
 
-FocalTermiteAttack <- rbind(AllFemales[,c('FID', 'GroupName', 'SubGroupName')],AllFemales[,c('FID', 'GroupName', 'SubGroupName')])
-FocalTermiteAttack$FocalTermiteColor <- c(rep('Brown',nrow(AllFemales)),rep('Green',nrow(AllFemales)))
-FocalTermiteAttack <- FocalTermiteAttack[order(FocalTermiteAttack$FID),]
-nrow(FocalTermiteAttack) # 200 looks good
+FocalAttack <- rbind(AllFemales[,c('FID', 'GroupName', 'SubGroupName')],AllFemales[,c('FID', 'GroupName', 'SubGroupName')])
+FocalAttack$FocalColor <- c(rep('Brown',nrow(AllFemales)),rep('Green',nrow(AllFemales)))
+FocalAttack$FocalColorCode <- c(rep(2,nrow(AllFemales)),rep(1,nrow(AllFemales)))
+FocalAttack <- FocalAttack[order(FocalAttack$FID),]
+nrow(FocalAttack) # 200 looks good
 
 
-FocalTermiteAttack <- merge(FocalTermiteAttack, FirstAttacks[,c('FID','AttackedColor')], by='FID', all.x=TRUE)
+FocalAttack <- merge(FocalAttack, FirstAttacks[,c('FID','AttackedColor')], by='FID', all.x=TRUE)
 
 
-FocalTermiteAttack$FocalTermiteAttackedYN[FocalTermiteAttack$FocalTermiteColor == FocalTermiteAttack$AttackedColor] <- 1
-FocalTermiteAttack$FocalTermiteAttackedYN[FocalTermiteAttack$FocalTermiteColor != FocalTermiteAttack$AttackedColor] <- 0
+FocalAttack$FocalAttackedYN[FocalAttack$FocalColor == FocalAttack$AttackedColor] <- 1
+FocalAttack$FocalAttackedYN[FocalAttack$FocalColor != FocalAttack$AttackedColor] <- 0
 
 
-for (i in 1:nrow(FocalTermiteAttack)) {
+for (i in 1:nrow(FocalAttack)) {
   
-  if(FocalTermiteAttack$SubGroupName[i] == "GreenDB" & FocalTermiteAttack$FocalTermiteColor[i] == 'Green')
-  {FocalTermiteAttack$FocalPalatability[i] <- 0
-  FocalTermiteAttack$FocalPalatabilityTreatment[i] <- "DB"}
+  if(FocalAttack$SubGroupName[i] == "GreenDB" & FocalAttack$FocalColor[i] == 'Green')
+  {FocalAttack$FocalPalatability[i] <- 0
+  FocalAttack$FocalPalatabilityTreatment[i] <- "DB"}
   
-  if(FocalTermiteAttack$SubGroupName[i] == "GreenDB" & FocalTermiteAttack$FocalTermiteColor[i] == 'Brown')
-  {FocalTermiteAttack$FocalPalatability[i] <- 1
-  FocalTermiteAttack$FocalPalatabilityTreatment[i] <- "Control"}
+  if(FocalAttack$SubGroupName[i] == "GreenDB" & FocalAttack$FocalColor[i] == 'Brown')
+  {FocalAttack$FocalPalatability[i] <- 1
+  FocalAttack$FocalPalatabilityTreatment[i] <- "Control"}
   
-  if(FocalTermiteAttack$SubGroupName[i] == "BrownDB" & FocalTermiteAttack$FocalTermiteColor[i] == 'Brown')
-  {FocalTermiteAttack$FocalPalatability[i] <- 0
-  FocalTermiteAttack$FocalPalatabilityTreatment[i] <- "DB"}
+  if(FocalAttack$SubGroupName[i] == "BrownDB" & FocalAttack$FocalColor[i] == 'Brown')
+  {FocalAttack$FocalPalatability[i] <- 0
+  FocalAttack$FocalPalatabilityTreatment[i] <- "DB"}
   
-  if(FocalTermiteAttack$SubGroupName[i] == "BrownDB" & FocalTermiteAttack$FocalTermiteColor[i] == 'Green')
-  {FocalTermiteAttack$FocalPalatability[i] <- 1
-  FocalTermiteAttack$FocalPalatabilityTreatment[i] <- "Control"}
+  if(FocalAttack$SubGroupName[i] == "BrownDB" & FocalAttack$FocalColor[i] == 'Green')
+  {FocalAttack$FocalPalatability[i] <- 1
+  FocalAttack$FocalPalatabilityTreatment[i] <- "Control"}
   
 }
 
-FocalTermiteAttack$PriorExposureYN[FocalTermiteAttack$GroupName == 'DB'] <- 1
-FocalTermiteAttack$PriorExposureYN[FocalTermiteAttack$GroupName == 'Water'] <- 0
-FocalTermiteAttack$PriorExposure[FocalTermiteAttack$PriorExposureYN == 1] <- 'Trained'
-FocalTermiteAttack$PriorExposure[FocalTermiteAttack$PriorExposureYN == 0] <- 'Naive'
+FocalAttack$PriorExposureYN[FocalAttack$GroupName == 'DB'] <- 1
+FocalAttack$PriorExposureYN[FocalAttack$GroupName == 'Water'] <- 0
+FocalAttack$PriorExposure[FocalAttack$PriorExposureYN == 1] <- 'Trained'
+FocalAttack$PriorExposure[FocalAttack$PriorExposureYN == 0] <- 'Naive'
 
-FocalTermiteAttack$PalatExpo <-  paste(FocalTermiteAttack$FocalTermitePalatabilityTreatment, FocalTermiteAttack$PriorExposure, sep="")
+FocalAttack$PalatExpo <-  paste(FocalAttack$FocalPalatabilityTreatment, FocalAttack$PriorExposure, sep="")
 
 
-return(FocalTermiteAttack)
+return(FocalAttack)
 } # full table (2 lines per test) to sample focal from and create 1000 datasets for model 1
 
 

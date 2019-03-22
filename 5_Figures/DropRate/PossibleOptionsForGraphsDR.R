@@ -52,16 +52,8 @@ plot2 <- ggplot(contingency_tbl2, aes(x = factor(AttackedPalatability), y = coun
 
 
 PrepDF_withtraining <- function(df){
-  df$AttackedPalatability[df$AttackedPalatability == "1"] <- 'Control'
-  df$AttackedPalatability[df$AttackedPalatability == "0"] <- 'DB'
-  df$PriorExposure[df$PriorExposureYN == 1] <- 'Trained'
-  df$PriorExposure[df$PriorExposureYN == 0] <- 'Naive'
-  df$PalatExp <- paste(df$AttackedPalatability, df$PriorExposure, sep="")
-  df$Color[df$AttackedColor == "Brown"] <- 1
-  df$Color[df$AttackedColor == "Green"] <- 0
-  
-  
-  mod2 <- glmer (DropYN ~ -1 + PalatExp + scale(Color) + (1|FID), family = 'binomial', data = df)
+
+  mod2 <- glmer (DropYN ~ -1 + PalatExpo + scale(ColorCode) + (1|FID), family = 'binomial', data = df)
   summary(mod2)
   
   effects_table <- as.data.frame(cbind(est=invlogit(summary(mod2)$coeff[,1]),

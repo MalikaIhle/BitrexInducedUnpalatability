@@ -23,20 +23,18 @@ FocalAttacks3F <- read.csv(file = paste(here(),"3_ExtractedData/FocalAttacks/Foc
   
   sample_focal <- function(df) {
   
-  FocalTermiteAttack <- split(df, df$FID)
+  FocalAttack <- split(df, df$FID)
   
-  FocalTermiteAttack_fun <- function(x){
-    x$FocalTermiteYN <- sample(c(0,1), 2,replace=FALSE) # randomly assigning YN, determining whether the termite is focal or not
-    return(x[x$FocalTermiteYN == 1,])
+  FocalAttack_fun <- function(x){
+    x$FocalYN <- sample(c(0,1), 2,replace=FALSE) # randomly assigning YN, determining whether the  is focal or not
+    return(x[x$FocalYN == 1,])
   }
   
-  FocalTermiteAttack <- do.call(rbind,lapply(FocalTermiteAttack,FocalTermiteAttack_fun))
-  rownames(FocalTermiteAttack) <- NULL
+  FocalAttack <- do.call(rbind,lapply(FocalAttack,FocalAttack_fun))
+  rownames(FocalAttack) <- NULL
   
 
-  FocalTermiteAttack$PalatExp <- paste(FocalTermiteAttack$FocalPalatabilityTreatment, FocalTermiteAttack$PriorExposure, sep="")
-  
-  modInter <- glm (FocalTermiteAttackedYN ~  PalatExp + FocalTermiteColor, family = 'binomial', data = FocalTermiteAttack)
+  modInter <- glm (FocalAttackedYN ~  PalatExpo + scale(FocalColorCode), family = 'binomial', data = FocalAttack)
   summary(modInter)
   drop1(modInter, test="Chisq")
   
@@ -78,7 +76,7 @@ FocalAttacks3F <- read.csv(file = paste(here(),"3_ExtractedData/FocalAttacks/Foc
     guides(shape = guide_legend(override.aes = list(linetype = 0, size = 2))) # remove bar o top of symbol in legend
   
 
-   effects_table3F_list <- pbreplicate(5000, sample_focal(FocalAttacks3F))
+   effects_table3F_list <- pbreplicate(1000, sample_focal(FocalAttacks3F))
    
    effects_table3F <- Reduce(`+`, effects_table3F_list) / length(effects_table3F_list)
    effects_table3F$PriorExposure <- c("Naive", "Trained", "Naive","Trained")

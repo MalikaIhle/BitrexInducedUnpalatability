@@ -36,7 +36,7 @@ effects_table3 <- PrepDF(FocalAttacks3)
 
 {plot1_5_lkh <- 
     
-    ggplot(data=effects_table1_5, aes(x=Palatability, y=est)) + 
+    ggplot(data=effects_table15, aes(x=Palatability, y=est)) + 
     scale_y_continuous(name="Prey probability of being attacked first", 
                        limits=c(0, 1), breaks =c(0,0.25,0.50,0.75,1), labels=scales::percent)+ # 0.75 converted to 75%
     theme_classic() + # white backgroun, x and y axis (no box)
@@ -90,17 +90,17 @@ plot1_5_lkh_g <- ggplotGrob(plot1_5_lkh)
 plot2_lkh_g <- ggplotGrob(plot2_lkh)
 plot3_lkh_g <- ggplotGrob(plot3_lkh)
 
-setEPS() 
-pdf("5_Figures/AttackLikelihood/Fig1A.pdf", height=5, width=6.85)
+#setEPS() 
+#pdf("5_Figures/AttackLikelihood/Fig1A.pdf", height=5, width=6.85)
 grid.arrange(cbind(plot1_5_lkh_g,plot2_lkh_g, plot3_lkh_g, size="last"))
-dev.off()
+#dev.off()
 
 
 
 
 PrepDF_withtraining <- function(df){
 
-mod1 <- glm (FocalAttackedYN ~ -1+PalatExp + FocalColor, family = 'binomial', data = df)
+mod1 <- glm (FocalAttackedYN ~ -1+PalatExpo + FocalColor, family = 'binomial', data = df)
 summary(mod1)
 
 effects_table <- as.data.frame(cbind(est=invlogit(summary(mod1)$coeff[,1]),
@@ -113,8 +113,8 @@ effects_table$Palatability <- c("Control", "Control", "DB","DB")
 return(effects_table)
 }
 
-effects_table1 <- PrepDF_withtraining(FocalAttack1)
-effects_table3F <- PrepDF_withtraining(FocalAttack3F)
+effects_table1 <- PrepDF_withtraining(FocalAttacks1)
+effects_table3F <- PrepDF_withtraining(FocalAttacks3F)
 
 {plot1_lkh <- 
   
@@ -164,8 +164,8 @@ effects_table3F <- PrepDF_withtraining(FocalAttack3F)
 plot1_lkh_g <- ggplotGrob(plot1_lkh)
 plot3F_lkh_g <- ggplotGrob(plot3F_lkh)
 
-setEPS() 
-pdf("5_Figures/AttackLikelihood/Fig1B.pdf", height=5, width=5)
+#setEPS() 
+#pdf("5_Figures/AttackLikelihood/Fig1B.pdf", height=5, width=5)
 grid.arrange(cbind(plot1_lkh_g,plot3F_lkh_g, size="last"))
-dev.off()
+#dev.off()
 

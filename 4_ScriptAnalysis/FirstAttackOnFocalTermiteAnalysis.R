@@ -27,6 +27,21 @@ FocalAttacks3F <- read.csv(file="3_ExtractedData/FocalAttacks/FocalAttacks3F.csv
 
 # DB concentration = 1%
 
+# question 1 (confirmatory): reluctant to attack bitrex termite first especially if trained?   
+# --> interaction not significant, effect direction opposite expectation = less likely to attack a focal termite that is palatable if they were exposed
+# question 2 (confirmatory): reluctant to attack bitrex termite first regardless of their training?  
+# --> main effect of Palatability not significant, effect direction according to expectation = palatable one more likely to be attacked first (no effect)                                                           
+# question 3 (exploratory): bias against a color ?
+# --> no, effect direction: have a slight (no) preference to attack the green first
+
+str(FocalAttacks1)
+
+mod1 <- glm (FocalAttackedYN ~ FocalColor + FocalPalatabilityTreatment*PriorExposure, family = 'binomial', data = FocalAttacks1)
+summary(mod1)
+drop1(mod1, test="Chisq")
+
+
+
 
 # DB concentration = 0%
 # question 3 (exploratory): bias against a color ?
@@ -35,3 +50,13 @@ FocalAttacks3F <- read.csv(file="3_ExtractedData/FocalAttacks/FocalAttacks3F.csv
 table(FirstAttacks$AttackedColor)
 
 chisq.test(c(13,17),p=c(0.5,0.5))
+
+
+
+
+
+
+
+
+
+

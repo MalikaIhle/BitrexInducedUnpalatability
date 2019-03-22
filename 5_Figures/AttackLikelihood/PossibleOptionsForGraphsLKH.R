@@ -1,4 +1,5 @@
 # create panelled figure for attack probability observed
+## >>>> this does not select randomly a focal termite, but uses both lines per test
 
 rm(list = ls(all = TRUE))
 
@@ -9,11 +10,6 @@ require(gridExtra) # for function gridarrange
 library(dplyr)
 
 FirstAttack1 <- read.csv(file = paste(here(),"3_ExtractedData/FirstAttacks/FirstAttacks1.csv", sep='/'), header=TRUE, sep=",")
-# FirstAttack1_5 <- read.csv(file = paste(here(),"3_ExtractedData/FirstAttacks/FirstAttacks1_5.csv", sep='/'), header=TRUE, sep=",")
-# FirstAttack2 <- read.csv(file = paste(here(),"3_ExtractedData/FirstAttacks/FirstAttacks2.csv", sep='/'), header=TRUE, sep=",")
-# FirstAttack3 <- read.csv(file = paste(here(),"3_ExtractedData/FirstAttacks/FirstAttacks3.csv", sep='/'), header=TRUE, sep=",")
-# FirstAttack3F <- read.csv(file = paste(here(),"3_ExtractedData/FirstAttacks/FirstAttacks3_Final.csv", sep='/'), header=TRUE, sep=",")
-
 
 
 contingency_tbl <-   data.frame(FirstAttack1 %>%
@@ -52,18 +48,9 @@ plot2 <- ggplot(contingency_tbl, aes(x = factor(AttackedPalatability), y = Count
 FocalAttacks1 <- read.csv(file = paste(here(),"3_ExtractedData/FocalAttacks/FocalAttacks1.csv", sep='/'), header=TRUE, sep=",")
 
 PrepDF_withtraining <- function(df){
-  df$FocalTermitePalatability[df$FocalTermitePalatability == "1"] <- 'Control'
-  df$FocalTermitePalatability[df$FocalTermitePalatability == "0"] <- 'DB'
-  df$PriorExposure[df$PriorExposureYN == 1] <- 'Trained'
-  df$PriorExposure[df$PriorExposureYN == 0] <- 'Naive'
-  df$Color[df$AttackedColor == "Brown"] <- 1
-  df$Color[df$AttackedColor == "Green"] <- 0
-  
-  
-  
-  df$PalatExp <- paste(df$FocalTermitePalatability, df$PriorExposure, sep="")
-  mod1 <- glm (FocalTermiteAttackedYN ~ -1+PalatExp + AttackedColor
-                # scale(Color)
+
+  mod1 <- glm (FocalAttackedYN ~ -1+PalatExpo + FocalColor
+                # scale(ColorCode)
                  , family = 'binomial'
                , data = df)
   summary(mod1)

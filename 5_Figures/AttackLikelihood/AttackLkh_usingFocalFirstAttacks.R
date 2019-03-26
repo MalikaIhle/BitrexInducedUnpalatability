@@ -9,11 +9,11 @@
 
 rm(list = ls(all = TRUE))
 
-library(RODBC)
 library(here)
 library(pbapply)
 library(ggplot2) # to plot
 require(gridExtra) # for function gridarrange
+library(arm)
 
 FocalAttacks1 <- read.csv(file="3_ExtractedData/FocalAttacks/FocalAttacks1.csv", header=TRUE, sep=",")
 FocalAttacks15 <- read.csv(file="3_ExtractedData/FocalAttacks/FocalAttacks15.csv", header=TRUE, sep=",")

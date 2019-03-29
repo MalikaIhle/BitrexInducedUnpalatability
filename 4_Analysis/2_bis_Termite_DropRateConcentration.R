@@ -17,6 +17,7 @@ rm(list = ls(all = TRUE))
 library(lme4)
 library(arm)
 library(ggplot2)
+library(grid)
 
 
 # load ALL data
@@ -76,19 +77,30 @@ effects_table <- as.data.frame(cbind(est=invlogit(summary(mod)$coeff[,1]),
 effects_table$Concentration <- c("1", "1.5","2", "3")
 
 
-ggplot(data=effects_table, aes(x=Concentration, y=est)) + 
-  scale_y_continuous(name="DB prey rejection probability", 
+ p <- ggplot(data=effects_table, aes(x=Concentration, y=est)) + 
+  scale_y_continuous(name="DB termite rejection probability", 
                      limits=c(0, 1), breaks =c(0,0.25,0.50,0.75,1), labels=scales::percent)+ # 0.75 converted to 75%
-  theme_classic() + # white backgroun, x and y axis (no box)
+   scale_x_discrete(name="DB concentration", labels = c('1%', '1.5%', '2%', '3%'))+
+    theme_classic() + # white backgroun, x and y axis (no box)
   geom_errorbar(aes(ymin=CIlow, ymax=CIhigh), width =0.4)+ # don't plot bor bars on x axis tick, but separate them (dodge)
   geom_point(size =4, stroke = 1) +
    theme(panel.border = element_rect(colour = "black", fill=NA), # ad square box around graph 
         axis.title.x=element_text(size=10),
         axis.title.y=element_text(size=10),
-        plot.title = element_text(hjust = 0.5, size = 10))
+        plot.title = element_text(hjust = 0.5, size = 10)) +
+
+   annotation_custom(textGrob("//", gp = gpar(col = "black")), 
+                     xmin=3.5, xmax=3.5,ymin=-0.6, ymax=0.5)
+
+g = ggplotGrob(p)
+g$layout$clip[g$layout$name=="panel"] <- "off"
+grid.draw(g)
 
 
-
+setEPS() 
+pdf("5_Figures/DropRate/SuppFigConcentration.pdf", height=5, width=3.3)
+grid.draw(g)
+dev.off()
 
 
 

@@ -24,7 +24,7 @@ FocalAttacks3F <- read.csv(file="3_ExtractedData/FocalAttacks/FocalAttacks3F.csv
   
 # select one at random (1000 times), determine focal color, focal palatability, focal attackedYN, run the model, save est, CI, p 
   
-nrep <- 1000
+nrep <- 10
 
 
   sample_focal_with_training <- function(df) {
@@ -223,9 +223,40 @@ dev.off()
   
   plot1 <- ggplotGrob(plot1)
   plot3F <- ggplotGrob(plot3F)
+  tgrob <- textGrob("Palatability treatment")
+  
+  
+  blank2y <-ggplot()+
+    scale_x_continuous(limits = c(0, 10))+
+    scale_y_continuous(name="Prey probability of being attacked first", 
+                       limits=c(0, 1), breaks =c(0,0.25,0.50,0.75,1), labels=scales::percent)+
+    
+    annotate("text", x = 5, y = 0.5, label = "Palatability treatment",  hjust = 0.5, angle=0)+
+    theme_classic()+
+    
+    theme(
+      panel.border = element_rect(colour = "white", fill=NA),
+        axis.title.y=element_text(size=10, color = "white"),
+      axis.title.x = element_blank(),
+      axis.text.x=element_blank(),
+      axis.text.y=element_text(color = "white"),
+      axis.ticks.x=element_blank(),
+      axis.ticks.y=element_blank(),
+     axis.line = element_line("white"),
+           plot.margin = unit(c(0,0.2,0,0.1), "cm"))
+  blank2yGrob <- ggplotGrob(blank2y)
+  
   
   setEPS() 
   pdf("5_Figures/AttackLikelihood/Fig1B_focal1000.pdf", height=5, width=5)
+  
+
+  grid.arrange(grobs = list(cbind(plot1,plot3F,size="last"),blank2yGrob) , nrow=2, heights=c(10,1))
+  
+  
+  
   grid.arrange(cbind(plot1,plot3F, size="last"))
+  
+  
   dev.off()
   

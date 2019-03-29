@@ -90,7 +90,7 @@ BugAttack_dr <- ggplot(tbl_ggplot, aes(x=Palatability, y=Count, fill=Outcome)) +
   labs(y = "Number of prey rejected or consumed after attack", x = 'Palatability treatment')+      
   scale_x_discrete(labels=c("Milkweed", "Sunflower"))  +
   theme_classic() +
-  scale_fill_grey() +  
+  scale_fill_manual("legend", values = c("Consumed" = "grey", "Rejected" = "black"))  +
   theme(panel.border = element_rect(colour = "black", fill=NA),
         legend.title=element_blank(),
         legend.position = c(0.75,0.75))#+

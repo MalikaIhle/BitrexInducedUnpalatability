@@ -194,7 +194,7 @@ dev.off()
           legend.title = element_text(size=rel(0.8)),
           legend.text = element_text(size=rel(0.7)),
           legend.key.size = unit(0.8, 'lines'),
-          axis.title.x=element_text(size=10),
+          axis.title.x=element_blank(),
           axis.title.y=element_text(size=10),
           plot.title = element_text(hjust = 0.5, size = 10)) +
     guides(shape = guide_legend(override.aes = list(linetype = 0, size = 2))) # remove bar o top of symbol in legend
@@ -213,7 +213,7 @@ dev.off()
      scale_shape_manual(name= "Prior exposure to DB", values=c(16,17))+ # duplicate title to combine legend
      theme(panel.border = element_rect(colour = "black", fill=NA), # ad square box around graph 
            legend.position="none",
-            axis.title.x=element_text(size=10),
+            axis.title.x=element_blank(),
             axis.title.y=element_blank(),
            axis.text.y=element_blank(),
            plot.title = element_text(hjust = 0.5, size = 10)) +
@@ -249,14 +249,6 @@ dev.off()
   
   setEPS() 
   pdf("5_Figures/AttackLikelihood/Fig1B_focal1000.pdf", height=5, width=5)
-  
-
-  grid.arrange(grobs = list(cbind(plot1,plot3F,size="last"),blank2yGrob) , nrow=2, heights=c(10,1))
-  
-  
-  
-  grid.arrange(cbind(plot1,plot3F, size="last"))
-  
-  
+  grid.arrange(grobs = list(cbind(plot1,plot3F,size="last"),blank2yGrob) , nrow=2, heights=c(15,1))
   dev.off()
   

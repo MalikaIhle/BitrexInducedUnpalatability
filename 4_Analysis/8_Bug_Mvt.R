@@ -59,7 +59,7 @@ summary(mod_NoIntercept)
 effects_table <- as.data.frame(cbind(est=exp(summary(mod_NoIntercept)$coeff[,1]),
                                      CIhigh=exp(summary(mod_NoIntercept)$coeff[,1]+summary(mod_NoIntercept)$coeff[,2]*1.96),
                                      CIlow=exp(summary(mod_NoIntercept)$coeff[,1]-summary(mod_NoIntercept)$coeff[,2]*1.96)))
-effects_table$Palatability <- c("Milkweed", "Painted Milkweed", "Sunflower")
+effects_table$Palatability <- c("Milkweed Bug", "Painted Milkweed Bug", "Sunflower Bug")
 effects_table
 
 
@@ -69,7 +69,7 @@ pdf(paste(here(), "5_Figures/Mvt/BugMvt.pdf", sep="/"), height=5, width=3.3)
 
 ggplot(effects_table, aes(x=Palatability, y=est)) + 
   geom_errorbar(aes(ymin=CIlow, ymax=CIhigh), width =0.4)+ # don't plot bor bars on x axis tick, but separate them (dodge)
-  geom_point(size =4, stroke = 1) +
+  geom_point(shape = 15, size =4, stroke = 1) +
   
   labs(y = "Number of gridlines crossed", x = NULL)+
   theme_classic() +

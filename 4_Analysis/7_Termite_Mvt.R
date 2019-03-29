@@ -91,11 +91,11 @@ pdf(paste(here(), "5_Figures/Mvt/TermiteMvt.pdf", sep="/"), height=5, width=3.3)
 
 ggplot(effects_table, aes(x=Palatability, y=est)) + 
   geom_errorbar(aes(ymin=CIlow, ymax=CIhigh), width =0.4)+ # don't plot bor bars on x axis tick, but separate them (dodge)
-  geom_point(size =4, stroke = 1) +
+  geom_point(shape = 15, size =4, stroke = 1) +
   
   labs(y = "Number of gridlines crossed", x = NULL)+
   labs(title = "DB solution concentration: 3%") +
-  scale_x_discrete(labels=c("Control", "DB"))+
+  scale_x_discrete(labels=c("Control termite", "DB termite"))+
   theme_classic() +
   theme(panel.border = element_rect(colour = "black", fill=NA), # ad square box around graph 
         axis.title.x=element_text(size=10),

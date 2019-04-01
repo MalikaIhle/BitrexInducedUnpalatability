@@ -78,7 +78,7 @@ effects_table3F <- PrepDF_withtraining(AllAttacks3F)
     geom_point(size =4, stroke = 1) +
     geom_hline(yintercept=basaldr, linetype="dashed", color = "grey48") +
     theme(panel.border = element_rect(colour = "black", fill=NA), # ad square box around graph 
-          axis.title.x=element_text(size=10),
+          axis.title.x=element_blank(),
           axis.title.y=element_text(size=10),
           plot.title = element_text(hjust = 0.5, size = 10))
 }
@@ -94,7 +94,7 @@ effects_table3F <- PrepDF_withtraining(AllAttacks3F)
     geom_point(size =4, stroke = 1) +
     geom_hline(yintercept=basaldr, linetype="dashed", color = "grey48") +
     theme(panel.border = element_rect(colour = "black", fill=NA), # ad square box around graph 
-          axis.title.x=element_text(size=10),
+          axis.title.x=element_blank(),
           axis.title.y=element_blank(),
           axis.text.y=element_blank(),
           plot.title = element_text(hjust = 0.5, size = 10))
@@ -111,22 +111,42 @@ effects_table3F <- PrepDF_withtraining(AllAttacks3F)
     geom_point(size =4, stroke = 1) +
     geom_hline(yintercept=basaldr, linetype="dashed", color = "grey48") +
     theme(panel.border = element_rect(colour = "black", fill=NA), # ad square box around graph 
-          axis.title.x=element_text(size=10),
+          axis.title.x=element_blank(),
           axis.title.y=element_blank(),
           axis.text.y=element_blank(),
           plot.title = element_text(hjust = 0.5, size = 10))
 }
 
+{blank <-ggplot()+
+    scale_x_continuous(limits = c(0, 10))+
+    scale_y_continuous(name="PPP", 
+                       limits=c(0.5, 1), breaks =c(0.50,0.75,1), labels=scales::percent)+
+    
+    annotate("text", x = 5, y = 0.85, label = "Palatability treatment",  hjust = 0.5, angle=0)+
+    theme_classic()+
+    
+    theme(
+      panel.border = element_rect(colour = "white", fill=NA),
+      axis.title.y=element_text(size=10, color = "white"),
+      axis.title.x = element_blank(),
+      axis.text.x=element_blank(),
+      axis.text.y=element_text(color = "white"),
+      axis.ticks.x=element_blank(),
+      axis.ticks.y=element_blank(),
+      axis.line = element_line("white"),
+      plot.margin = unit(c(0,0.2,0,0.2), "cm")
+    )
+}
 
 plot1_5_dr_g <- ggplotGrob(plot1_5_dr)
 plot2_dr_g <- ggplotGrob(plot2_dr)
 plot3_dr_g <- ggplotGrob(plot3_dr)
+plotblank <- ggplotGrob(blank)
 
-
-#setEPS() 
-#pdf("5_Figures/DropRate/Fig2A.pdf", height=5, width=6.85)
-grid.arrange(cbind(plot1_5_dr_g,plot2_dr_g, plot3_dr_g, size="last"))
-#dev.off()
+setEPS() 
+pdf("5_Figures/DropRate/Fig2A.pdf", height=5, width=6.85)
+grid.arrange(grobs = list(cbind(plot1_5_dr_g,plot2_dr_g, plot3_dr_g,size="last"),plotblank) , nrow=2, heights=c(19,1))
+dev.off()
 
 
 
@@ -148,7 +168,7 @@ grid.arrange(cbind(plot1_5_dr_g,plot2_dr_g, plot3_dr_g, size="last"))
           legend.title = element_text(size=rel(0.8)),
           legend.text = element_text(size=rel(0.7)),
           legend.key.size = unit(0.8, 'lines'),
-          axis.title.x=element_text(size=10),
+          axis.title.x=element_blank(),
           axis.title.y=element_text(size=10),
           plot.title = element_text(hjust = 0.5, size = 10)) +
     guides(shape = guide_legend(override.aes = list(linetype = 0, size = 2))) # remove bar o top of symbol in legend
@@ -170,18 +190,20 @@ grid.arrange(cbind(plot1_5_dr_g,plot2_dr_g, plot3_dr_g, size="last"))
           legend.position="none",
           axis.title.y=element_blank(),
           axis.text.y=element_blank(),
-          axis.title.x=element_text(size=10),
+          axis.title.x=element_blank(),
           plot.title = element_text(hjust = 0.5, size=10))
   
 }
 
+
+
 plot1_dr_g <- ggplotGrob(plot1_dr)
 plot3F_dr_g <- ggplotGrob(plot3F_dr)
 
-#setEPS() 
-#pdf("5_Figures/DropRate/Fig2B.pdf", height=5, width=5)
-grid.arrange(cbind(plot1_dr_g,plot3F_dr_g, size="last"))
-#dev.off()
+setEPS() 
+pdf("5_Figures/DropRate/Fig2B.pdf", height=5, width=5)
+grid.arrange(grobs = list(cbind(plot1_dr_g,plot3F_dr_g, size="last"),plotblank) , nrow=2, heights=c(19,1))
+dev.off()
 
 
 

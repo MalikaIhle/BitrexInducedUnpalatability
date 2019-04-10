@@ -75,7 +75,7 @@ effects_table
 
 
 setEPS()
-pdf(paste(here(), "5_Figures/Mvt/BugMvt.pdf", sep="/"), height=5, width=3.3)
+pdf(paste(here(), "5_Figures/Mvt/BugMvt.pdf", sep="/"), height=5, width=5)
 
 ggplot(effects_table, aes(x=Palatability, y=est)) + 
   geom_errorbar(aes(ymin=CIlow, ymax=CIhigh), width =0.4)+ # don't plot bor bars on x axis tick, but separate them (dodge)

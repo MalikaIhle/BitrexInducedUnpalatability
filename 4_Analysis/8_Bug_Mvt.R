@@ -19,6 +19,7 @@ rm(list = ls(all = TRUE))
   library(RODBC) # this require R AND ACCESS to run on 32 bits ! (and apparently can't do it on MAC)
   library(here)
   library(lme4)
+  library(ggplot2)
 }
 
 
@@ -65,7 +66,7 @@ effects_table
 
 
 setEPS()
-pdf(paste(here(), "5_Figures/Mvt/BugMvt.pdf", sep="/"), height=5, width=3.3)
+pdf(paste(here(), "5_Figures/Mvt/BugMvt.pdf", sep="/"), height=5, width=5)
 
 ggplot(effects_table, aes(x=Palatability, y=est)) + 
   geom_errorbar(aes(ymin=CIlow, ymax=CIhigh), width =0.4)+ # don't plot bor bars on x axis tick, but separate them (dodge)

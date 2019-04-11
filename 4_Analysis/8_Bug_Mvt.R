@@ -20,6 +20,7 @@ rm(list = ls(all = TRUE))
   library(here)
   library(lme4)
   library(ggplot2)
+  library(multcomp) # for glht
 }
 
 
@@ -47,7 +48,8 @@ table(tbl$Treatment)
 mod <-glmer(NbGridCrossed ~ Treatment + (1|rowID) # account for overdispersion: makes the whole difference !!! <<<<<<<<<<<<<<<
             ,data = tbl, family = 'poisson') # intercept is MW non painted bug
 summary(mod)
-drop1(mod, test="Chisq")
+#drop1(mod, test="Chisq")
+summary(glht(mod, linfct=mcp(Treatment="Tukey")))
 
 
 mod_MWvsSF <-glmer(NbGridCrossed ~ Treatment + (1|rowID) # account for overdispersion: makes the whole difference !!! <<<<<<<<<<<<<<<

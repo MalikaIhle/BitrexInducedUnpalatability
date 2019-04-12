@@ -46,10 +46,10 @@ sample_focal_run_model_with_training <- function(df) {
   
   mod <- glm (FocalAttackedYN ~ FocalColor + FocalPalatabilityTreatment*PriorExposure, family = 'binomial', data = FocalAttack)
   summary(mod)
-  drop1(mod, test="Chisq")[,c('LRT','Pr(>Chi)')]
+  #drop1(mod, test="Chisq")[,c('LRT','Pr(>Chi)')]
 
-  return(list(drop1(mod, test="Chisq")[,c('LRT','Pr(>Chi)')]))
-  
+  #return(list(drop1(mod, test="Chisq")[,c('LRT','Pr(>Chi)')]))
+  return(list(summary(mod)$coeff))
 }
 
 
@@ -68,10 +68,10 @@ sample_focal_run_model_without_training <- function(df) {
   
   mod <- glm (FocalAttackedYN ~ FocalColor + FocalPalatabilityTreatment, family = 'binomial', data = FocalAttack)
   summary(mod)
-  drop1(mod, test="Chisq")[,c('LRT','Pr(>Chi)')]
+  #drop1(mod, test="Chisq")[,c('LRT','Pr(>Chi)')]
   
-  return(list(drop1(mod, test="Chisq")[,c('LRT','Pr(>Chi)')]))
-  
+  #return(list(drop1(mod, test="Chisq")[,c('LRT','Pr(>Chi)')]))
+  return(list(summary(mod)$coeff))
 }
 
 

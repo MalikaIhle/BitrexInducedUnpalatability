@@ -79,10 +79,16 @@ summary(mod_NoIntercept)
 
 effects_table <- as.data.frame(cbind(est=exp(summary(mod_NoIntercept)$coeff[,1]),
                                      CIhigh=exp(summary(mod_NoIntercept)$coeff[,1]+summary(mod_NoIntercept)$coeff[,2]*1.96),
-                                     CIlow=exp(summary(mod_NoIntercept)$coeff[,1]-summary(mod_NoIntercept)$coeff[,2]*1.96)))
+                                     CIlow=exp(summary(mod_NoIntercept)$coeff[,1]-summary(mod_NoIntercept)$coeff[,2]*1.96),
+                                     SEhigh = exp(summary(mod_NoIntercept)$coeff[,1] + summary(mod_NoIntercept)$coeff[,2]),
+                                     SElow = exp(summary(mod_NoIntercept)$coeff[,1] - summary(mod_NoIntercept)$coeff[,2])
+                               ))
+ effects_table$avSE <- (effects_table$SEhigh-effects_table$SElow)/2
+                               
 effects_table <- effects_table[-nrow(effects_table),]
 effects_table$Palatability <- c("Control", "DB")
 effects_table
+
 
 
 

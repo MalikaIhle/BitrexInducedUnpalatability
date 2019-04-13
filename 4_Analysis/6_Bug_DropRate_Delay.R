@@ -57,7 +57,7 @@ chisq.test(table(AllAttacks$Fate,AllAttacks$AttackedColor))
 
 mod3 <- lm(DelayToAttack ~ AttackedPalatabilityTreatment, data = FirstAttacks)
 summary(mod3)
-drop1(mod3, test="Chisq")
+drop1(mod3, test="F")
 
 
 

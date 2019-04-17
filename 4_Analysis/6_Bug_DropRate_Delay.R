@@ -60,16 +60,16 @@ fisher.test(table(FirstAttacks$Fate,FirstAttacks$AttackedColor))
 
 
 # model delay
-# question 1 (exploratory): delay to first attack longer if attack the bitrex Bug?
+# question 1 (exploratory): delay to first attack longer if attack the MW Bug?
 # no, effect according to expectation = palatable Bug attacked first were attacked after a shorter delay than MW Bugs attacked first
 
 mod3 <- lm(DelayToAttack ~ AttackedPalatabilityTreatment, data = FirstAttacks)
 summary(mod3)
-drop1(mod3, test="Chisq")
+drop1(mod3, test="F")
 
 
 
-# Several Opetions for figure drop rate
+# Several Options for figure drop rate
 
 par(mfrow=c(2,2))
 barplot(c(100,40),

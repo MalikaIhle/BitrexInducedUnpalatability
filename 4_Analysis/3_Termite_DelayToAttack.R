@@ -33,8 +33,7 @@ FirstAttacks3F <- read.csv(file = "3_ExtractedData/FirstAttacks/FirstAttacks3F.c
 
 mod1 <- lm(DelayToAttack ~ AttackedPalatabilityTreatment, data = FirstAttacks1)
 summary(mod1)
-drop1(mod1, test="Chisq")
-
+drop1(mod1, test="F")
 
 # DB concentration = 1.5%
 # question 1 (exploratory): delay to first attack longer if attack the bitrex termite?
@@ -44,7 +43,7 @@ str(FirstAttacks15)
 
 mod15 <- lm(DelayToAttack ~ AttackedPalatabilityTreatment, data = FirstAttacks15)
 summary(mod15)
-drop1(mod15, test="Chisq")
+drop1(mod15, test="F")
 
 
 # DB concentration = 2%
@@ -55,7 +54,7 @@ str(FirstAttacks2)
 
 mod2 <- lm(DelayToAttack ~ AttackedPalatabilityTreatment, data = FirstAttacks2)
 summary(mod2)
-drop1(mod2, test="Chisq")
+drop1(mod2, test="F")
 
 
 # DB concentration = 3%
@@ -67,7 +66,7 @@ str(FirstAttacks3)
 
 mod3 <- lm(DelayToAttack ~ AttackedPalatabilityTreatment, data = FirstAttacks3)
 summary(mod3)
-drop1(mod3, test="Chisq")
+drop1(mod3, test="F")
 
 
 # DB concentration = 3F%
@@ -78,7 +77,7 @@ str(FirstAttacks3F)
 
 mod3F <- lm(DelayToAttack ~ AttackedPalatabilityTreatment, data = FirstAttacks3F)
 summary(mod3F)
-drop1(mod3F, test="Chisq")
+drop1(mod3F, test="F")
 
 
 

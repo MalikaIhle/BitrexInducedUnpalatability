@@ -41,10 +41,10 @@ sample_focal_run_model <- function(df) {
   
   mod <- glm (FocalAttackedYN ~ FocalColor + FocalPalatabilityTreatment, family = 'binomial', data = FocalAttack)
   summary(mod)
-  drop1(mod, test="Chisq")[,c('LRT','Pr(>Chi)')]
+  #drop1(mod, test="Chisq")[,c('LRT','Pr(>Chi)')]
   
-  return(list(drop1(mod, test="Chisq")[,c('LRT','Pr(>Chi)')]))
-  
+  #return(list(drop1(mod, test="Chisq")[,c('LRT','Pr(>Chi)')]))
+  return(list(summary(mod)$coef))
 }
 
 

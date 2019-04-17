@@ -49,13 +49,18 @@ contingency_tbl <- table(AllAttacks$Fate,AllAttacks$AttackedPalatabilityTreatmen
 chisq.test(table(AllAttacks$Fate,AllAttacks$AttackedPalatability))
 chisq.test(table(AllAttacks$Fate,AllAttacks$AttackedColor))
   ## not pseureplicated
-fisher.test(table(FirstAttacks$Fate,FirstAttacks$AttackedPalatability))
+fisher.test(table(FirstAttacks$Fate,FirstAttacks$AttackedPalatabilityTreatment))
 fisher.test(table(FirstAttacks$Fate,FirstAttacks$AttackedColor))
 contingency_tbl <- table(FirstAttacks$Fate,FirstAttacks$AttackedPalatabilityTreatment)
 
 ## not pseureplicated - one tailed test as preregistered
-fisher.test(table(FirstAttacks$Fate,FirstAttacks$AttackedPalatability), alternative ="less")
+fisher.test(table(FirstAttacks$Fate,FirstAttacks$AttackedPalatabilityTreatment), alternative ="less")
 fisher.test(table(FirstAttacks$Fate,FirstAttacks$AttackedColor))
+
+## not pseureplicated - one tailed test as preregistered - with rejected as the reference (to fit like termites ref)
+fisher.test(table(FirstAttacks$Outcome,FirstAttacks$AttackedPalatabilityTreatment), alternative ="greater")
+fisher.test(table(FirstAttacks$Outcome,FirstAttacks$AttackedColor))
+
 
 
 

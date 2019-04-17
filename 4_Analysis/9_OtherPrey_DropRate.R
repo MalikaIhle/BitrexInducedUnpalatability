@@ -147,5 +147,21 @@ fisher.test (table(FirstAttacks$Fate[FirstAttacks$TestName =='BitrexDrosophila' 
 
 
 
+# not pseudoreplicated and one tailed test as prereg  - with rejected as reference like with termite exp
+
+
+fisher.test (table(FirstAttacks$Outcome[FirstAttacks$TestName =='BitrexCapedTermite' ], 
+                   FirstAttacks$Trt[FirstAttacks$TestName =='BitrexCapedTermite' ]), alternative = "less" )
+
+fisher.test (table(FirstAttacks$Outcome[FirstAttacks$TestName =='BitrexCricket_3' ], 
+                   FirstAttacks$Trt[FirstAttacks$TestName =='BitrexCricket_3' ]) , alternative = "less" )
+
+fisher.test (table(FirstAttacks$Outcome[FirstAttacks$TestName =='BitrexCricket_5' ], 
+                   FirstAttacks$Trt[FirstAttacks$TestName =='BitrexCricket_5' ]), alternative = "less"  )
+
+fisher.test (table(FirstAttacks$Outcome[FirstAttacks$TestName =='BitrexDrosophila' ], 
+                   FirstAttacks$Trt[FirstAttacks$TestName =='BitrexDrosophila' ]) , alternative = "less" )
+
+
 
 

@@ -35,6 +35,10 @@ mod1 <- lm(DelayToAttack ~ AttackedPalatabilityTreatment, data = FirstAttacks1)
 summary(mod1)
 drop1(mod1, test="F")
 
+mod1_inter <- lm(DelayToAttack ~ AttackedPalatabilityTreatment*PriorExposure, data = FirstAttacks1)
+summary(mod1_inter)
+drop1(mod1_inter, test="F")
+
 # DB concentration = 1.5%
 # question 1 (exploratory): delay to first attack longer if attack the bitrex termite?
 # no, effect according to expectation = palatable termite attacked first were attacked after a shorter delay than bitrex termites attacked first
@@ -80,5 +84,7 @@ summary(mod3F)
 drop1(mod3F, test="F")
 
 
-
+mod3F_inter <- lm(DelayToAttack ~ AttackedPalatabilityTreatment*PriorExposure, data = FirstAttacks3F)
+summary(mod3F_inter)
+drop1(mod3F_inter, test="F")
 

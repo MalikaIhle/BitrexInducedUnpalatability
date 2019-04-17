@@ -48,6 +48,14 @@ plot(mod2)  ## I believe test not valid as residual variance super heteroscedast
 contingency_tbl <- table(AllAttacks$Fate,AllAttacks$AttackedPalatabilityTreatment) # dropping rate of milkweed Bug = 100%, SF bugs = 40%
 chisq.test(table(AllAttacks$Fate,AllAttacks$AttackedPalatability))
 chisq.test(table(AllAttacks$Fate,AllAttacks$AttackedColor))
+  ## not pseureplicated
+fisher.test(table(FirstAttacks$Fate,FirstAttacks$AttackedPalatability))
+fisher.test(table(FirstAttacks$Fate,FirstAttacks$AttackedColor))
+contingency_tbl <- table(FirstAttacks$Fate,FirstAttacks$AttackedPalatabilityTreatment)
+
+## not pseureplicated - one tailed test as preregistered
+fisher.test(table(FirstAttacks$Fate,FirstAttacks$AttackedPalatability), alternative ="less")
+fisher.test(table(FirstAttacks$Fate,FirstAttacks$AttackedColor))
 
 
 
@@ -82,7 +90,8 @@ barplot(contingency_tbl,
 contingency_tbl
 tbl_ggplot <- data.frame(Palatability = c('Milkweed', 'Milkweed', 'Sunflower', 'Sunflower'),
                          Outcome = c('Rejected', 'Consumed', 'Rejected', 'Consumed'),
-                         Count = c(41,0,10,15))
+                         #Count = c(41,0,10,15) # pseudoreplicated
+                         Count = c(26,0,6,8))
 
 
 BugAttack_dr <- ggplot(tbl_ggplot, aes(x=Palatability, y=Count, fill=Outcome)) + 

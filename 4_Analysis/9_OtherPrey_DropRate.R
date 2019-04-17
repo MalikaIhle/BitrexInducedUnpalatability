@@ -28,26 +28,49 @@ library(RODBC) # this require R AND ACCESS to run on 32 bits ! (and apparently c
 library(stringr) # for function convert time
 library(dplyr) # summarize
 
+# function
+ConvertToTime <- function(x){
+  as.POSIXct(str_pad(x, 6, pad = "0"), format="%H%M%S") # this adds the date of today to every time... stupid but hard to get around and not important
+}
+
+create_FirstAttacks <- function(AllAttacks) {
+  FirstAttacks <- split(AllAttacks, AllAttacks$FID)
+  
+  FirstAttacks_fun <- function(x){
+    x <- x[x$AttackTime == min(x$AttackTime),] 
+    return(x)
+  }
+  
+  FirstAttacks <- do.call(rbind,lapply(FirstAttacks,FirstAttacks_fun))
+  rownames(FirstAttacks) <- NULL
+  return(FirstAttacks)
+} # to explore delay to attack (and build Focaldatasets)
+
+
+
 # load data
 {
 conDB= odbcConnectAccess2007("1_RawData/VideoAnalyses_OtherPreyBitrexTests.accdb")
 sqlTables(conDB)
 
 AllAttacks <- sqlQuery(conDB, "
-SELECT Behav_Female.TestName, Behav_Video_Metadata.FID, Behav_Female_Attacks.Outcome
+SELECT Behav_Female.TestName, Behav_Video_Metadata.FID, Behav_Female_Attacks.Outcome, Behav_Female_Attacks.AttackTime
 FROM (Behav_Female INNER JOIN Behav_Video_Metadata ON Behav_Female.FID = Behav_Video_Metadata.FID) LEFT JOIN Behav_Female_Attacks ON Behav_Video_Metadata.VideoID = Behav_Female_Attacks.VideoID;
-")
+                       ")
 close(conDB)
 
+AllAttacks$AttackTime <- ConvertToTime(AllAttacks$AttackTime)
 AllAttacks$Fate[AllAttacks$Outcome == 1] <- "Consumed"
 AllAttacks$Fate[AllAttacks$Outcome == -1] <- "Rejected" 
 AllAttacks$DropYN[AllAttacks$Outcome == 1] <- 0
 AllAttacks$DropYN[AllAttacks$Outcome == -1] <- 1
 AllAttacks$Trt <- "DB"
 
-AllAttacks <- rbind(AllAttacks, data.frame( TestName = rep(unique(AllAttacks$TestName), each = 10),
+AllAttacks <- rbind(AllAttacks, data.frame( 
+            TestName = rep(unique(AllAttacks$TestName), each = 10),
             FID  = 1:40,
             Outcome = 1,
+            AttackTime = NA,
             DropYN = 0,
             Fate = "Consumed",
             Trt = "Control"))
@@ -56,6 +79,19 @@ AllAttacks <- rbind(AllAttacks, data.frame( TestName = rep(unique(AllAttacks$Tes
 
 head(AllAttacks)
 nrow(AllAttacks)
+
+
+FirstAttacks <- rbind(create_FirstAttacks(AllAttacks[AllAttacks$Trt == "DB",]), data.frame( 
+  TestName = rep(unique(AllAttacks$TestName), each = 10),
+  FID  = 1:40,
+  Outcome = 1,
+  AttackTime = NA,
+  DropYN = 0,
+  Fate = "Consumed",
+  Trt = "Control"))
+  
+head(FirstAttacks)
+nrow(FirstAttacks)
 
 # descriptive stats
 
@@ -92,6 +128,21 @@ fisher.test (table(AllAttacks$Fate[AllAttacks$TestName =='BitrexDrosophila' ],
                    AllAttacks$Trt[AllAttacks$TestName =='BitrexDrosophila' ]) )
 
 
+
+# not pseudoreplicated and one tailed test as prereg ?
+
+
+fisher.test (table(FirstAttacks$Fate[FirstAttacks$TestName =='BitrexCapedTermite' ], 
+                   FirstAttacks$Trt[FirstAttacks$TestName =='BitrexCapedTermite' ]), alternative = "greater" )
+
+fisher.test (table(FirstAttacks$Fate[FirstAttacks$TestName =='BitrexCricket_3' ], 
+                   FirstAttacks$Trt[FirstAttacks$TestName =='BitrexCricket_3' ]) , alternative = "greater" )
+
+fisher.test (table(FirstAttacks$Fate[FirstAttacks$TestName =='BitrexCricket_5' ], 
+                   FirstAttacks$Trt[FirstAttacks$TestName =='BitrexCricket_5' ]), alternative = "greater"  )
+
+fisher.test (table(FirstAttacks$Fate[FirstAttacks$TestName =='BitrexDrosophila' ], 
+                   FirstAttacks$Trt[FirstAttacks$TestName =='BitrexDrosophila' ]) , alternative = "greater" )
 
 
 

@@ -40,20 +40,18 @@ return(contingency_tbl)
 }
 
 
-
 # DB concentration = 1%
-fisher.test(create_contingency_tbl(AllAttacks1), alternative='greater') # p =0.9
+fisher.test(create_contingency_tbl(AllAttacks1)) # p =0.4
 
 # DB concentration = 1.5%
-fisher.test(create_contingency_tbl(AllAttacks15), alternative='greater') # p =0.45
+fisher.test(create_contingency_tbl(AllAttacks15)) # p =0.6
 
 # DB concentration = 2%
-fisher.test(create_contingency_tbl(AllAttacks2), alternative='greater') # p =0.9
+fisher.test(create_contingency_tbl(AllAttacks2)) # p =0.6
 
 # DB concentration = 3%
-fisher.test(create_contingency_tbl(AllAttacks3), alternative='greater') # p =0.7
+fisher.test(create_contingency_tbl(AllAttacks3)) # p =1
 
 # DB concentration = 3F%
-fisher.test(create_contingency_tbl(AllAttacks3F), alternative='greater') # p =0.33
-
+fisher.test(create_contingency_tbl(AllAttacks3F)) # p =0.4
 

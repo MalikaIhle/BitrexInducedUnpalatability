@@ -37,27 +37,15 @@ head(FirstAttacks)
 # yes
 
 
-mod2 <- glm (DropYN ~ AttackedColor + AttackedPalatabilityTreatment  #+ (1|FID)
-             ,family = 'binomial', data = AllAttacks)
-summary(mod2) ## <<<<<< super weird P value for ultra significant effect >>>>>>>>>>>>>> use LRT drop1 function
-drop1(mod2, test="Chisq")
-par(mfrow=c(2,2))
-plot(mod2)  ## I believe test not valid as residual variance super heteroscedastic
+# mod2 <- glm (DropYN ~ AttackedColor + AttackedPalatabilityTreatment + (1|FID) ,family = 'binomial', data = AllAttacks)
+# summary(mod2) ## <<<<<< super weird P value for ultra significant effect >>>>>>>>>>>>>> use LRT drop1 function
+# par(mfrow=c(2,2))
+# plot(mod2)  ## I believe test not valid as residual variance super heteroscedastic
 
-#sunflowerplot(AllAttacks$DropYN,AllAttacks$AttackedBugPalatability)
-contingency_tbl <- table(AllAttacks$Fate,AllAttacks$AttackedPalatabilityTreatment) # dropping rate of milkweed Bug = 100%, SF bugs = 40%
-chisq.test(table(AllAttacks$Fate,AllAttacks$AttackedPalatability))
-chisq.test(table(AllAttacks$Fate,AllAttacks$AttackedColor))
-  ## not pseureplicated
-fisher.test(table(FirstAttacks$Fate,FirstAttacks$AttackedPalatabilityTreatment))
-fisher.test(table(FirstAttacks$Fate,FirstAttacks$AttackedColor))
-contingency_tbl <- table(FirstAttacks$Fate,FirstAttacks$AttackedPalatabilityTreatment)
 
-## not pseureplicated - one tailed test as preregistered
-fisher.test(table(FirstAttacks$Fate,FirstAttacks$AttackedPalatabilityTreatment), alternative ="less")
-fisher.test(table(FirstAttacks$Fate,FirstAttacks$AttackedColor))
+## not pseureplicated - one tailed test as preregistered - with rejected MW as the reference (to fit like termites ref)
+table(AllAttacks$Outcome,AllAttacks$AttackedPalatabilityTreatment) # dropping rate of milkweed Bug = 100%, SF bugs = 40%
 
-## not pseureplicated - one tailed test as preregistered - with rejected as the reference (to fit like termites ref)
 fisher.test(table(FirstAttacks$Outcome,FirstAttacks$AttackedPalatabilityTreatment), alternative ="greater")
 fisher.test(table(FirstAttacks$Outcome,FirstAttacks$AttackedColor))
 
@@ -92,7 +80,8 @@ barplot(contingency_tbl,
         legend = rownames(contingency_tbl)
 )
 
-contingency_tbl
+contingency_tbl <- table(AllAttacks$Fate,AllAttacks$AttackedPalatabilityTreatment) # dropping rate of milkweed Bug = 100%, SF bugs = 40%
+
 tbl_ggplot <- data.frame(Palatability = c('Milkweed', 'Milkweed', 'Sunflower', 'Sunflower'),
                          Outcome = c('Rejected', 'Consumed', 'Rejected', 'Consumed'),
                          #Count = c(41,0,10,15) # pseudoreplicated

@@ -112,43 +112,10 @@ summary(AllAttacks$NbAttacks[AllAttacks$TestName =='BitrexDrosophila' & AllAttac
   ## we cannot run glmer with FID as random effect to account for several attacks from the same female 
   ## because there is no variation in fate for the control group
 
-table(AllAttacks$Fate,  AllAttacks$Trt, AllAttacks$TestName) # dropping rate of bitrex prey
+table(AllAttacks$Outcome,  AllAttacks$Trt, AllAttacks$TestName) # dropping rate of bitrex prey
 
 
-fisher.test (table(AllAttacks$Fate[AllAttacks$TestName =='BitrexCapedTermite' ], 
-                  AllAttacks$Trt[AllAttacks$TestName =='BitrexCapedTermite' ]) )
-
-fisher.test (table(AllAttacks$Fate[AllAttacks$TestName =='BitrexCricket_3' ], 
-                   AllAttacks$Trt[AllAttacks$TestName =='BitrexCricket_3' ]) )
-
-fisher.test (table(AllAttacks$Fate[AllAttacks$TestName =='BitrexCricket_5' ], 
-                   AllAttacks$Trt[AllAttacks$TestName =='BitrexCricket_5' ]) )
-
-fisher.test (table(AllAttacks$Fate[AllAttacks$TestName =='BitrexDrosophila' ], 
-                   AllAttacks$Trt[AllAttacks$TestName =='BitrexDrosophila' ]) )
-
-
-
-# not pseudoreplicated and one tailed test as prereg ?
-
-
-fisher.test (table(FirstAttacks$Fate[FirstAttacks$TestName =='BitrexCapedTermite' ], 
-                   FirstAttacks$Trt[FirstAttacks$TestName =='BitrexCapedTermite' ]), alternative = "greater" )
-
-fisher.test (table(FirstAttacks$Fate[FirstAttacks$TestName =='BitrexCricket_3' ], 
-                   FirstAttacks$Trt[FirstAttacks$TestName =='BitrexCricket_3' ]) , alternative = "greater" )
-
-fisher.test (table(FirstAttacks$Fate[FirstAttacks$TestName =='BitrexCricket_5' ], 
-                   FirstAttacks$Trt[FirstAttacks$TestName =='BitrexCricket_5' ]), alternative = "greater"  )
-
-fisher.test (table(FirstAttacks$Fate[FirstAttacks$TestName =='BitrexDrosophila' ], 
-                   FirstAttacks$Trt[FirstAttacks$TestName =='BitrexDrosophila' ]) , alternative = "greater" )
-
-
-
-
-# not pseudoreplicated and one tailed test as prereg  - with rejected as reference like with termite exp
-
+# not pseudoreplicated and one tailed test as prereg  - with rejected control as reference
 
 fisher.test (table(FirstAttacks$Outcome[FirstAttacks$TestName =='BitrexCapedTermite' ], 
                    FirstAttacks$Trt[FirstAttacks$TestName =='BitrexCapedTermite' ]), alternative = "less" )

@@ -52,18 +52,6 @@ summary(mod)
 summary(glht(mod, linfct=mcp(Treatment="Tukey")))
 
 
-mod_MWvsSF <-glmer(NbGridCrossed ~ Treatment + (1|rowID) # account for overdispersion: makes the whole difference !!! <<<<<<<<<<<<<<<
-            ,data = tbl[tbl$Treatment != "PaintedMW",], family = 'poisson') # intercept is MW non painted bug
-summary(mod_MWvsSF)
-drop1(mod_MWvsSF, test="Chisq")
-
-
-mod_MWvspaintedMW <-glmer(NbGridCrossed ~ Treatment + (1|rowID) # account for overdispersion: makes the whole difference !!! <<<<<<<<<<<<<<<
-                   ,data = tbl[tbl$Treatment != "Sunflower",], family = 'poisson') # intercept is MW non painted bug
-summary(mod_MWvspaintedMW)
-drop1(mod_MWvspaintedMW, test="Chisq")
-
-
 mod_NoIntercept <-glmer(NbGridCrossed ~ -1+ Treatment + (1|rowID) # account for overdispersion: makes the whole difference !!! <<<<<<<<<<<<<<<
                         , data = tbl, family = 'poisson')
 summary(mod_NoIntercept)

@@ -73,7 +73,7 @@ AllAttacks <- rbind(AllAttacks, data.frame(
             AttackTime = NA,
             DropYN = 0,
             Fate = "Consumed",
-            Trt = "Control"))
+            Trt = "Z_Control"))
             
 }
 
@@ -88,7 +88,7 @@ FirstAttacks <- rbind(create_FirstAttacks(AllAttacks[AllAttacks$Trt == "DB",]), 
   AttackTime = NA,
   DropYN = 0,
   Fate = "Consumed",
-  Trt = "Control"))
+  Trt = "Z_Control"))
   
 head(FirstAttacks)
 nrow(FirstAttacks)
@@ -115,19 +115,19 @@ summary(AllAttacks$NbAttacks[AllAttacks$TestName =='BitrexDrosophila' & AllAttac
 table(AllAttacks$Outcome,  AllAttacks$Trt, AllAttacks$TestName) # dropping rate of bitrex prey
 
 
-# not pseudoreplicated and one tailed test as prereg  - with rejected control as reference
+# not pseudoreplicated and one tailed test as prereg  - with rejected DB as reference
 
 fisher.test (table(FirstAttacks$Outcome[FirstAttacks$TestName =='BitrexCapedTermite' ], 
-                   FirstAttacks$Trt[FirstAttacks$TestName =='BitrexCapedTermite' ]), alternative = "less" )
+                   FirstAttacks$Trt[FirstAttacks$TestName =='BitrexCapedTermite' ]), alternative = "greater" )
 
 fisher.test (table(FirstAttacks$Outcome[FirstAttacks$TestName =='BitrexCricket_3' ], 
-                   FirstAttacks$Trt[FirstAttacks$TestName =='BitrexCricket_3' ]) , alternative = "less" )
+                   FirstAttacks$Trt[FirstAttacks$TestName =='BitrexCricket_3' ]) , alternative = "greater" )
 
 fisher.test (table(FirstAttacks$Outcome[FirstAttacks$TestName =='BitrexCricket_5' ], 
-                   FirstAttacks$Trt[FirstAttacks$TestName =='BitrexCricket_5' ]), alternative = "less"  )
+                   FirstAttacks$Trt[FirstAttacks$TestName =='BitrexCricket_5' ]), alternative = "greater"  )
 
 fisher.test (table(FirstAttacks$Outcome[FirstAttacks$TestName =='BitrexDrosophila' ], 
-                   FirstAttacks$Trt[FirstAttacks$TestName =='BitrexDrosophila' ]) , alternative = "less" )
+                   FirstAttacks$Trt[FirstAttacks$TestName =='BitrexDrosophila' ]) , alternative = "greater" )
 
 
 

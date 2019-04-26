@@ -16,6 +16,7 @@ library(ggplot2)
 library(here)
 library(pbapply)
 
+
 # load data
 FocalAttacks <- read.csv(file = "3_ExtractedData/FocalAttacks/FocalAttacks_Bug.csv", header=TRUE, sep=",")
 head(FocalAttacks)
@@ -92,10 +93,10 @@ effects_table_NoIntercept$Palatability <- c("Milkweed","Sunflower")
 
 
 BugAttack_lkh <- ggplot(data=effects_table_NoIntercept, aes(x=Palatability, y=est)) + 
-  scale_y_continuous(name="Prey probability of being attacked first", 
+  scale_y_continuous(name="Probability of prey being attacked first", 
                      limits=c(0, 1), breaks =c(0,0.25,0.50,0.75,1), labels=scales::percent)+ # 0.75 converted to 75%
   theme_classic() + # white backgroun, x and y axis (no box)
-  #labs(title = "...") +
+  labs(x = "Palatability treatment") +
   
   geom_errorbar(aes(ymin=CIlow, ymax=CIhigh), width =0.4)+ # don't plot bor bars on x axis tick, but separate them (dodge)
   geom_point(size =4, stroke = 1) +

@@ -69,7 +69,7 @@ effects_table3F <- PrepDF_withtraining(AllAttacks3F)
 {plot1_5_dr <- 
     
     ggplot(data=effects_table1_5, aes(x=Palatability, y=est)) + 
-    scale_y_continuous(name="Prey rejection probability", 
+    scale_y_continuous(name="Probability of prey rejection", 
                        limits=c(0, 1), breaks =c(0,0.25,0.50,0.75,1), labels=scales::percent)+ # 0.75 converted to 75%
     theme_classic() + # white backgroun, x and y axis (no box)
     labs(title = "DB solution concentration: 1.5%") +
@@ -153,7 +153,7 @@ dev.off()
 {plot1_dr <- 
     
     ggplot(data=effects_table1, aes(x=Palatability, y=est,colour=PriorExposure, shape = PriorExposure)) + 
-    scale_y_continuous(name="Prey rejection probability", 
+    scale_y_continuous(name="Probability of prey rejection", 
                        limits=c(0, 1), breaks =c(0,0.25,0.50,0.75,1), labels=scales::percent)+ # 0.75 converted to 75%
     theme_classic() + # white backgroun, x and y axis (no box)
     labs(title = "DB solution concentration: 1%") +
@@ -161,11 +161,11 @@ dev.off()
     geom_errorbar(aes(ymin=CIlow, ymax=CIhigh, col=PriorExposure), width =0.4,na.rm=TRUE, position = position_dodge(width=0.5))+ # don't plot bor bars on x axis tick, but separate them (dodge)
     geom_point(size =4, aes(shape=PriorExposure, col=PriorExposure), stroke = 1, position = position_dodge(width=0.5)) +
     geom_hline(yintercept=basaldr, linetype="dashed", color = "grey48") +
-    scale_colour_manual(name= "Prior exposure to DB", values=c("Black","Grey")) +
-    scale_shape_manual(name= "Prior exposure to DB", values=c(16,17))+ # duplicate title to combine legend
+    scale_colour_manual(values=c("Black","Grey"),labels=c("Naive spiders", "Previously exposed spiders")) +
+    scale_shape_manual(values=c(16,17), labels=c("Naive spiders", "Previously exposed spiders"))+ 
     theme(panel.border = element_rect(colour = "black", fill=NA), # ad square box around graph 
           legend.position=c(0.5,0.85),
-          legend.title = element_text(size=rel(0.8)),
+          legend.title = element_blank(),
           legend.text = element_text(size=rel(0.7)),
           legend.key.size = unit(0.8, 'lines'),
           axis.title.x=element_blank(),

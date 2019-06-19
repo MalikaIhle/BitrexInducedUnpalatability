@@ -59,7 +59,10 @@ summary(mod_NoIntercept)
 effects_table <- as.data.frame(cbind(est=exp(summary(mod_NoIntercept)$coeff[,1]),
                                      CIhigh=exp(summary(mod_NoIntercept)$coeff[,1]+summary(mod_NoIntercept)$coeff[,2]*1.96),
                                      CIlow=exp(summary(mod_NoIntercept)$coeff[,1]-summary(mod_NoIntercept)$coeff[,2]*1.96)))
-effects_table$Palatability <- c("Milkweed Bug", "Painted Milkweed Bug", "Sunflower Bug")
+effects_table$Palatability <- c("Unpainted 
+Milkweed Bug", "Painted 
+Milkweed Bug", "Unpainted 
+Sunflower Bug")
 effects_table
 
 

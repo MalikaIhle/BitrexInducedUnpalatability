@@ -27,6 +27,7 @@ rm(list = ls(all = TRUE))
 library(RODBC) # this require R AND ACCESS to run on 32 bits ! (and apparently can't do it on MAC)
 library(stringr) # for function convert time
 library(dplyr) # summarize
+require(pairwiseCI) # for odds ratio with one cell zero, function Prop.or
 
 # function
 ConvertToTime <- function(x){
@@ -130,5 +131,17 @@ fisher.test (table(FirstAttacks$Outcome[FirstAttacks$TestName =='BitrexDrosophil
                    FirstAttacks$Trt[FirstAttacks$TestName =='BitrexDrosophila' ]) , alternative = "greater" )
 
 
+## with Woolf correction
 
+Prop.or(table(FirstAttacks$Outcome[FirstAttacks$TestName =='BitrexCapedTermite' ]), 
+                   table(FirstAttacks$Trt[FirstAttacks$TestName =='BitrexCapedTermite' ]), alternative = "greater", CImethod="Woolf")
+
+Prop.or(table(FirstAttacks$Outcome[FirstAttacks$TestName =='BitrexCricket_3' ]), 
+                  table(FirstAttacks$Trt[FirstAttacks$TestName =='BitrexCricket_3' ]) , alternative = "greater", CImethod="Woolf" )
+
+Prop.or(table(FirstAttacks$Outcome[FirstAttacks$TestName =='BitrexCricket_5' ]), 
+                  table(FirstAttacks$Trt[FirstAttacks$TestName =='BitrexCricket_5' ]), alternative = "greater", CImethod="Woolf" )
+
+Prop.or(table(FirstAttacks$Outcome[FirstAttacks$TestName =='BitrexDrosophila' ]), 
+                 table(FirstAttacks$Trt[FirstAttacks$TestName =='BitrexDrosophila' ]) , alternative = "greater" , CImethod="Woolf")
 

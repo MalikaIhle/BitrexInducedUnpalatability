@@ -14,7 +14,7 @@ library(lme4)
 library(arm)
 library(ggplot2)
 library(here)
-
+require(pairwiseCI) # for odds ratio with one cell zero, function Prop.or
 
 # load data
 AllAttacks <- read.csv(file="3_ExtractedData/AllAttacks/AllAttacks_Bug.csv", header=TRUE, sep=",")
@@ -49,6 +49,8 @@ table(AllAttacks$Outcome,AllAttacks$AttackedPalatabilityTreatment) # dropping ra
 fisher.test(table(FirstAttacks$Outcome,FirstAttacks$AttackedPalatabilityTreatment), alternative ="greater")
 fisher.test(table(FirstAttacks$Outcome,FirstAttacks$AttackedColor))
 
+Prop.or(table(FirstAttacks$Outcome), 
+        table(FirstAttacks$AttackedPalatabilityTreatment) , alternative = "greater" , CImethod="Woolf")
 
 
 

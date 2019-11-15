@@ -9,7 +9,7 @@
   ## outcome: 1= Consum or -1=Drop
   
   
-  # Additionally, separatekym with other spiders, one palatable prey was provided per spider (n = number of spiders):
+  # Additionally, separately, with other spiders, one palatable prey was provided per spider (n = number of spiders):
   # colored crickets (n=10)
   # caped termites (n=10)
   # fruit flies (n=10)
@@ -28,6 +28,8 @@ library(RODBC) # this require R AND ACCESS to run on 32 bits ! (and apparently c
 library(stringr) # for function convert time
 library(dplyr) # summarize
 require(pairwiseCI) # for odds ratio with one cell zero, function Prop.or
+require(gridExtra) # for function gridarrange
+library(cowplot) # for function plot_grid
 
 # function
 ConvertToTime <- function(x){
@@ -144,4 +146,101 @@ Prop.or(table(FirstAttacks$Outcome[FirstAttacks$TestName =='BitrexCricket_5' ]),
 
 Prop.or(table(FirstAttacks$Outcome[FirstAttacks$TestName =='BitrexDrosophila' ]), 
                  table(FirstAttacks$Trt[FirstAttacks$TestName =='BitrexDrosophila' ]) , alternative = "greater" , CImethod="Woolf")
+
+
+# figure 
+
+contingency_tbl <- table(FirstAttacks$Trt,FirstAttacks$Outcome, FirstAttacks$TestName) # dropping rate of milkweed Bug = 100%, SF bugs = 40%
+
+tbl_ggplot_CapedTermite <- data.frame(Palatability = c('DB', 'DB', 'Control', 'Control'),
+                         Outcome = c('Rejected', 'Consumed', 'Rejected', 'Consumed'),
+                         Count = c(5,5,0,10))
+
+tbl_ggplot_Cricket <- data.frame(Palatability = c('DB 3%', 'DB 3%', 'DB 5%', 'DB 5%','Control', 'Control'),
+                                      Outcome = c('Rejected', 'Consumed', 'Rejected', 'Consumed','Rejected', 'Consumed'),
+                                      Count = c(2,8,16,4,0,10))
+
+tbl_ggplot_Droso <- data.frame(Palatability = c('DB', 'DB', 'Control', 'Control'),
+                                  Outcome = c('Rejected', 'Consumed', 'Rejected', 'Consumed'),
+                                  Count = c(5,5,0,10))
+
+
+
+CapedTermite_dr <- ggplot(tbl_ggplot_CapedTermite, aes(x=Palatability, y=Count, fill=Outcome)) + 
+  geom_bar(stat="identity")+
+  ylim(0,20)+
+  labs(title = "Caped Termites") +
+  labs(y = "Number of prey rejected or consumed after attack", x = 'Palatability treatment')+      
+  #scale_x_discrete(labels=c("DB", "Control"))  +
+  theme_classic() +
+  scale_fill_manual("legend", values = c("Consumed" = "grey", "Rejected" = "black"))  +
+  theme(panel.border = element_rect(colour = "black", fill=NA),
+        legend.position=c(0.4,0.85),
+        legend.title = element_blank(),
+        legend.text = element_text(size=rel(0.7)),
+        legend.key.size = unit(0.8, 'lines'),
+        axis.title.x=element_blank(),
+        axis.title.y=element_text(size=10),
+        plot.title = element_text(hjust = 0.5, size = 10))
+
+Cricket_dr <- ggplot(tbl_ggplot_Cricket, aes(x=Palatability, y=Count, fill=Outcome)) + 
+  geom_bar(stat="identity")+
+  labs(title = "Crickets") +
+  labs(y = "Number of prey rejected or consumed after attack", x = 'Palatability treatment')+      
+  #scale_x_discrete(labels=c("DB", "Control"))  +
+  theme_classic() +
+  scale_fill_manual("legend", values = c("Consumed" = "grey", "Rejected" = "black"))  +
+  theme(panel.border = element_rect(colour = "black", fill=NA),
+        legend.title=element_blank(),
+        legend.position = "none",
+        axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.text.y=element_text(color = "white"),
+        plot.title = element_text(hjust = 0.5, size = 10))
+
+Droso_dr <- ggplot(tbl_ggplot_Droso, aes(x=Palatability, y=Count, fill=Outcome)) + 
+  geom_bar(stat="identity")+
+  labs(title = "Fruit flies") +
+  labs(y = "Number of prey rejected or consumed after attack", x = 'Palatability treatment')+      
+  ylim(0,20)+
+  theme_classic() +
+  scale_fill_manual("legend", values = c("Consumed" = "grey", "Rejected" = "black"))  +
+  theme(panel.border = element_rect(colour = "black", fill=NA),
+        legend.title=element_blank(),
+        legend.position = "none",
+        axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.text.y=element_text(color = "white"),
+        plot.title = element_text(hjust = 0.5, size = 10))
+
+{blank2y <-ggplot()+
+    scale_x_continuous(limits = c(0, 1))+
+    scale_y_continuous(name="PPP", 
+                       limits=c(0, 20))+
+    
+    annotate("text", x = 0.5, y = 10, label = "Palatability treatment",  hjust = 0.5, angle=0)+
+    theme_classic()+
+    
+    theme(
+      panel.border = element_rect(colour = "white", fill=NA),
+      axis.title.y=element_text(size=10, color = "white"),
+      axis.title.x = element_blank(),
+      axis.text.x=element_blank(),
+      axis.text.y=element_text(color = "white"),
+      axis.ticks.x=element_blank(),
+      axis.ticks.y=element_blank(),
+      axis.line = element_line("white"),
+      plot.margin = unit(c(0,0.2,0,0.2), "cm")
+    )
+  }  
+
+
+blank2yGrob <- ggplotGrob(blank2y)
+
+PLOT <- ggplotGrob(plot_grid(CapedTermite_dr, Cricket_dr, Droso_dr, align = "h", ncol = 3, rel_widths = c(3, 3.5, 2.55)))
+
+setEPS() 
+pdf("5_Figures/DropRate/OtherPreyDR.pdf", height=5,  width=6.85)
+grid.arrange(grobs = list(PLOT, blank2yGrob), nrow=2, heights=c(19,1))
+dev.off()  
 

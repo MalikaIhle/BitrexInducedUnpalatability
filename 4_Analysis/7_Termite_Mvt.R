@@ -19,6 +19,7 @@ rm(list = ls(all = TRUE))
   library(RODBC) # this require R AND ACCESS to run on 32 bits ! (and apparently can't do it on MAC)
   library(here)
   library(lme4)
+  library(ggplot2)
 }
 
 
@@ -90,8 +91,6 @@ effects_table$Palatability <- c("Control", "DB")
 effects_table
 
 
-
-
 setEPS()
 pdf(paste(here(), "5_Figures/Mvt/TermiteMvt.pdf", sep="/"), height=5, width=3.3)
 
@@ -106,11 +105,20 @@ ggplot(effects_table, aes(x=Palatability, y=est)) +
   theme(panel.border = element_rect(colour = "black", fill=NA), # ad square box around graph 
         axis.title.x=element_text(size=10),
         axis.title.y=element_text(size=10),
-        plot.title = element_text(hjust = 0.5, size = 10))  
-
+        plot.title = element_text(hjust = 0.5, size = 10))
+ 
 
 dev.off()
 
 
+tbl_long$PalatabilityYN[tbl_long$Palatability == "A_Yes"] <- 1
+tbl_long$PalatabilityYN[tbl_long$Palatability == "No"] <- 0
 
+plot(tbl_long$NbGrid~tbl_long$PalatabilityYN)
+summary(tbl_long$NbGrid[tbl_long$PalatabilityYN == 1])
+summary(tbl_long$NbGrid[tbl_long$PalatabilityYN == 0])
+
+ggplot(tbl_long, aes(x=Palatability, y=NbGrid)) +
+geom_boxplot()+
+  geom_jitter(shape=16, position=position_jitter(0.2))
 

@@ -168,7 +168,7 @@ tbl_ggplot_Droso <- data.frame(Palatability = c('DB', 'DB', 'Control', 'Control'
 
 CapedTermite_dr <- ggplot(tbl_ggplot_CapedTermite, aes(x=Palatability, y=Count, fill=Outcome)) + 
   geom_bar(stat="identity")+
-  ylim(0,20)+
+  ylim(0,20.5)+
   labs(title = "Caped Termites") +
   labs(y = "Number of prey rejected or consumed after attack", x = 'Palatability treatment')+      
   #scale_x_discrete(labels=c("DB", "Control"))  +
@@ -185,6 +185,7 @@ CapedTermite_dr <- ggplot(tbl_ggplot_CapedTermite, aes(x=Palatability, y=Count, 
 
 Cricket_dr <- ggplot(tbl_ggplot_Cricket, aes(x=Palatability, y=Count, fill=Outcome)) + 
   geom_bar(stat="identity")+
+  ylim(0,20.5)+
   labs(title = "Crickets") +
   labs(y = "Number of prey rejected or consumed after attack", x = 'Palatability treatment')+      
   #scale_x_discrete(labels=c("DB", "Control"))  +
@@ -202,7 +203,7 @@ Droso_dr <- ggplot(tbl_ggplot_Droso, aes(x=Palatability, y=Count, fill=Outcome))
   geom_bar(stat="identity")+
   labs(title = "Fruit flies") +
   labs(y = "Number of prey rejected or consumed after attack", x = 'Palatability treatment')+      
-  ylim(0,20)+
+  ylim(0,20.5)+
   theme_classic() +
   scale_fill_manual("legend", values = c("Consumed" = "grey", "Rejected" = "black"))  +
   theme(panel.border = element_rect(colour = "black", fill=NA),
@@ -240,7 +241,7 @@ blank2yGrob <- ggplotGrob(blank2y)
 PLOT <- ggplotGrob(plot_grid(CapedTermite_dr, Cricket_dr, Droso_dr, align = "h", ncol = 3, rel_widths = c(3, 3.5, 2.55)))
 
 setEPS() 
-pdf("5_Figures/DropRate/OtherPreyDR.pdf", height=5,  width=6.85)
+pdf("5_Figures/DropRate/OtherPreyDR2.pdf", height=5,  width=6.85)
 grid.arrange(grobs = list(PLOT, blank2yGrob), nrow=2, heights=c(19,1))
 dev.off()  
 

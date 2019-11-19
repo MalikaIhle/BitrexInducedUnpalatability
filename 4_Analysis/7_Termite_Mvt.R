@@ -59,6 +59,7 @@ tbl_long$rowID <- 1:nrow(tbl_long)
 }
 
 head(tbl_long)
+table(tbl_long$TestID)
 
 table(tbl_long$Trt)
 table(tbl_long$Col)
@@ -67,7 +68,8 @@ table(tbl_long$Col)
 
 hist(tbl_long$NbGrid)
 
-mod <-glmer(NbGrid ~ Palatability + Col + (1|rowID) # account for overdispersion: makes the whole difference !!! <<<<<<<<<<<<<<<
+mod <-glmer(NbGrid ~ Palatability + Col #+ (1|TestID) # creates singular fit
+            + (1|rowID) # account for overdispersion: makes the whole difference !!! <<<<<<<<<<<<<<<
             , data = tbl_long, family = 'poisson')
 summary(mod)
 drop1(mod, test="Chisq")
